@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM condaforge/mambaforge:23.11.0-0
+FROM condaforge/mambaforge:24.9.2-0
 
 ARG DEBIAN_FRONTEND=noninteractive
 
