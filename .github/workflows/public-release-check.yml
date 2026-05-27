@@ -1,0 +1,28 @@
+name: Public release check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-release-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install release-check tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep python3-openpyxl
+
+      - name: Run public release check
+        run: make public-release-check

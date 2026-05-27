@@ -1,0 +1,72 @@
+name: Build GeneCluster runner image
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag (e.g. v0.1)'
+        required: false
+        default: 'v0.1'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/genecluster-runner
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./images/genecluster-runner
+          file: ./images/genecluster-runner/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag || 'v0.1' }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.description=BioSymphony GeneCluster runner (BLAST+, DIAMOND, MMseqs2, HMMER, miniprot, sra-tools, ncbi-datasets-cli, minimap2, Nextflow)
+            org.opencontainers.image.licenses=MIT
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Summary
+        env:
+          TAG: ${{ inputs.tag || 'v0.1' }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+          SHA: ${{ github.sha }}
+        run: |
+          {
+            echo "## GeneCluster runner image"
+            echo
+            echo "- Digest: \`${DIGEST}\`"
+            echo "- Pin: \`${REGISTRY}/${IMAGE_NAME}@${DIGEST}\`"
+            echo "- Tags pushed:"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:${TAG}\`"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:sha-${SHA}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,130 @@
+name: Build GeneCluster Superpowers image
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag (e.g. v0.1)'
+        required: false
+        default: 'v0.1'
+      runpod_tag:
+        description: 'RunPod-compatible amd64 tag without BuildKit attestations'
+        required: false
+        default: 'runpod-amd64-noattest'
+      clean_repo_ref:
+        description: 'CLEAN repo ref (override Dockerfile default v1.0.1)'
+        required: false
+        default: ''
+      plantismash_repo_ref:
+        description: 'plantiSMASH repo ref (override Dockerfile default plantismash-2.0.4)'
+        required: false
+        default: ''
+      hit_ec_repo_ref:
+        description: 'HIT-EC repo ref (override Dockerfile default v2.0.0)'
+        required: false
+        default: ''
+      base_runner_image:
+        description: 'Base runner image (defaults to ghcr.io/<owner>/genecluster-runner:v0.1)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner }}/genecluster-superpowers
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space
+        # Image is ~5-7 GB; need extra room on the GHA runner.
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+                      /opt/hostedtoolcache/CodeQL || true
+          sudo docker image prune --all --force || true
+          df -h
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compose build args
+        id: args
+        env:
+          CLEAN_REF: ${{ inputs.clean_repo_ref }}
+          PLANT_REF: ${{ inputs.plantismash_repo_ref }}
+          HIT_EC_REF: ${{ inputs.hit_ec_repo_ref }}
+          BASE_IMAGE_INPUT: ${{ inputs.base_runner_image }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          DEFAULT_BASE_IMAGE="${REGISTRY}/${GITHUB_REPOSITORY_OWNER}/genecluster-runner:v0.1"
+          {
+            echo "args<<EOF"
+            echo "BASE_IMAGE=${BASE_IMAGE_INPUT:-$DEFAULT_BASE_IMAGE}"
+            [ -n "$CLEAN_REF" ] && echo "CLEAN_REPO_REF=$CLEAN_REF"
+            [ -n "$PLANT_REF" ] && echo "PLANTISMASH_REPO_REF=$PLANT_REF"
+            [ -n "$HIT_EC_REF" ] && echo "HIT_EC_REPO_REF=$HIT_EC_REF"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./images/genecluster-superpowers
+          file: ./images/genecluster-superpowers/Dockerfile
+          platforms: linux/amd64
+          push: true
+          # RunPod has shown stalls before container telemetry appears. Keep a
+          # plain amd64 image index without BuildKit attestation descriptors so
+          # provider-side platform resolution has only the runnable manifest.
+          provenance: false
+          sbom: false
+          build-args: ${{ steps.args.outputs.args }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag || 'v0.1' }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.runpod_tag || 'runpod-amd64-noattest' }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:runpod-${{ github.sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.description=BioSymphony GeneCluster Superpowers (extends genecluster-runner with cblaster, clinker, JCVI MCScan, foldseek, ProstT5, HIT-EC, CLEAN, plantiSMASH 2.0, P450Rdb)
+            org.opencontainers.image.licenses=MIT
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Summary
+        env:
+          TAG: ${{ inputs.tag || 'v0.1' }}
+          RUNPOD_TAG: ${{ inputs.runpod_tag || 'runpod-amd64-noattest' }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+          SHA: ${{ github.sha }}
+        run: |
+          {
+            echo "## GeneCluster Superpowers image"
+            echo
+            echo "- Digest: \`${DIGEST}\`"
+            echo "- Pin: \`${REGISTRY}/${IMAGE_NAME}@${DIGEST}\`"
+            echo "- Tags pushed:"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:${TAG}\`"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:${RUNPOD_TAG}\`"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:sha-${SHA}\`"
+            echo "  - \`${REGISTRY}/${IMAGE_NAME}:runpod-${SHA}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

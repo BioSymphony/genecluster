@@ -1,0 +1,4 @@
+# Skill output (per-tool wrapper scripts may write here while iterating)
+output/
+*.log
+*.tmp

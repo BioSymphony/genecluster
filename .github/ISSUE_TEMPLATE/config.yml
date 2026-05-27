@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a usage question
+    url: https://github.com/BioSymphony/biosymphony-genecluster/discussions
+    about: Use Discussions for campaign ideas, agent-orchestrator setup, and tool-route questions.
+  - name: Security report
+    url: https://github.com/BioSymphony/biosymphony-genecluster/security/policy
+    about: Report vulnerabilities and accidental disclosure risks privately when possible.

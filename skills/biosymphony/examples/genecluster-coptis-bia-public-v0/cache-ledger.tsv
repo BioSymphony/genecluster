@@ -1,0 +1,9 @@
+cache_id	provider_class	cache_role	remote_path	mount_path	required	free_space_gb	retention_policy	backup_policy	env_var	notes
+network_volume	runpod_pod	network_volume_mount	/workspace	/workspace	true	2000	runpod_volume_persistent	external_backup_required	GENECLUSTER_VOLUME	RunPod network volume mount point.
+db_cache	runpod_pod	database_cache	/workspace/genecluster/db-cache	/workspace/genecluster/db-cache	true	200	runpod_volume_persistent	external_backup_optional	GENECLUSTER_DB_CACHE	Reference database cache.
+search_results	runpod_pod	search_result_cache	/workspace/genecluster/search-cache	/workspace/genecluster/search-cache	true	100	runpod_volume_persistent	local_summary_sync_allowed	GENECLUSTER_SEARCH_CACHE	Cached search results across runs.
+run_root	runpod_pod	run_root	/workspace/genecluster/runs	/workspace/genecluster/runs	true	500	runpod_volume_persistent	local_summary_sync_allowed	GENECLUSTER_RUN_ROOT	Per-run output root.
+nextflow_cache	runpod_pod	nextflow_cache	/workspace/genecluster/nextflow-cache	/workspace/genecluster/nextflow-cache	true	50	runpod_volume_persistent	external_backup_optional	NXF_CACHE_DIR	Nextflow work cache.
+sra_cache	runpod_pod	sra_cache	/workspace/genecluster/sra-cache	/workspace/genecluster/sra-cache	true	300	runpod_volume_persistent	external_backup_optional	GENECLUSTER_SRA_CACHE	SRA prefetch cache.
+fast_scratch	runpod_pod	fast_scratch	/workspace/genecluster/scratch	/workspace/genecluster/scratch	true	200	delete_after_review	not_applicable	GENECLUSTER_SCRATCH	Per-run scratch space.
+summary_export	runpod_pod	summary_export	/workspace/genecluster/summary-export	/workspace/genecluster/summary-export	true	20	runpod_volume_persistent	local_summary_sync_allowed	GENECLUSTER_SUMMARY_EXPORT	Pullback summary export root.

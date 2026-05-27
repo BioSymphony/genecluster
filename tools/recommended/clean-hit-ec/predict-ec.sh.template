@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# tools/recommended/clean-hit-ec/predict-ec.sh.template
+#
+# STATUS: foundation only, not-yet-tested.
+#
+# What this would do for the BIA atlas:
+#   Run CLEAN (contrastive-learning EC predictor, Yu Science 2023) on the
+#   cluster-candidate proteins for one species. Output is per-protein EC
+#   labels (e.g. "EC 1.14.14.110", S-stylopine synthase) that convert our
+#   "uncharacterized P450 73E2-like" rows into actionable enzymatic
+#   assignments.
+#
+#   HIT-EC (Liu et al. Nat Commun 2026) would run alongside as the
+#   abstention-aware companion; this template stubs CLEAN since HIT-EC's
+#   public release timing is still pending.
+#
+# Inputs:
+#   {QUERY_FASTA}        cluster-candidate FASTA
+#                        e.g. .runtime/<species>-summary/cluster-candidates.faa
+#   {OUTPUT_DIR}         where CLEAN writes results
+#   {CLEAN_REPO}         path to local CLEAN clone (set by install-heavy.sh)
+#   {SPLIT}              "70" or "100" identity-clustering split; 70 generalizes,
+#                        100 is more accurate when SwissProt has close homologs
+#
+# Outputs:
+#   ${OUTPUT_DIR}/{queryname}_maxsep.csv    , per-protein EC predictions with
+#                                              maxsep-algorithm confidence
+#
+# Where output feeds in:
+#   - pipeline/genecluster_annotation_direct/ parses the CSV into per-protein
+#     ec_top1 / ec_top1_score columns.
+#   - your downstream postprocess script adds an ec-clean sheet to the per-species
+#     xlsx; later, an ec-consensus sheet joining CLEAN + HIT-EC.
+#   - cross-species/pathway-completion.qmd uses EC labels to cross-reference
+#     PMN 16 pathway-step IDs (see docs/tooling/plantcyc-p450rdb.md).
+
+set -euo pipefail
+
+QUERY_FASTA="{QUERY_FASTA}"
+OUTPUT_DIR="{OUTPUT_DIR}"
+CLEAN_REPO="{CLEAN_REPO}"          # e.g. tools/recommended/clean-hit-ec/src/CLEAN
+SPLIT="{SPLIT}"                     # "70" or "100"
+
+mkdir -p "${OUTPUT_DIR}"
+
+# CLEAN expects to be run from its own directory
+pushd "${CLEAN_REPO}" >/dev/null
+
+python3 CLEAN_infer_fasta.py \
+  --fasta_data "${QUERY_FASTA}" \
+  --pretrained "${SPLIT}"
+
+# Move outputs to our requested OUTPUT_DIR
+mv results/*_maxsep.csv "${OUTPUT_DIR}/"
+
+popd >/dev/null
+
+echo "CLEAN EC prediction → ${OUTPUT_DIR}/"

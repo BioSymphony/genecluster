@@ -1,0 +1,31 @@
+flowchart TB
+  Goal["Biology goal<br/>pathway, species,<br/>target molecule"]
+  Local["Local control plane<br/>preflight, route choice,<br/>contracts, validation"]
+  Work["Agent work waves<br/>source scout<br/>query resolution<br/>search lanes<br/>comparison lanes"]
+  Execute["Execution lanes<br/>laptop, HPC/SSH,<br/>cloud GPU"]
+  Heavy["Heavy data stays in execution lane<br/>raw reads, indexes,<br/>large model outputs"]
+  Results["Compact results return<br/>candidate tables<br/>cluster calls<br/>function scores<br/>pathway figures"]
+  Next["Next search wave<br/>tighten queries, add species,<br/>escalate tools, design experiment"]
+
+  Goal --> Local
+  Local --> Work
+  Work --> Execute
+  Execute --> Results
+  Execute -.-> Heavy
+  Results --> Next
+
+  classDef goal fill:#eef3f8,stroke:#64748b,color:#0f172a;
+  classDef local fill:#e8f4ff,stroke:#2563eb,color:#0f172a;
+  classDef waves fill:#ecfeff,stroke:#0891b2,color:#083344;
+  classDef lanes fill:#fff7ed,stroke:#ea580c,color:#431407;
+  classDef results fill:#f0fdf4,stroke:#16a34a,color:#052e16;
+  classDef next fill:#fdf2f8,stroke:#db2777,color:#500724;
+  classDef heavy fill:#f8fafc,stroke:#94a3b8,color:#334155;
+
+  class Goal goal;
+  class Local local;
+  class Work waves;
+  class Execute lanes;
+  class Results results;
+  class Next next;
+  class Heavy heavy;

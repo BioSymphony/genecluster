@@ -1,0 +1,290 @@
+# EGFR Resistance: Literature Claims for Wave 10 Claim Auditor
+#
+# Each claim is a published statement about a variant's structural mechanism.
+# The Wave 10 auditor classifies each claim as one of:
+#   - supported       (campaign evidence is consistent with the claim)
+#   - qualified       (campaign partially supports the claim, with caveats)
+#   - not_supported   (campaign evidence contradicts the claim)
+#   - untestable      (claim makes a prediction the campaign cannot evaluate)
+#
+# The claim set deliberately includes all four expected verdict types so the
+# auditor's branch logic gets exercised on the v1 EGFR run.
+#
+# Citations are short tags (author/year/journal). Full references live in
+# `references_full.bib` (TBD).
+
+schema_version: 1
+campaign: mechanistic-variant-atlas
+
+claims:
+
+  - id: T790M_gatekeeper_clash
+    variant_ref: T790M
+    drug_context: [gefitinib, erlotinib]
+    claim: |
+      T790M acts as a gatekeeper substitution that sterically clashes with
+      the methoxy substituents of gefitinib and erlotinib, reducing TKI
+      affinity in the ATP-binding cleft.
+    citation: Kobayashi_2005_NEJM
+    testable_predictions:
+      - metric: gatekeeper_vdw_overlap
+        operator: ">"
+        threshold: 1.5
+        units: angstrom
+      - metric: drug_contact_loss
+        operator: ">="
+        threshold: 3
+        comparison: vs_wt_gefitinib_complex
+    expected_verdict: supported
+
+  - id: T790M_atp_affinity_increase
+    variant_ref: T790M
+    drug_context: [atp]
+    claim: |
+      T790M increases ATP-binding affinity, restoring kinase activity and
+      reducing competitive TKI inhibition.
+    citation: Yun_2008_PNAS
+    testable_predictions:
+      - metric: kd_atp
+        operator: "<"
+        comparison: vs_wt
+        notes: kinetic/biophysical, not directly structural
+    expected_verdict: untestable
+    rationale: |
+      The campaign computes static structural metrics. ATP-binding kinetics
+      requires biophysical assays beyond Tier A. The auditor should record
+      this as untestable rather than claiming support or refutation.
+
+  - id: T790M_osimertinib_retained
+    variant_ref: T790M
+    drug_context: [osimertinib]
+    claim: |
+      T790M does not impair osimertinib binding because osimertinib's
+      pyrimidine scaffold avoids the gatekeeper clash that defeats
+      gefitinib and erlotinib.
+    citation: Cross_2014_CancerDiscov
+    testable_predictions:
+      - metric: gatekeeper_vdw_overlap_osimertinib
+        operator: "<"
+        threshold: 1.0
+        units: angstrom
+      - metric: drug_contact_loss_osimertinib
+        operator: "<="
+        threshold: 1
+    expected_verdict: supported
+
+  - id: C797S_covalent_loss
+    variant_ref: C797S
+    drug_context: [osimertinib]
+    claim: |
+      C797S abolishes the covalent bond formation between osimertinib's
+      acrylamide warhead and the kinase catalytic site, eliminating
+      irreversible binding.
+    citation: Thress_2015_NatMed
+    testable_predictions:
+      - metric: covalent_residue_mutated
+        operator: "=="
+        threshold: true
+      - metric: covalent_bond_distance
+        operator: ">"
+        threshold: 4.0
+        units: angstrom
+        notes: Without Cys nucleophile the warhead cannot form a covalent bond.
+    expected_verdict: supported
+
+  - id: C797S_phenotype_resistance
+    variant_ref: C797S
+    drug_context: [osimertinib]
+    claim: |
+      C797S causes acquired resistance to osimertinib in T790M-positive
+      NSCLC.
+    citation: Thress_2015_NatMed
+    testable_predictions:
+      - metric: clinical_response_rate
+        notes: clinical phenotype, campaign cannot evaluate directly
+    expected_verdict: untestable
+    rationale: |
+      Phenotype-level claim. The structural campaign can support the
+      mechanism (see C797S_covalent_loss), but cannot directly verify the
+      clinical-resistance outcome.
+
+  - id: L858R_destabilizes_inactive
+    variant_ref: L858R
+    drug_context: []
+    claim: |
+      L858R destabilizes the inactive (Src-like) conformation of the EGFR
+      kinase domain, biasing the equilibrium toward the active state.
+    citation: Yun_2007_CancerCell
+    testable_predictions:
+      - metric: local_backbone_rmsd_helix_c
+        operator: ">"
+        threshold: 1.0
+        units: angstrom
+        notes: Static structural deviation in αC-helix region between WT-inactive and L858R-active reference structures.
+    expected_verdict: qualified
+    rationale: |
+      The campaign can show the residue's position and any backbone difference
+      between deposited inactive-WT and active-L858R structures, but full
+      characterization of the inactive→active equilibrium requires conformational
+      ensembles (Tier D, BioEmu). Qualified support is the honest verdict.
+
+  - id: L858R_no_direct_tki_resistance
+    variant_ref: L858R
+    drug_context: [gefitinib, erlotinib, osimertinib]
+    claim: |
+      L858R alone does not produce intrinsic TKI resistance and is in fact
+      a sensitizing mutation for first- and third-generation EGFR TKIs.
+    citation: Lynch_2004_NEJM
+    testable_predictions:
+      - metric: drug_contact_loss
+        operator: "<="
+        threshold: 1
+        comparison: vs_wt_for_each_tki
+      - metric: gatekeeper_vdw_overlap
+        operator: "<"
+        threshold: 1.0
+    expected_verdict: supported
+
+  - id: del_E746_A750_p_loop_shortening
+    variant_ref: del_E746_A750
+    drug_context: []
+    claim: |
+      The exon 19 deletion (E746-A750) shortens the P-loop and reorients
+      the αC-helix into the active position, accounting for ligand-
+      independent kinase activation.
+    citation: Yun_2007_CancerCell
+    testable_predictions:
+      - metric: p_loop_length_residues
+        operator: "<"
+        comparison: vs_wt_kinase_domain
+      - metric: helix_c_orientation_angle
+        operator: "shifted_toward_active"
+        notes: Compare αC-helix axis between WT-inactive and exon-19-del-active deposited structures.
+    expected_verdict: qualified
+    rationale: |
+      Static comparison of deposited structures supports the geometry, but the
+      activation-equilibrium claim is partly dynamic.
+
+  - id: L718Q_steric_clash_osimertinib
+    variant_ref: L718Q
+    drug_context: [osimertinib]
+    claim: |
+      L718Q produces a steric clash with the aniline group of osimertinib,
+      reducing binding affinity.
+    citation: Bersanelli_2016_LungCancer
+    testable_predictions:
+      - metric: residue_718_to_aniline_min_distance
+        operator: "<"
+        threshold: 3.0
+        units: angstrom
+        notes: Distance from any heavy atom of residue 718 (post-mutation) to the osimertinib aniline ring.
+      - metric: drug_contact_loss_osimertinib
+        operator: ">="
+        threshold: 2
+    expected_verdict: supported
+    notes: |
+      No deposited L718Q structure exists as of 2026-04-28. Audit must use
+      either AFDB prediction or PyMOL mutagenesis on a WT osimertinib
+      complex (e.g., 4ZAU) and explicitly mark the modeling caveat.
+
+  - id: A763_Y764insFQEA_helix_c_shift
+    variant_ref: A763_Y764insFQEA
+    drug_context: [gefitinib, erlotinib]
+    claim: |
+      The exon 20 insertion at position 763-764 introduces a helical extension
+      that alters αC-helix orientation, producing intrinsic resistance to
+      first-generation TKIs without direct disruption of the ATP/TKI cleft.
+    citation: Robichaux_2018_NatMed
+    testable_predictions:
+      - metric: helix_c_orientation_angle_change
+        operator: ">"
+        threshold: 5.0
+        units: degrees
+      - metric: pocket_shape_delta
+        operator: ">"
+        threshold: 0.25
+      - metric: direct_tki_contact_residue
+        operator: "=="
+        threshold: false
+    expected_verdict: qualified
+    rationale: |
+      Pocket-shape change is testable on Tier A, but the full activation-
+      equilibrium claim has dynamic components.
+
+  - id: G719A_p_loop_alters_tki_binding
+    variant_ref: G719A
+    drug_context: [gefitinib, erlotinib]
+    claim: |
+      G719A in the P-loop alters the local backbone conformation required
+      for optimal first-generation TKI binding, reducing affinity for
+      gefitinib and erlotinib.
+    citation: Pao_2005_PLoSMed
+    testable_predictions:
+      - metric: p_loop_local_rmsd
+        operator: ">"
+        threshold: 0.7
+        units: angstrom
+      - metric: drug_contact_loss_first_gen
+        operator: ">="
+        threshold: 1
+    expected_verdict: qualified
+
+  - id: G724S_destabilizes_p_loop
+    variant_ref: G724S
+    drug_context: [osimertinib]
+    claim: |
+      G724S destabilizes the P-loop conformation required for osimertinib
+      binding, producing a primarily allosteric resistance phenotype rather
+      than direct contact loss.
+    citation: Oztan_2019_LungCancer
+    testable_predictions:
+      - metric: p_loop_local_rmsd
+        operator: ">"
+        threshold: 0.7
+      - metric: direct_tki_contact_residue
+        operator: "=="
+        threshold: false
+      - metric: pocket_shape_delta
+        operator: ">"
+        threshold: 0.2
+    expected_verdict: qualified
+
+  - id: T790M_classifies_as_active_site_for_first_gen_only
+    variant_ref: T790M
+    drug_context: [gefitinib, osimertinib]
+    claim: |
+      A correct mechanism classifier should label T790M as active_site for
+      gefitinib and erlotinib, but as benign (no resistance) for osimertinib.
+    citation: campaign_self_test
+    testable_predictions:
+      - metric: classifier_label
+        per_drug_context: true
+        expected:
+          gefitinib: active_site
+          erlotinib: active_site
+          osimertinib: not_resistance
+    expected_verdict: supported
+    notes: |
+      Self-test claim. Verifies that the Wave 5 classifier respects drug
+      context per variant rather than producing one mechanism label per
+      variant globally.
+
+  - id: classifier_should_route_S768I_to_ambiguous
+    variant_ref: S768I
+    drug_context: []
+    claim: |
+      With Tier A evidence only, S768I should be routed to the ambiguous
+      mechanism family because the classifier cannot reliably distinguish
+      its mode of action from contact-based or pocket-shape evidence
+      alone.
+    citation: campaign_self_test
+    testable_predictions:
+      - metric: classifier_label
+        operator: "=="
+        threshold: ambiguous
+    expected_verdict: supported
+    notes: |
+      Self-test claim that exercises the ambiguous-routing path (Wave 6e).
+
+# End of claims. The wave-10 auditor processes each claim against the
+# evidence produced by waves 4-7 and records a verdict in audit/<claim_id>/.

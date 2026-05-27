@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# tools/recommended/foldseek/prostt5-search.sh.template
+#
+# STATUS: foundation only, not-yet-tested.
+#
+# What this would do for the BIA atlas:
+# Run Foldseek easy-search using ProstT5 to encode our cluster-candidate
+# proteins from sequence alone (no AlphaFold step). Output is a structure-
+# based homology table that catches convergent enzymes at <15% sequence
+# identity, the only tool that can support a "fold-level convergence"
+# claim across the 4 BIA species. Manuscript-differentiating evidence for
+# the atlas headline.
+#
+# Inputs:
+# {QUERY_FASTA} path to cluster candidates FASTA, e.g.
+# .runtime/<species>-summary/cluster-candidates.faa
+# {TARGET_DB} Foldseek target DB; start with afdb-swissprot, scale
+# to AFDB-Plants (350 GB) if/when we commit.
+# {OUTPUT_DIR} where to write outputs
+# {THREADS} CPU thread count, e.g. 8
+#
+# Outputs:
+# ${OUTPUT_DIR}/foldseek-hits.m8 , tabular hit table
+# Columns: query, target, evalue, bits, prob, alntmscore
+#
+# Where output feeds in:
+# - pipeline/genecluster_annotation_direct/ parses .m8 into per-
+# protein tm_top_hit / tm_score / tm_evalue.
+# - your downstream postprocess script adds a structure-foldseek sheet to the
+# per-species xlsx; flags rows where Foldseek hit ≠ BLAST hit (the
+# convergence cases).
+# - cross-species/convergence-evidence.qmd lists fold-homology-but-no-
+# sequence-homology cases with the headline TM-score panel.
+
+set -euo pipefail
+
+QUERY_FASTA="{QUERY_FASTA}"
+TARGET_DB="{TARGET_DB}" # e.g. .runtime/databases/foldseek-afdb-swissprot/afdb-swissprot
+OUTPUT_DIR="{OUTPUT_DIR}"
+THREADS="{THREADS}" # e.g. 8
+
+mkdir -p "${OUTPUT_DIR}"
+
+foldseek easy-search \
+ "${QUERY_FASTA}" \
+ "${TARGET_DB}" \
+ "${OUTPUT_DIR}/foldseek-hits.m8" \
+ "${OUTPUT_DIR}/tmp" \
+ --prostt5-model "Rostlab/ProstT5" \
+ --threads "${THREADS}" \
+ --format-output "query,target,evalue,bits,prob,alntmscore"
+
+echo "Foldseek + ProstT5 search → ${OUTPUT_DIR}/foldseek-hits.m8"

@@ -1,0 +1,8 @@
+>ACT2_control Arabidopsis actin 2 positive control
+MAAAAA
+>GAPDH_control glycolysis positive control
+MGGGGG
+>random_shuffle_negative shuffled decoy control
+MSSSSS
+>pathway_query BIA anchor fixture protein
+MQQQQQ
