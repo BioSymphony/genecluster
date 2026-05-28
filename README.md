@@ -29,8 +29,6 @@ You do not need to memorize 50+ scripts or invoke them by hand. The agent does t
 
 ## Missions You Can Run
 
-<p align="center"><img src="docs/diagrams/biosymphony-genecluster-workflow.png" alt="The discovery engine every mission shares: a biology target becomes a ranked pathway map, then the campaign iterates" width="480"></p>
-
 - **Find a biosynthetic gene cluster in a new species.** Pick a known pathway (BIA, MIA, terpene, polyketide, custom) and a target species. The agent scouts public genomes and transcriptomes, runs candidate-gene search via homology and structure, anchors hits in genomic context via synteny and neighborhood capture, detects clusters with plantiSMASH, antiSMASH, and DeepBGC, and scores enzyme function across a tool jury.
 - **Fill gaps in a published pathway.** Point the agent at a known partial pathway plus the step that needs catalyzing. The agent runs structure-based and HMM-based candidate search across related species, ranks hits across function-prediction tools, and proposes the strongest candidates for wet-lab validation.
 - **Assemble pathway evidence toward a target molecule (bioprospecting).** Pick a target compound (terpenes like artemisinin or paclitaxel, or any plant secondary metabolite in your area). The agent assembles the candidate enzyme set from canonical and comparator species, scores evidence, and produces a pathway map you can hand to a wet lab or pathway-engineering team.
@@ -39,6 +37,8 @@ You do not need to memorize 50+ scripts or invoke them by hand. The agent does t
 - **Long-horizon comparative-genomics programs.** Every completed mission feeds new species rows, novelty windows, and cluster-confidence scores back into `data/pathway-species-catalog.tsv`, so the next mission starts richer than the last.
 - **Next-experiment design.** Convert evidence gaps into assay, sequencing, or metabolomics recommendations before spending wet-lab time or sequencing budget.
 - **Extend the kit with new tooling.** The `genecluster-superpowers` skill ships ready-to-invoke shortcuts for 25 validated tools, including Quarto, plantiSMASH 2.0.4, antiSMASH 8.0.4, DeepBGC, JCVI MCScan, MMseqs2, Foldseek + ProstT5, HMMER, InterProScan, ESM-C / ESM-2, ColabFold, KEGG/KAAS, EnzymeMap, DiffPaSS, DeepEC, igv-reports, pyGenomeTracks, and Cytoscape.js. Parked and gated tools carry re-entry recipes so future iterations resume from where the last one stopped.
+
+<p align="center"><img src="docs/diagrams/biosymphony-genecluster-workflow.png" alt="The discovery engine every mission shares: a biology target becomes a ranked pathway map, then the campaign iterates" width="480"></p>
 
 ## Use It With Your Agent Stack
 
