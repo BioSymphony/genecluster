@@ -25,11 +25,11 @@ The agent reads `skills/biosymphony/SKILL.md`, scouts NCBI Datasets and SRA for 
 
 You do not need to memorize 50+ scripts or invoke them by hand. The agent does that. Your job is to set the mission, supervise, and approve.
 
-![How a GeneCluster session looks: you set the mission and hold the cloud-launch approval; the agent runs every step in between](docs/diagrams/genecluster-session-flow.png)
+<p align="center"><img src="docs/diagrams/genecluster-session-flow.png" alt="How a GeneCluster session looks: you set the mission and hold the cloud-launch approval; the agent runs every step in between" width="320"></p>
 
 ## Missions You Can Run
 
-![The discovery engine every mission shares: a biology target becomes a ranked pathway map, then the campaign iterates](docs/diagrams/biosymphony-genecluster-workflow.png)
+<p align="center"><img src="docs/diagrams/biosymphony-genecluster-workflow.png" alt="The discovery engine every mission shares: a biology target becomes a ranked pathway map, then the campaign iterates" width="480"></p>
 
 - **Find a biosynthetic gene cluster in a new species.** Pick a known pathway (BIA, MIA, terpene, polyketide, custom) and a target species. The agent scouts public genomes and transcriptomes, runs candidate-gene search via homology and structure, anchors hits in genomic context via synteny and neighborhood capture, detects clusters with plantiSMASH, antiSMASH, and DeepBGC, and scores enzyme function across a tool jury.
 - **Fill gaps in a published pathway.** Point the agent at a known partial pathway plus the step that needs catalyzing. The agent runs structure-based and HMM-based candidate search across related species, ranks hits across function-prediction tools, and proposes the strongest candidates for wet-lab validation.
@@ -51,7 +51,7 @@ GeneCluster is harness-agnostic. Wire it into whichever multi-agent setup fits y
 
 ## Local And Cloud Lanes
 
-![Trust boundary: the control plane stays on your laptop, heavy compute runs on a provider (RunPod, Lambda, HPC), only compact summaries return, and raw data never leaves the cloud](docs/diagrams/genecluster-local-cloud-boundary.png)
+<p align="center"><img src="docs/diagrams/genecluster-local-cloud-boundary.png" alt="Trust boundary: the control plane stays on your laptop, heavy compute runs on a provider (RunPod, Lambda, HPC), only compact summaries return, and raw data never leaves the cloud" width="760"></p>
 
 - **Local laptop.** The entire control plane (preflight, source and route scouting, contracts, validators, summary evidence packet, review surface) runs on Python 3, `make`, and ripgrep. The demo harness produces the full campaign packet offline.
 - **RunPod, AWS, GCP, Vast.ai, Lambda Labs.** Provider-neutral launch bundles and dispatch templates handle heavy candidate search, BLAST/MMseqs2/Foldseek workloads, plantiSMASH and antiSMASH BGC calling, structural model inference, and large transcriptome work. Provider state stays out of the source tree.
@@ -63,7 +63,7 @@ Agents escalate to cloud after a launch bundle and stage contract validate local
 
 GeneCluster never lets a campaign claim more than its data supports. Stage 0 classifies what the target genome and transcriptome actually contain, that choice selects an evidence route, and each route carries a hard claim ceiling, so a `transcript-first` run can never assert physical cluster boundaries.
 
-![Route decision tree: data state selects the route, and each route caps the strongest claim allowed](docs/diagrams/genecluster-route-claim-ceiling.png)
+<p align="center"><img src="docs/diagrams/genecluster-route-claim-ceiling.png" alt="Route decision tree: data state selects the route, and each route caps the strongest claim allowed" width="700"></p>
 
 ## What's In The Repo
 
