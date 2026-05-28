@@ -1,0 +1,39 @@
+flowchart TB
+  Target["Biology target<br/>pathway, molecule,<br/>species or evidence gap"]
+  Sources["Public genomes + transcriptomes<br/>NCBI, SRA, UniProt, KEGG, MIBiG"]
+  Seeds["Seed queries + controls<br/>known enzymes, domains,<br/>positive controls, decoys"]
+  Search["Candidate search<br/>BLAST, DIAMOND, MMseqs2,<br/>HMMER, Foldseek"]
+  Context["Genome context<br/>coordinates, neighborhoods,<br/>cluster windows"]
+
+  Compare["Comparative genomics<br/>orthology, paralogs,<br/>synteny across species"]
+  Function["Function prediction<br/>BGC callers, EC/KO,<br/>protein structure signals"]
+
+  Pathway["Pathway map<br/>ranked candidate enzymes<br/>cluster hypotheses<br/>natural-product route"]
+  Next["Next search question<br/>missing step, new species,<br/>stronger query"]
+
+  Target --> Sources
+  Target --> Seeds
+  Seeds --> Search
+  Sources --> Search
+  Search --> Context
+  Context --> Compare
+  Context --> Function
+  Compare --> Pathway
+  Function --> Pathway
+  Pathway --> Next
+
+  classDef source fill:#eef7f2,stroke:#16a34a,color:#052e16;
+  classDef query fill:#fef9c3,stroke:#ca8a04,color:#422006;
+  classDef search fill:#ecfeff,stroke:#0891b2,color:#083344;
+  classDef context fill:#f0f9ff,stroke:#2563eb,color:#172554;
+  classDef compare fill:#f5f3ff,stroke:#7c3aed,color:#2e1065;
+  classDef function fill:#fff7ed,stroke:#ea580c,color:#431407;
+  classDef output fill:#fdf2f8,stroke:#db2777,color:#500724;
+
+  class Target,Sources source;
+  class Seeds,Next query;
+  class Search search;
+  class Context context;
+  class Compare compare;
+  class Function function;
+  class Pathway output;

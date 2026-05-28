@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+# tools/recommended/cblaster/query-cluster.sh.template
+#
+# STATUS: foundation only, not-yet-tested.
+#
+# What this would do for the BIA atlas:
+# Given the BIA query set (queries-with-controls.faa) as the cluster
+# definition, search homologous clusters across the campaign species set' DIAMOND DBs
+# and generate publication-quality clinker SVG ribbons of those clusters.
+# Closes our cross-species cluster homology gap directly.
+#
+# Inputs:
+# {QUERY_FASTA} e.g. pipeline/genecluster_annotation_direct/queries-with-controls.faa
+# {DB_DIR} dir containing per-species *.dmnd files (built once
+# via cblaster makedb on each species proteome.faa)
+# {OUTPUT_DIR} where cblaster + clinker write
+# {MAX_DISTANCE} max cluster-internal distance, e.g. 50000 (matches
+# our existing 50 kb anchor window)
+# {MIN_HITS} min cluster size, e.g. 3 (lower to 2 if BIA pathway
+# clusters are sparser)
+#
+# Outputs:
+# ${OUTPUT_DIR}/bia-clusters.csv , cblaster cluster table
+# ${OUTPUT_DIR}/bia-clusters.html , cblaster interactive plot
+# ${OUTPUT_DIR}/clusters/*.gbk , per-cluster GenBank slices
+# ${OUTPUT_DIR}/clinker.html , clinker interactive comparison
+# ${OUTPUT_DIR}/clinker.svg , clinker publication SVG
+#
+# Where output feeds in:
+# - pipeline/genecluster_annotation_direct/ joins cblaster cluster IDs onto our
+# existing per-species cluster rows.
+# - your downstream postprocess script embeds clinker SVG link in the per-species
+# clusters-diamond sheet.
+# - cross-species/bbe-gradient.qmd <iframe>s the clinker HTML for the
+# manuscript-grade cross-species figure.
+
+set -euo pipefail
+
+QUERY_FASTA="{QUERY_FASTA}"
+DB_DIR="{DB_DIR}"
+OUTPUT_DIR="{OUTPUT_DIR}"
+MAX_DISTANCE="{MAX_DISTANCE}" # e.g. 50000
+MIN_HITS="{MIN_HITS}" # e.g. 3
+
+mkdir -p "${OUTPUT_DIR}/clusters"
+
+# 1. cblaster search across all species DBs
+cblaster search \
+ --query_file "${QUERY_FASTA}" \
+ --mode local \
+ --database "${DB_DIR}"/*.dmnd \
+ --max_distance "${MAX_DISTANCE}" \
+ --min_hits "${MIN_HITS}" \
+ --output "${OUTPUT_DIR}/bia-clusters.csv" \
+ --plot "${OUTPUT_DIR}/bia-clusters.html"
+
+# 2. cblaster extract, pull per-cluster GenBank slices
+cblaster extract \
+ --query "${OUTPUT_DIR}/bia-clusters.csv" \
+ --output "${OUTPUT_DIR}/clusters" \
+ --format genbank
+
+# 3. clinker, synteny-ribbon SVG + interactive HTML
+clinker "${OUTPUT_DIR}/clusters"/*.gbk \
+ --output_html "${OUTPUT_DIR}/clinker.html" \
+ --output_svg "${OUTPUT_DIR}/clinker.svg"
+
+echo "cblaster + clinker → ${OUTPUT_DIR}"

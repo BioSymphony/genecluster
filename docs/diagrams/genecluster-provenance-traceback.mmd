@@ -1,0 +1,11 @@
+flowchart RL
+  CLAIM["Claim in evidence package<br/>candidate, cluster,<br/>or pathway gap"]
+  CLAIM --> LEDGER["Claim ledger row<br/>claim level, caveats,<br/>review status"]
+  LEDGER --> EVIDENCE["Evidence tables<br/>candidate hits<br/>function jury<br/>cluster calls"]
+  EVIDENCE --> ROUTE["Route decision<br/>allowed lanes<br/>rejected routes<br/>claim ceiling"]
+  ROUTE --> QUERY["Query ledger<br/>seed proteins<br/>positive controls<br/>decoys"]
+  EVIDENCE --> SOURCE["Source ledger<br/>assembly, annotation,<br/>RNA-Seq metadata"]
+  EVIDENCE --> RUN["Execution record<br/>tool versions<br/>commands, hashes,<br/>runtime warnings"]
+  RUN --> PROVIDER["Execution lane<br/>local workstation,<br/>SSH/HPC,<br/>or cloud provider"]
+  SOURCE --> PUBLIC["Public source record<br/>NCBI, SRA, UniProt,<br/>KEGG, MIBiG"]
+  CLAIM --> REVIEW["Review surface<br/>summary-only evidence<br/>figures and caveats"]

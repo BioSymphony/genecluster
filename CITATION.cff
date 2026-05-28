@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use BioSymphony GeneCluster in your research, please cite it as below."
+title: "BioSymphony GeneCluster"
+abstract: >-
+  An agent skill for finding biosynthetic gene clusters and assembling pathway
+  evidence across genomes and transcriptomes. Drives a pathway, a target
+  molecule, or an evidence gap through a multi-stage comparative-genomics
+  campaign that scouts public plant, fungal, and microbial sources, finds
+  candidate genes via homology and structure search, anchors them to clusters
+  via synteny and neighborhood capture, detects biosynthetic gene clusters
+  with BGC callers, scores function across a tool jury, checks pathway
+  completeness, and produces a reviewable pathway evidence package. Applications include
+  bioprospecting toward target molecules, pathway gap-filling, comparative
+  atlas building, novel-cluster discovery, and next-experiment design.
+  Provides source and query ledgers, route cards with claim ceilings,
+  candidate-search contracts, evidence normalizers, reviewable pathway outputs,
+  provider-neutral launch bundles, and a 25-tool integration kit. Designed for
+  Claude Code, Codex, Symphony, and other agent orchestrators.
+authors:
+  - name: "BioSymphony contributors"
+type: software
+license: MIT
+keywords:
+  - agent-skill
+  - agent-orchestration
+  - gene-cluster-discovery
+  - biosynthetic-gene-clusters
+  - biosynthetic-pathway-assembly
+  - pathway-gap-filling
+  - bioprospecting
+  - natural-products
+  - comparative-genomics
+  - transcriptomics
+  - plant-specialized-metabolism
+  - bioinformatics
+  - evidence-review
+  - claude-code
+  - codex
+  - symphony
+  - linear
+  - runpod

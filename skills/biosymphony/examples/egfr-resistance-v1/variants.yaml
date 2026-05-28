@@ -1,0 +1,259 @@
+# EGFR Resistance Variants: Mechanistic Variant Atlas v1 example
+#
+# Curated set of EGFR kinase-domain variants covering primary activating
+# mutations and the most clinically relevant acquired-resistance mutations
+# in non-small-cell lung cancer (NSCLC).
+#
+# Sources cross-referenced: COSMIC, cBioPortal, Cancer Genome Atlas (TCGA-LUAD),
+# and the supporting literature listed per variant in claims.yaml. None of the
+# data here is private or unpublished.
+#
+# Numbering: HGVS uses the canonical EGFR isoform 1 (UniProt P00533, 1210 aa).
+
+schema_version: 1
+campaign: mechanistic-variant-atlas
+target:
+  gene_symbol: EGFR
+  uniprot: P00533
+  isoform: 1
+  domain_of_interest:
+    name: kinase_domain
+    residue_range: [712, 979]
+  drug_context:
+    - name: gefitinib
+      generation: 1
+      dbid: DB00317
+    - name: erlotinib
+      generation: 1
+      dbid: DB00530
+    - name: afatinib
+      generation: 2
+      dbid: DB08916
+    - name: osimertinib
+      generation: 3
+      dbid: DB09330
+      covalent_residue: C797
+
+variants:
+
+  - id: L858R
+    hgvs_protein: p.Leu858Arg
+    hgvs_coding: c.2573T>G
+    cosmic_id: COSV51765119
+    exon: 21
+    residue: 858
+    type: primary_activating
+    frequency_in_egfr_mutant_nsclc: 0.30
+    drug_context:
+      sensitizing_to: [gefitinib, erlotinib, afatinib, osimertinib]
+    phenotype:
+      label: activating
+      notes: Primary kinase-activating mutation. Sensitizes to first- and third-generation TKIs.
+    expected_pdb:
+      - id: 2ITV
+        ligand: AEE788
+        notes: L858R kinase domain in complex with TKI; 2.7 Å.
+      - id: 4LQM
+        ligand: erlotinib
+        notes: L858R with erlotinib analog.
+    afdb_available: true
+    notes_for_classifier: |
+      Destabilizes inactive conformation; favors active state. Should not classify
+      as a resistance mechanism. Useful as a sanity-check variant for the campaign.
+
+  - id: del_E746_A750
+    hgvs_protein: p.Glu746_Ala750del
+    hgvs_coding: c.2236_2250del
+    cosmic_id: COSV51765492
+    exon: 19
+    residue_range: [746, 750]
+    type: primary_activating
+    frequency_in_egfr_mutant_nsclc: 0.45
+    drug_context:
+      sensitizing_to: [gefitinib, erlotinib, afatinib, osimertinib]
+    phenotype:
+      label: activating
+      notes: Primary kinase-activating in-frame deletion in exon 19. Most common EGFR-mutant NSCLC variant.
+    expected_pdb:
+      - id: 2ITX
+        ligand: erlotinib
+        notes: Exon 19 deletion kinase domain with erlotinib.
+    afdb_available: true
+    notes_for_classifier: |
+      Shortens P-loop, reorients C-helix. Allosteric activation rather than direct
+      pocket disruption. Sensitivity to TKI is preserved.
+
+  - id: T790M
+    hgvs_protein: p.Thr790Met
+    hgvs_coding: c.2369C>T
+    cosmic_id: COSV51767252
+    exon: 20
+    residue: 790
+    type: acquired_resistance
+    frequency_in_resistance_to_first_gen_tki: 0.50
+    drug_context:
+      resistance_to: [gefitinib, erlotinib]
+      sensitivity_retained: [osimertinib]
+    phenotype:
+      label: resistance
+      notes: Gatekeeper mutation. Most common acquired resistance to first-generation TKIs.
+    expected_pdb:
+      - id: 3UG2
+        ligand: WZ4002
+        notes: T790M kinase domain with covalent inhibitor.
+      - id: 5EDQ
+        ligand: gefitinib
+        notes: T790M with gefitinib showing residual binding.
+      - id: 4ZAU
+        ligand: osimertinib
+        notes: T790M with osimertinib bound.
+    afdb_available: true
+    notes_for_classifier: |
+      Gatekeeper. Increases ATP affinity and creates steric clash with the methoxy
+      groups of gefitinib/erlotinib. Should classify as active_site for gefitinib/erlotinib
+      drug context and retain sensitivity for osimertinib.
+
+  - id: C797S
+    hgvs_protein: p.Cys797Ser
+    hgvs_coding: c.2390G>C
+    cosmic_id: COSV51768036
+    exon: 20
+    residue: 797
+    type: acquired_resistance
+    frequency_in_osimertinib_resistance: 0.15
+    drug_context:
+      resistance_to: [osimertinib]
+      sensitivity_retained: [first_gen_reversible_tkis_when_t790m_absent]
+    phenotype:
+      label: resistance
+      notes: Loss of the cysteine residue used for covalent osimertinib binding.
+    expected_pdb:
+      - id: 6JX0
+        ligand: osimertinib
+        notes: C797S/T790M/L858R triple mutant with osimertinib showing loss of covalent bond.
+    afdb_available: true
+    notes_for_classifier: |
+      Direct loss of the covalent-binding residue used by osimertinib. Strong
+      active_site classification specifically against osimertinib drug context.
+
+  - id: L718Q
+    hgvs_protein: p.Leu718Gln
+    hgvs_coding: c.2153T>A
+    cosmic_id: COSV51769204
+    exon: 18
+    residue: 718
+    type: acquired_resistance
+    frequency_in_osimertinib_resistance: 0.05
+    drug_context:
+      resistance_to: [osimertinib]
+    phenotype:
+      label: resistance
+      notes: Acquired resistance to osimertinib. Steric clash with the aniline group of osimertinib.
+    expected_pdb: []
+    afdb_available: true
+    notes_for_classifier: |
+      No deposited variant structure as of 2026-04-28. Use AFDB or PyMOL mutagenize
+      against an osimertinib-bound WT structure. Should classify as active_site by
+      direct TKI-contact-residue criterion.
+
+  - id: G724S
+    hgvs_protein: p.Gly724Ser
+    hgvs_coding: c.2170G>A
+    cosmic_id: COSV51769316
+    exon: 18
+    residue: 724
+    type: acquired_resistance
+    drug_context:
+      resistance_to: [osimertinib]
+      activity_against_first_gen: variable
+    phenotype:
+      label: resistance
+      notes: P-loop residue. Disrupts P-loop conformation, reduces TKI affinity.
+    expected_pdb: []
+    afdb_available: true
+    notes_for_classifier: |
+      P-loop residue. Likely allosteric (pocket shape change) rather than direct
+      contact-residue mutation. Edge-case for the classifier.
+
+  - id: L792H
+    hgvs_protein: p.Leu792His
+    hgvs_coding: c.2375T>A
+    cosmic_id: COSV51768902
+    exon: 20
+    residue: 792
+    type: acquired_resistance
+    drug_context:
+      resistance_to: [osimertinib]
+    phenotype:
+      label: resistance
+      notes: Alters drug-binding pocket geometry adjacent to the gatekeeper.
+    expected_pdb: []
+    afdb_available: true
+    notes_for_classifier: |
+      Adjacent to gatekeeper (T790). Often co-occurs with T790M. Test the
+      compound-mutation handling of the campaign.
+
+  - id: A763_Y764insFQEA
+    hgvs_protein: p.Ala763_Tyr764insPheGlnGluAla
+    hgvs_coding: c.2290_2291insTTCCAGGAAGCC
+    cosmic_id: COSV51766789
+    exon: 20
+    residue_range: [763, 764]
+    type: primary_activating
+    drug_context:
+      typically_resistant_to: [gefitinib, erlotinib, afatinib]
+      sensitivity_to: [poziotinib, mobocertinib]
+    phenotype:
+      label: activating_with_intrinsic_resistance
+      notes: Exon 20 insertion. Activating but typically resistant to first/second-gen TKIs.
+    expected_pdb:
+      - id: 4LRM
+        ligand: AEE788
+        notes: Exon 20 insertion with TKI; structural basis for resistance.
+    afdb_available: true
+    notes_for_classifier: |
+      Insertion at the C-terminal end of αC-helix. Should classify as allosteric
+      (pocket shape / αC-helix orientation change) without a direct TKI-contact
+      residue mutation.
+
+  - id: S768I
+    hgvs_protein: p.Ser768Ile
+    hgvs_coding: c.2303G>T
+    cosmic_id: COSV51767443
+    exon: 20
+    residue: 768
+    type: uncommon_activating
+    drug_context:
+      sensitivity_variable: true
+    phenotype:
+      label: activating
+      notes: Uncommon activating mutation. Variable response to TKIs.
+    expected_pdb: []
+    afdb_available: true
+    notes_for_classifier: |
+      Variable effect on αC-helix dynamics. Likely ambiguous for the v1 classifier.
+      Useful as a stress-test for Wave 6e ambiguous-routing.
+
+  - id: G719A
+    hgvs_protein: p.Gly719Ala
+    hgvs_coding: c.2156G>C
+    cosmic_id: COSV51766094
+    exon: 18
+    residue: 719
+    type: uncommon_activating
+    drug_context:
+      sensitivity_to: [afatinib, dacomitinib]
+      reduced_sensitivity_to: [gefitinib, erlotinib]
+    phenotype:
+      label: activating
+      notes: P-loop residue. Reduced sensitivity to first-generation TKIs.
+    expected_pdb:
+      - id: 2ITN
+        ligand: AEE788
+        notes: G719S kinase domain (similar position) with TKI.
+    afdb_available: true
+    notes_for_classifier: |
+      P-loop. Should classify as allosteric for first-gen TKIs (pocket shape change
+      without direct contact-residue mutation).
+
+# End of variants. claims.yaml provides the literature claims for these IDs.

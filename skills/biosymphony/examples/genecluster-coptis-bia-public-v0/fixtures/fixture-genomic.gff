@@ -1,0 +1,2 @@
+chr1	BioSymphony	CDS	10	99	.	+	0	ID=cds-protA;protein_id=protA;product=fixture_anchor
+chr1	BioSymphony	CDS	150	240	.	+	0	ID=cds-protB;protein_id=protB;product=fixture_neighbor

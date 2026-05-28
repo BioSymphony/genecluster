@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# tools/recommended/mmseqs2/iterative-profile.sh.template
+#
+# STATUS: foundation only, not-yet-tested.
+#
+# What this would do for the BIA atlas:
+#   Run MMseqs2 iterative-profile search (--num-iterations 3) as a drop-in
+#   replacement for DIAMOND BLAST. Recovers +10-15% true orthologs at 25-40%
+#   identity, exactly the twilight zone where many BIA P450/methyltransferase
+#   paralogs sit. Output is BLAST-tabular so our existing parse_outfmt6 stays
+#   usable.
+#
+# Inputs:
+#   {QUERY_FASTA}        path to BIA queries+controls
+#                        (pipeline/genecluster_annotation_direct/queries-with-controls.faa)
+#   {TARGET_FASTA}       path to a species proteome FASTA
+#   {OUTPUT_DIR}         working dir for MMseqs2 DBs and results
+#   {THREADS}            e.g. 8
+#   {SENSITIVITY}        e.g. 7.5 (max sensitivity; default 5.7)
+#
+# Outputs:
+#   ${OUTPUT_DIR}/queries-vs-target.outfmt6  , BLAST-tabular hits
+#
+# Where output feeds in:
+#   - pipeline/genecluster_annotation_direct/run.py with --search-engine mmseqs2 substitutes this
+#     for the DIAMOND step; the rest of the pipeline is unchanged.
+#   - your downstream postprocess script adds a search_engine column per row.
+#   - new sheet `mmseqs2-vs-diamond` lists rows recovered only by iterative
+#     profile, the headline sensitivity gain.
+
+set -euo pipefail
+
+QUERY_FASTA="{QUERY_FASTA}"
+TARGET_FASTA="{TARGET_FASTA}"
+OUTPUT_DIR="{OUTPUT_DIR}"
+THREADS="{THREADS}"
+SENSITIVITY="{SENSITIVITY}"
+
+mkdir -p "${OUTPUT_DIR}/tmp"
+
+# 1. Build query + target DBs
+mmseqs createdb "${QUERY_FASTA}" "${OUTPUT_DIR}/queries.db"
+mmseqs createdb "${TARGET_FASTA}" "${OUTPUT_DIR}/target.db"
+
+# 2. Iterative-profile search (the headline mode)
+mmseqs search \
+  "${OUTPUT_DIR}/queries.db" \
+  "${OUTPUT_DIR}/target.db" \
+  "${OUTPUT_DIR}/queries-vs-target.result" \
+  "${OUTPUT_DIR}/tmp" \
+  --num-iterations 3 \
+  --sensitivity "${SENSITIVITY}" \
+  --threads "${THREADS}"
+
+# 3. Convert to BLAST-tabular for parser compatibility
+mmseqs convertalis \
+  "${OUTPUT_DIR}/queries.db" \
+  "${OUTPUT_DIR}/target.db" \
+  "${OUTPUT_DIR}/queries-vs-target.result" \
+  "${OUTPUT_DIR}/queries-vs-target.outfmt6" \
+  --format-mode 0
+
+echo "MMseqs2 iterative profile → ${OUTPUT_DIR}/queries-vs-target.outfmt6"

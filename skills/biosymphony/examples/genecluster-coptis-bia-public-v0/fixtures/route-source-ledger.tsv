@@ -1,0 +1,2 @@
+source_id	organism	proteome_fasta	gff	genome_fasta	transcriptome	transcriptome_species
+example_fixture	Coptis chinensis	fixture-proteome.faa	fixture-genomic.gff			Coptis chinensis

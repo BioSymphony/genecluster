@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# tools/recommended/jcvi-mcscan/pairwise-synteny.sh.template
+#
+# STATUS: foundation only, not-yet-tested.
+#
+# What this would do for the BIA atlas:
+# Build a pairwise macro-synteny ribbon between two species using JCVI
+# MCScan (Python). Produces the chromosome-level "Stephania chr10 ⇔
+# Houttuynia chr3" backbone that papers like Houttuynia 2024 Hortic Res and
+# Astilbe 2025 Nat Commun use as their cross-species figure spine.
+#
+# Inputs:
+# {SPECIES_A} slug, e.g. coptis-chinensis
+# {SPECIES_B} slug, e.g. stephania-tetrandra
+# {SPECIES_A_GFF} path to A's annotation GFF
+# {SPECIES_B_GFF} path to B's annotation GFF
+# {SPECIES_A_CDS} path to A's CDS FASTA
+# {SPECIES_B_CDS} path to B's CDS FASTA
+# {OUTPUT_DIR} working dir; conventionally
+# .runtime/jcvi-synteny/{A}-vs-{B}/
+#
+# Outputs:
+# ${OUTPUT_DIR}/{A}.bed , JCVI-formatted gene table
+# ${OUTPUT_DIR}/{B}.bed
+# ${OUTPUT_DIR}/{A}.{B}.lifted.anchors , synteny anchor pairs
+# ${OUTPUT_DIR}/{A}-vs-{B}-synteny.pdf , ribbon plot
+#
+# Where output feeds in:
+# - pipeline/genecluster_annotation_direct/ orchestrates the 6 pairwise sweeps for the
+# comparative atlas.
+# - your downstream postprocess script adds a synteny-blocks sheet referencing
+# the SVG/PDF and listing macro-synteny anchor counts.
+# - cross-species/synteny-blocks.qmd embeds the SVG.
+
+set -euo pipefail
+
+SPECIES_A="{SPECIES_A}"
+SPECIES_B="{SPECIES_B}"
+SPECIES_A_GFF="{SPECIES_A_GFF}"
+SPECIES_B_GFF="{SPECIES_B_GFF}"
+SPECIES_A_CDS="{SPECIES_A_CDS}"
+SPECIES_B_CDS="{SPECIES_B_CDS}"
+OUTPUT_DIR="{OUTPUT_DIR}"
+
+mkdir -p "${OUTPUT_DIR}"
+cd "${OUTPUT_DIR}"
+
+# 1. Convert each species' GFF to JCVI BED + stage CDS
+python3 -m jcvi.formats.gff bed --type=mRNA --key=ID \
+ "${SPECIES_A_GFF}" -o "${SPECIES_A}.bed"
+python3 -m jcvi.formats.gff bed --type=mRNA --key=ID \
+ "${SPECIES_B_GFF}" -o "${SPECIES_B}.bed"
+ln -sf "${SPECIES_A_CDS}" "${SPECIES_A}.cds"
+ln -sf "${SPECIES_B_CDS}" "${SPECIES_B}.cds"
+
+# 2. JCVI MCScan pairwise ortholog-synteny pipeline
+python3 -m jcvi.compara.catalog ortholog \
+ "${SPECIES_A}" "${SPECIES_B}" \
+ --no_strip_names
+
+# 3. Render the synteny ribbon
+# (seqids.txt + layout.txt are project-level; one-time hand edit per atlas)
+python3 -m jcvi.graphics.synteny seqids.txt layout.txt \
+ --outfile "${SPECIES_A}-vs-${SPECIES_B}-synteny.pdf"
+
+echo "JCVI MCScan pairwise: ${SPECIES_A} vs ${SPECIES_B} → ${OUTPUT_DIR}"

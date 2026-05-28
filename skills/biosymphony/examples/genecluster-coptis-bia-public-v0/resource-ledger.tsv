@@ -1,0 +1,16 @@
+resource	resource_type	version	license_class	use_mode	citation
+blastp	tool	2.16.0+	permissive-code	local_or_provider	Camacho 2009
+diamond	tool	2.1.10	copyleft-code	local_or_provider	Buchfink 2015
+mmseqs2	tool	15-6f452	copyleft-code	local_or_provider	Steinegger 2017
+hmmer	tool	3.4	copyleft-code	local_or_provider	Eddy 2011
+interproscan	tool	5.69-101.0	academic-free-or-web	provider_only	Jones 2014
+plantismash	tool	2.0.4	copyleft-code	provider_only	Kautsar 2017
+antismash	tool	8.0.4	copyleft-code	provider_only	Blin 2023
+foldseek	tool	9-427df8a	copyleft-code	provider_only	van Kempen 2024
+jcvi-mcscan	tool	1.4.16	permissive-code	local_or_provider	Tang 2008
+quarto	tool	1.9.37	permissive-code	local	quarto.org
+pfam	database	37.0	open-data-with-terms	provider_only	Mistry 2021
+swissprot	database	2025_03	open-data-with-terms	provider_only	UniProt 2024
+kegg	database	112.0	account-or-api-terms	provider_only	Kanehisa 2024
+mibig	database	4.0	open-data-with-terms	provider_only	Terlouw 2023
+p450rdb	database	2024_q3	open-data-with-terms	provider_only	P450 Hub 2024

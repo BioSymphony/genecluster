@@ -1,0 +1,93 @@
+schema_version: 1
+project_id: genecluster-coptis-bia-public-v0
+scientific_goal: Find and rank candidate genes, neighborhoods, and evidence gaps for
+  benzylisoquinoline alkaloid (BIA) biosynthesis in Coptis chinensis using public/approved
+  data and provider-local search.
+organism:
+  scientific_name: Coptis chinensis
+  outgroups:
+  - Berberis vulgaris
+  - Eschscholzia californica
+  - Argemone mexicana
+target_pathway: benzylisoquinoline-alkaloid-cluster-discovery
+default_run_scope: full_campaign_24h
+database_tier: maximum
+execution_defaults:
+  provider_class: runpod_pod
+  provider_role: internal_default
+  mount_path: /workspace
+  remote_workdir_template: /workspace/genecluster/runs/{run_id}
+  db_cache_root: /workspace/genecluster/db-cache
+  nextflow_cache_root: /workspace/genecluster/nextflow-cache
+  scratch_root: /workspace/genecluster/scratch
+  return_policy: summaries_only
+runtime_budget:
+  target_runtime_hours: 24
+  hard_stop_hours: 24
+  completion_definition: complete_summary_dossier_with_deferred_lane_manifest
+  budget_policy: finish_with_caveats_rather_than_extend_runtime
+  defer_before_exceeding_budget:
+  - optional_max_databases
+  - de_novo_transcriptome_assembly
+  - interproscan_full_cache
+  - plantismash_full_run
+  - broad_nr_nt_searches
+  - coexpression_if_sample_design_or_runtime_insufficient
+  - synteny_if_reference_sets_or_runtime_insufficient
+priorities:
+  novelty: high
+  deduplication: high
+  splice_variants: high
+  genome_context: high
+  local_blast: high
+  coexpression: medium
+  synteny: medium
+allowed_compute_lanes:
+- local_blast
+- diamond
+- mmseqs2
+- hmmer
+- interproscan
+- cdd_rpsblast
+- nextflow_local_executor
+- genome_neighborhood_capture
+- orthology_synteny
+- coexpression_if_supported
+forbidden_compute_lanes:
+- ncbi_remote_blast_batch
+- public_webserver_private_upload
+- local_repo_raw_download
+stop_conditions:
+- raw_or_heavy_local_artifact_detected
+- provider_cache_preflight_failed
+- missing_required_database
+- missing_required_tool
+- insufficient_provider_volume_free_space
+- launch_manifest_claim_boundary_violation
+- runtime_budget_exhausted_before_summary_dossier
+claim_boundaries:
+  transcriptome_cluster_claim: forbidden
+  broad_family_product_claim: forbidden
+  cluster_claim_requires:
+  - genome_coordinates
+  - neighboring_gene_evidence
+  product_claim_requires:
+  - functional_assay_or_lcms_validation
+  - validated_literature_seed_support
+approved_resources:
+  data_ledgers:
+  - data-ledger.tsv
+  query_ledgers:
+  - query-ledger.tsv
+  resource_ledgers:
+  - resource-ledger.tsv
+  database_ledgers:
+  - database-ledger.tsv
+review_outputs:
+  primary: interactive_structured_dossier
+  compatibility: excel_export
+  required_ledgers:
+  - candidate_hits.tsv
+  - evidence.jsonl
+  - provenance.jsonl
+  - claim-audit.jsonl

@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "campaign_id": "genecluster-coptis-bia-public-v0",
+  "organism": {
+    "scientific_name": "Coptis chinensis",
+    "common_name": "Chinese goldthread"
+  },
+  "target_pathway": {
+    "name": "benzylisoquinoline-alkaloid-cluster-discovery",
+    "scope": "Evidence-scored candidate gene discovery for benzylisoquinoline alkaloid (BIA) biosynthesis in Coptis chinensis using public reference data and comparator species.",
+    "caveat": "Synthetic public-safe example. Treat all bundled fixtures as illustrative; cluster claims still require genome coordinates and neighborhood evidence, and product claims still require functional or LC-MS/MS validation."
+  },
+  "accessions": [
+    {
+      "id": "SRX9153204",
+      "role": "transcriptome_illumina",
+      "source_url": "https://www.ncbi.nlm.nih.gov/sra/SRX9153204"
+    },
+    {
+      "id": "SRX16999876",
+      "role": "transcriptome_isoseq",
+      "source_url": "https://www.ncbi.nlm.nih.gov/sra/SRX16999876"
+    },
+    {
+      "id": "SRX9153201",
+      "role": "genome_wgs",
+      "source_url": "https://www.ncbi.nlm.nih.gov/sra/SRX9153201"
+    }
+  ],
+  "query_set": {
+    "ledger": "query-ledger.tsv",
+    "seed_classes": [
+      "NCS",
+      "6OMT",
+      "CNMT",
+      "4OMT",
+      "BBE",
+      "CYP719A1",
+      "CYP80B2",
+      "STOX"
+    ]
+  },
+  "run_readiness_contracts": {
+    "project_goals": "project-goals.yaml",
+    "pathway_steps": "pathway-steps.tsv",
+    "database_ledger": "database-ledger.tsv",
+    "cache_ledger": "cache-ledger.tsv",
+    "database_tier": "maximum",
+    "search_policy": "local_or_provider_blast_diamond_mmseqs_only",
+    "return_policy": "summaries_manifests_ledgers_provenance_versions_claim_audit_dossier_only"
+  },
+  "evidence_classes": [
+    "transcript_hit",
+    "protein_hit",
+    "domain_hit",
+    "genome_localized",
+    "neighborhood_supported",
+    "coexpression_supported",
+    "review_required"
+  ],
+  "execution": {
+    "mode": "remote",
+    "provider_class": "runpod_pod",
+    "large_local_downloads": false,
+    "remote_workdir": "/workspace/genecluster/runs/<run_id>",
+    "remote_volume_mount": "/workspace",
+    "artifact_policy": "summaries_only",
+    "web_tool_policy": "container-only",
+    "future_provider_classes": [
+      "local_lite",
+      "local_full",
+      "ssh_hpc",
+      "cloud_vm",
+      "managed_workflow"
+    ]
+  },
+  "run_scopes": {
+    "smoke": {
+      "description": "Metadata/query resolution and validation only.",
+      "heavy_compute": false
+    },
+    "candidate_search": {
+      "description": "Remote or configured-workdir candidate search and small dossier.",
+      "heavy_compute": true
+    },
+    "genome_context": {
+      "description": "Anchor candidate genes to reviewed genome/GFF resources, capture neighboring genes, and gate physical cluster claims on coordinates.",
+      "heavy_compute": true
+    },
+    "coexpression": {
+      "description": "Quantify expression where sample design permits it and score candidates by coexpression with pathway anchors.",
+      "heavy_compute": true
+    },
+    "synteny": {
+      "description": "Compare candidate loci against related genomes/transcriptomes to identify orthology, paralogy, and conserved neighborhoods.",
+      "heavy_compute": true
+    },
+    "full_public_mining": {
+      "description": "Provider-neutral full public-data mining: remote data fetch/import, optional assembly, annotation, candidate search, genome context, BGC/context, synteny, coexpression, dossier, and next-experiment brief.",
+      "heavy_compute": true
+    },
+    "next_experiment_design": {
+      "description": "Small planning scope that converts evidence gaps into sequencing, metabolomics, and functional-assay follow-ups.",
+      "heavy_compute": false
+    },
+    "full_campaign": {
+      "description": "Campaign-specific alias for full_public_mining using the example ledgers.",
+      "heavy_compute": true
+    },
+    "full_campaign_24h": {
+      "description": "One-day complete campaign profile: reference-first, cache-first, no de novo assembly by default, and complete summary dossier with deferred lane manifest.",
+      "heavy_compute": true,
+      "runtime_budget_hours": 24,
+      "completion_definition": "complete_summary_dossier_with_deferred_lane_manifest"
+    }
+  },
+  "artifact_policy": {
+    "local_downloads": "small_summaries_only",
+    "remote_large_artifacts": "runpod-volume-only-for-v0",
+    "forbidden_local_artifacts": [
+      "fastq",
+      "sra",
+      "bam",
+      "cram",
+      "sam",
+      "large_genome_assembly",
+      "blast_database",
+      "workflow_workdir"
+    ]
+  },
+  "license_policy": {
+    "skill_repo_license_target": "MIT",
+    "third_party_mode": "orchestrated_external_dependencies",
+    "web_tool_policy": "container-only",
+    "restricted_resources_require_approval": true
+  },
+  "review_policy": {
+    "statuses": [
+      "new",
+      "needs-human-review",
+      "accepted",
+      "rejected",
+      "needs-rerun",
+      "publication-candidate"
+    ],
+    "cluster_claim_rule": "Physical gene-cluster claims require genome coordinates; transcript-only hits are candidate genes only."
+  }
+}
