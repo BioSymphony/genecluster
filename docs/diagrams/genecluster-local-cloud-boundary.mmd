@@ -1,0 +1,19 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":26,"rankSpacing":96}}}%%
+flowchart LR
+  subgraph LOCAL["LOCAL — your laptop"]
+    P["control plane<br/>preflight · route · ceiling<br/>validators · review"]:::context
+  end
+  subgraph CLOUD["CLOUD — RunPod / Lambda / HPC"]
+    direction TB
+    H["heavy compute<br/>search · BGC<br/>structure · assembly"]:::search
+    RAW[("raw reads · indexes<br/>NEVER LEAVE")]:::heavy
+    H -.->|stays| RAW
+  end
+  P ==>|"launch bundle ▸"| H
+  H ==>|"◂ summaries only"| P
+  style LOCAL fill:#06140f,stroke:#2dd4bf,color:#defff8
+  style CLOUD fill:#0a1024,stroke:#60a5fa,color:#e7f0ff
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef heavy fill:#0e1420,stroke:#64748b,color:#cbd5e1,stroke-width:1.6px;

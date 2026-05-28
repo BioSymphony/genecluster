@@ -49,7 +49,7 @@ Each issue should preserve:
 - dependencies
 - final `symphony-outcome` comment
 
-<img src="diagrams/genecluster-issue-contract.svg" alt="GeneCluster issue contract" width="420">
+<img src="diagrams/genecluster-issue-contract.png" alt="GeneCluster issue contract" width="420">
 
 This makes the campaign reviewable after the fact. A researcher can ask why a candidate exists, which public source supported it, which query/control produced it, which route was rejected, and which validation accepted or caveated the claim.
 
@@ -84,7 +84,7 @@ genecluster-evidence-package/
   provenance.md
 ```
 
-<img src="diagrams/genecluster-provenance-traceback.svg" alt="GeneCluster provenance traceback" width="900">
+<img src="diagrams/genecluster-provenance-traceback.png" alt="GeneCluster provenance traceback" width="900">
 
 ## High-Value Differentiator
 

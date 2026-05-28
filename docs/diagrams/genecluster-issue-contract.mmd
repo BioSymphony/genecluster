@@ -1,11 +1,14 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":50,"rankSpacing":54}}}%%
 flowchart TB
-  G["User goal<br/>pathway, species,<br/>evidence gap, budget"]
-  C["Scientific issue contract<br/>inputs, acceptance criteria,<br/>validation commands, dependencies"]
-  W["Bounded worker<br/>one lane only<br/>candidate search<br/>context capture<br/>function jury"]
-  O["Outcome summary<br/>versions, hashes<br/>warnings, caveats"]
-  N["Next route decision<br/>promote, revise,<br/>or stop"]
-
-  G --> C
-  C --> W
-  W --> O
-  O --> N
+  G["User goal<br/>pathway · species<br/>gap · budget"]:::source
+  C["Scientific issue contract<br/>inputs · acceptance criteria<br/>validation · dependencies"]:::context
+  W["Bounded worker — one lane<br/>candidate search · context<br/>function jury"]:::search
+  O["Outcome summary<br/>versions · hashes<br/>warnings · caveats"]:::output
+  N{"Next route decision<br/>promote · revise · stop"}:::gate
+  G --> C --> W --> O --> N
+  N -.->|revise| C
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;

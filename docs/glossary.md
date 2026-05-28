@@ -29,6 +29,10 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
   - `L4_raw_sra_pipeline_ready`: raw SRA reads are fetched, converted, and materialized into searchable target sequences.
   - `L5_claim_audited_dossier_ready`: legacy maturity id for a validated evidence package; candidate hits, anchors, neighborhoods, provenance, versions, and claim checks all validate.
 
+![Stage 0 preflight: the mandatory five-pillar readiness gate (data, inputs, relevance, novelty, importance) before any compute](diagrams/genecluster-stage0-preflight.png)
+
+![Maturity ladder L0 to L5: each arrow is a verify gate, no stage succeeds before the prior is verified](diagrams/genecluster-maturity-ladder.png)
+
 ## Routes And Claim Ceilings
 
 - **Route.** The defensible evidence path the campaign is allowed to follow. Routes have explicit claim ceilings; choosing a weaker route is fine, choosing one your data cannot support is the failure mode this vocabulary is designed to prevent.
@@ -42,12 +46,16 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
 - **Route card.** The artifact that records the chosen route, the rejected routes, the rationale, and the claim ceiling. Produced by `genecluster_annotation_scout.py` and read by every downstream worker.
 - **Claim ceiling.** The strongest scientific claim the chosen route is allowed to support. A campaign that detects a cluster on `transcript-first` evidence cannot claim physical genomic cluster boundaries; the claim ceiling forbids that.
 
+![Route decision tree: data state selects the route, and each route sets a hard claim ceiling](diagrams/genecluster-route-claim-ceiling.png)
+
 ## Evidence And Review
 
 - **Candidate hit.** A protein or gene that scored well on the campaign's search lanes. Rows live in `candidate_hits.tsv`.
 - **Evidence normalizer.** A script that turns raw tool output (BLAST tables, BGC caller results, function-prediction votes) into the campaign's canonical TSV shape so downstream lanes do not need tool-specific parsers. See `genecluster_atlas_normalizers.py`.
 - **Function jury.** The aggregated vote across multiple function-prediction tools (HMMER + InterProScan + DeepEC + KEGG mapping + CLEAN, where validated) for each candidate. Stored as `protein_function_jury.tsv`.
 - **Claim check.** The final check that every claim in the evidence package is supported by candidate hits, route ceiling, validators, and provenance. Implemented by `genecluster_claim_audit.py`. Failures are hard blockers.
+
+![Function jury: multiple function-prediction tools vote per candidate; the consensus and confidence land in protein_function_jury.tsv](diagrams/genecluster-function-jury.png)
 
 ## Outputs
 

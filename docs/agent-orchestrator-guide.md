@@ -35,7 +35,7 @@ gap is just "decide the next bounded worker" or "write a straightforward
 adapter around a known ledger," that is normal orchestrator work, not a missing
 platform feature.
 
-<img src="diagrams/genecluster-issue-contract.svg" alt="GeneCluster issue contract" width="420">
+<img src="diagrams/genecluster-issue-contract.png" alt="GeneCluster issue contract" width="420">
 
 ## Default Flow For A New Goal
 

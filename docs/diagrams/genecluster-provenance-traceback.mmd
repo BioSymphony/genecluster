@@ -1,11 +1,25 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":12,"nodeSpacing":22,"rankSpacing":40}}}%%
 flowchart RL
-  CLAIM["Claim in evidence package<br/>candidate, cluster,<br/>or pathway gap"]
-  CLAIM --> LEDGER["Claim ledger row<br/>claim level, caveats,<br/>review status"]
-  LEDGER --> EVIDENCE["Evidence tables<br/>candidate hits<br/>function jury<br/>cluster calls"]
-  EVIDENCE --> ROUTE["Route decision<br/>allowed lanes<br/>rejected routes<br/>claim ceiling"]
-  ROUTE --> QUERY["Query ledger<br/>seed proteins<br/>positive controls<br/>decoys"]
-  EVIDENCE --> SOURCE["Source ledger<br/>assembly, annotation,<br/>RNA-Seq metadata"]
-  EVIDENCE --> RUN["Execution record<br/>tool versions<br/>commands, hashes,<br/>runtime warnings"]
-  RUN --> PROVIDER["Execution lane<br/>local workstation,<br/>SSH/HPC,<br/>or cloud provider"]
-  SOURCE --> PUBLIC["Public source record<br/>NCBI, SRA, UniProt,<br/>KEGG, MIBiG"]
-  CLAIM --> REVIEW["Review surface<br/>summary-only evidence<br/>figures and caveats"]
+  CLAIM["Claim<br/>candidate · cluster · gap"]:::output
+  LEDGER["Claim ledger<br/>level · caveats"]:::context
+  EVIDENCE["Evidence tables<br/>hits · jury · calls"]:::search
+  ROUTE["Route decision<br/>allowed · ceiling"]:::gate
+  QUERY["Query ledger<br/>seeds · controls"]:::query
+  SOURCE["Source ledger<br/>assembly · annotation"]:::source
+  PUBLIC["Public record<br/>NCBI · SRA · UniProt"]:::source
+  RUN["Execution record<br/>versions · hashes"]:::function
+  PROVIDER["Execution lane<br/>local · HPC · cloud"]:::heavy
+  REVIEW["Review surface<br/>summary-only · figures"]:::output
+  CLAIM --> LEDGER --> EVIDENCE
+  EVIDENCE --> ROUTE --> QUERY
+  EVIDENCE --> SOURCE --> PUBLIC
+  EVIDENCE --> RUN --> PROVIDER
+  CLAIM --> REVIEW
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef query fill:#231803,stroke:#fbbf24,color:#fff5e0,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;
+  classDef heavy fill:#0e1420,stroke:#64748b,color:#cbd5e1,stroke-width:1.6px;

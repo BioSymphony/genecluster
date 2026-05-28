@@ -1,0 +1,19 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":14,"nodeSpacing":18,"rankSpacing":28}}}%%
+flowchart TB
+  L0["L0 · control plane<br/>ledgers + Stage 0"]:::source
+  L1["L1 · provider + tools"]:::context
+  L2["L2 · reference DBs"]:::search
+  L3["L3 · target inputs + indexes"]:::compare
+  L4["L4 · raw SRA materialized"]:::function
+  L5["L5 · claim-audited package"]:::output
+  L0 -->|verify| L1
+  L1 -->|verify| L2
+  L2 -->|verify| L3
+  L3 -->|verify| L4
+  L4 -->|verify| L5
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef compare fill:#190f30,stroke:#c084fc,color:#f4ecff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;

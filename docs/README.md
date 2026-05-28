@@ -12,8 +12,14 @@ This directory is the operating manual for the public GeneCluster control plane.
 - [architecture.md](architecture.md) - the public GeneCluster control-plane model.
 - [workflow-campaigns.md](workflow-campaigns.md) - campaign and issue-contract flow.
 - [model-routing.md](model-routing.md) - model/worker routing notes.
-- [diagrams/genecluster-issue-contract.svg](diagrams/genecluster-issue-contract.svg) - visual issue-contract lifecycle.
-- [diagrams/genecluster-provenance-traceback.svg](diagrams/genecluster-provenance-traceback.svg) - visual claim-to-source traceback.
+- [diagrams/genecluster-issue-contract.png](diagrams/genecluster-issue-contract.png) - visual issue-contract lifecycle.
+- [diagrams/genecluster-provenance-traceback.png](diagrams/genecluster-provenance-traceback.png) - visual claim-to-source traceback.
+- [diagrams/genecluster-stage0-preflight.png](diagrams/genecluster-stage0-preflight.png) - mandatory Stage 0 five-pillar readiness gate.
+- [diagrams/genecluster-route-claim-ceiling.png](diagrams/genecluster-route-claim-ceiling.png) - route decision tree and claim ceilings.
+- [diagrams/genecluster-maturity-ladder.png](diagrams/genecluster-maturity-ladder.png) - L0 to L5 maturity ladder with verify gates.
+- [diagrams/genecluster-function-jury.png](diagrams/genecluster-function-jury.png) - multi-tool function jury and consensus.
+- [diagrams/genecluster-local-cloud-boundary.png](diagrams/genecluster-local-cloud-boundary.png) - local control plane vs cloud execution boundary.
+- [diagrams/genecluster-session-flow.png](diagrams/genecluster-session-flow.png) - human-in-the-loop session flow with approval gate.
 
 ## Validation And Runbooks
 

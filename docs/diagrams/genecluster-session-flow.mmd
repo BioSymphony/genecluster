@@ -1,0 +1,16 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":30,"rankSpacing":40}}}%%
+flowchart TB
+  S1["① YOU · state the mission<br/>pathway · species · target molecule"]:::query
+  S2["② AGENT · scout public DBs<br/>NCBI · SRA — what data exists?"]:::search
+  S3["③ AGENT · Stage 0 + pick route<br/>set the claim ceiling"]:::search
+  S4["④ AGENT · report back<br/>campaign packet · shortlist · next wave"]:::search
+  G{"⑤ YOU · approve<br/>cloud launch?"}:::gate
+  S6["⑥ AGENT · run on cloud GPU<br/>validated launch bundle"]:::search
+  S7["⑦ AGENT · evidence package<br/>caveats · next bounded wave"]:::output
+  S1 --> S2 --> S3 --> S4 --> G
+  G -->|approve| S6 --> S7
+  G -.->|not yet — revise| S4
+  classDef query fill:#231803,stroke:#fbbf24,color:#fff5e0,stroke-width:2.2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;
