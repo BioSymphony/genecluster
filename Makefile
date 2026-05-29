@@ -22,7 +22,7 @@ skill-audit:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B skills/biosymphony/scripts/biosymphony_public_skill_audit.py --skill-root skills/biosymphony
 
 capability:
-	PYTHONDONTWRITEBYTECODE=1 python3 -B skills/biosymphony/scripts/capability_probe.py --json
+	PYTHONDONTWRITEBYTECODE=1 python3 -B skills/biosymphony/scripts/capability_probe.py --json --no-fail
 
 artifact-scan:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B skills/biosymphony/scripts/genecluster_preflight.py \

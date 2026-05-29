@@ -92,6 +92,16 @@ def conda_envs(conda_path: str | None) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Probe local BioSymphony capability tiers.")
     parser.add_argument("--json", action="store_true", help="Emit machine-readable JSON.")
+    parser.add_argument(
+        "--no-fail",
+        action="store_true",
+        help=(
+            "Report-only: always exit 0 even when Tier A is not locally ready. "
+            "Used by `make capability` so CI (which lacks local GUI apps / tooling / "
+            "the ValarTTS server) does not fail. Direct invocation without this flag "
+            "keeps the exit-1 signal for local readiness checks."
+        ),
+    )
     args = parser.parse_args()
 
     path_commands = {cmd: shutil.which(cmd) for cmd in PATH_COMMANDS}
@@ -173,6 +183,8 @@ def main() -> int:
         if missing_mods:
             print("Missing Python modules: " + ", ".join(missing_mods))
 
+    if args.no_fail:
+        return 0
     return 0 if tier_a_ready else 1
 
 

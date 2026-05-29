@@ -39,7 +39,8 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/genecluster-superpowers
+  # IMAGE_NAME is computed (lowercased) in the "Normalize image name" step below.
+  # GHCR rejects tags containing uppercase characters and the owner is "BioSymphony".
 
 jobs:
   build:
@@ -49,6 +50,12 @@ jobs:
       digest: ${{ steps.build.outputs.digest }}
 
     steps:
+      - name: Normalize image name
+        # GHCR repository names must be lowercase; github.repository_owner is "BioSymphony".
+        env:
+          OWNER: ${{ github.repository_owner }}
+        run: echo "IMAGE_NAME=${OWNER,,}/genecluster-superpowers" >> "$GITHUB_ENV"
+
       - name: Checkout
         uses: actions/checkout@v6
 
@@ -79,7 +86,7 @@ jobs:
           BASE_IMAGE_INPUT: ${{ inputs.base_runner_image }}
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
-          DEFAULT_BASE_IMAGE="${REGISTRY}/${GITHUB_REPOSITORY_OWNER}/genecluster-runner:v0.1"
+          DEFAULT_BASE_IMAGE="${REGISTRY}/${GITHUB_REPOSITORY_OWNER,,}/genecluster-runner:v0.1"
           {
             echo "args<<EOF"
             echo "BASE_IMAGE=${BASE_IMAGE_INPUT:-$DEFAULT_BASE_IMAGE}"
