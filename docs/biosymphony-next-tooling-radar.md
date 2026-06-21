@@ -23,17 +23,34 @@ The useful additions cluster into six categories:
 
 | Rank | Candidate | Why It Is Useful Here | First BioSymphony Contract | First Check |
 |---:|---|---|---|---|
-| 1 | `nf-core/fetchngs` + NCBI Datasets + SRA/ENA/GWH adapters | Stage 0 already depends on public genome/read metadata, but the data acquisition layer should emit stronger normalized ledgers instead of one-off accession heuristics. | `source-ledger.tsv`, `read-accessions.tsv`, `assembly-ledger.tsv`, `checksums.tsv` | Keep raw/private data out of the repo; pin tool versions. |
+| 1 | `nf-core/fetchngs` + NCBI Datasets + SRA/ENA/GWH/PubPlant adapters | Stage 0 already depends on public genome/read metadata, but the data acquisition layer should emit stronger normalized ledgers instead of one-off accession heuristics. | `source-ledger.tsv`, `read-accessions.tsv`, `assembly-ledger.tsv`, `checksums.tsv` | Keep raw/private data out of the repo; pin tool versions. |
 | 2 | AGAT + `pyGenomeViz` | The cblaster/clinker parked slot exposed annotation-format friction. AGAT is the GFF sanitation workhorse; `pyGenomeViz` gives lightweight static HTML/SVG cluster review without requiring a full browser app. | `annotation-normalization-report.tsv`, `cluster-neighborhood.svg`, `cluster-neighborhood.html` | GPL-3.0 for AGAT; smoke on messy plant GFFs. |
 | 3 | PMN 17 / PlantCyc | The repo still frames PlantCyc as PMN 16. PMN 17 is a real upgrade and the best plant-specific pathway/reaction source when license terms are acceptable. | `pmn_pathway_coverage.tsv`, `pmn-reaction-evidence.tsv` | Manual PMN license form; cache outside repo. |
 | 4 | PGDD 2.0 / Gramene Plants / PlantPan | BioSymphony needs better source-scout enrichment before running custom synteny. These are plant-specific support sources for precomputed synteny, pangenome, pathway, expression, and orthology context. | `external-synteny-evidence.tsv`, `pangenome-context.tsv` | Species coverage is crop-biased; preserve release numbers. |
 | 5 | Workflow Run RO-Crate + Process Run Crate + Data Package v2 | Figure dossiers need interoperable provenance without forcing every worker into a full workflow engine. RO-Crate captures runs; Data Package/check-jsonschema checks compact tables. | `ro-crate-metadata.json`, `datapackage.json`, `validation-report.json` | Decide private-path omission policy. |
 | 6 | Boltz-2 + OpenFold3 + P2Rank/fpocket + GNINA/PoseBusters | Structure work is more useful when the agent records complexes, pockets, docking boxes, pose plausibility, and affinity triage in tables. | `protein_structure_models.tsv`, `binding_pockets.tsv`, `ligand_pose_scores.tsv` | GPU pods and ligand-prep discipline; predictions are triage support. |
 | 7 | Intra-cluster protein-complex prediction | A candidate BGC locus can contain adjacent proteins whose functions only make sense as a physical complex or enzyme assembly. This lane turns that into a bounded hypothesis test instead of a full proteome-scale screen. | `cluster_complex_pairs.tsv`, `complex_model_scores.tsv`, `cluster_ppi_network.json` | Candidate/preprint lane; use small public loci first and keep claims hypothesis-level. |
-| 8 | LOTUS + Rhea + RetroRules 2026 | Gene/pathway review is stronger when paired with metabolite occurrence and reaction-template context, especially for alkaloid route claims. | `metabolite_occurrence.tsv`, `reaction_template_evidence.tsv` | Occurrence supports context only; synonym cleanup required. |
+| 8 | LOTUS + Rhea + RetroRules 2026 + ATTED-II | Gene/pathway review is stronger when paired with metabolite occurrence, reaction-template, and public coexpression context, especially for alkaloid route claims. | `metabolite_occurrence.tsv`, `reaction_template_evidence.tsv`, `public_coexpression_context.tsv` | Occurrence and coexpression support context only; synonym and ID cleanup required. |
 | 9 | Observable Framework + igv-reports/JBrowse + Molstar/Nightingale | Quarto remains the report spine, but dense review needs sortable claim tables, self-contained locus cards, and pinned protein-structure scenes. | `review/` static site manifest plus per-card HTML/state files | Keep canonical narrative in Quarto; avoid server-only apps. |
 | 10 | RunPod S3 artifact pull + rclone/s5cmd | RunPod stays default, but artifact retrieval should prefer direct object-style pulls where available and fall back to proxy-pod pulls only when needed. | `artifact_pull.yaml`, `artifact-pull-report.json` | S3 API is datacenter-limited; keep raw FASTQ/BAM out of the repo. |
-| 11 | Nextflow/Wave/Fusion, dstack, SkyPilot | Useful later for standardized overflow lanes, portable smoke jobs, and eventually AWS/GCP Batch after the Symphony/RunPod wrappers stabilize. | provider-neutral `launch-manifest.json` to `nextflow.config`, `dstack.yml`, or `sky.yaml` | More credentials/config surface; wait for stable wrapper contracts. |
+| 11 | Nextflow/Wave/Fusion, Snakemake/Apptainer, dstack, SkyPilot | Useful later for standardized overflow lanes, portable smoke jobs, HPC execution, and eventually AWS/GCP Batch after the Symphony/RunPod wrappers stabilize. | provider-neutral `launch-manifest.json` to `nextflow.config`, `Snakefile`, `apptainer.def`, `dstack.yml`, or `sky.yaml` | More credentials/config surface; wait for stable wrapper contracts. |
+
+## June 2026 Tool Intake
+
+This refresh records recent public tools and databases that fill gaps in the radar. These entries are knowledge-base candidates, not checked tool rows. Promote one only after a small smoke run produces the named contract.
+
+| Candidate | Fit | First Contract | Decision |
+|---|---|---|---|
+| PubPlant | Publication-backed plant genome catalogue for Stage 0 source scouting. | `published_genome_sources.tsv` folded into `source-ledger.tsv` | Add to the source adapter pack. |
+| GATOR-GC | Required/optional-protein cluster search for known or suspected cluster families. | `targeted_cluster_windows.tsv`, `gator_gc_similarity.tsv` | Smoke after cblaster/Scan Cluster handoff shape is stable. |
+| BGC-QUAST | Compares antiSMASH, DeepBGC, and GECCO-style BGC calls and emits reviewable reports. | `bgc_caller_comparison.tsv`, `bgc-quast-report/` | Add a narrow BGC-caller comparison smoke. |
+| BGC-Prophet | Fast microbial/metagenome BGC triage using a transformer-style model. | `microbial_bgc_triage.tsv` | Watch for microbial/fungal expansion. |
+| PanBGC / PanBGC-DB | Pangenome-style family context for BGC families. | `bgc_family_pan_context.tsv` | Watch for microbial/fungal family work. |
+| ATTED-II v13 | Public plant coexpression lookup before campaign-specific CoExpPhylo work. | `public_coexpression_context.tsv` | Add when species coverage fits. |
+| AF2BIND + PoseBench | Binding-site predictions and pose benchmark context before docking tables. | `binding_site_predictions.tsv`, `pose_benchmark_report.json` | Smoke AF2BIND after P2Rank/fpocket; watch PoseBench. |
+| MAPred / ProtDETR / TopEC | Second-wave EC/function-scoring alternatives with structure or residue-level signals. | `protein_function_votes.tsv` | Watch after HIT-EC/EnzyMM/DeepEC contracts settle. |
+| Apptainer 1.4 + Snakemake 9 plugins | HPC runtime path for sites where Docker or Nextflow is awkward. | `apptainer.def`, `Snakefile`, `snakemake-profile.yaml` | Add when an HPC user appears. |
+| A2A / MCP / Agents SDK handoff patterns | Shared vocabulary for task, tool, and artifact handoff manifests. | `agent-handoff-manifest.json` | Watch; keep the skill runtime-agnostic. |
 
 ## Stage 0 Acquisition And Source Scouting
 
@@ -65,7 +82,7 @@ The useful additions cluster into six categories:
 
 **Source:** [nf-core/fetchngs GitHub](https://github.com/nf-core/fetchngs).
 
-### SRA Toolkit, ENA API, GWH API, ffq, pysradb
+### SRA Toolkit, ENA API, GWH API, PubPlant, ffq, pysradb
 
 **Fit:** focused adapters for the same source-ledger flow.
 
@@ -73,11 +90,12 @@ The useful additions cluster into six categories:
 - SRA Cloud is the right path when read movement dominates; NCBI documents faster cloud access and unlimited concurrent cloud-bucket downloads.
 - ENA Browser/Portal APIs should be used for accession resolution and FTP/metadata mirrors.
 - GWH API fills the China National Genomics Data Center plant assembly fallback already named in Stage 0.
+- PubPlant fills a publication-backed plant genome catalogue role, useful for checking whether a target species has a public genome, publication, and downloadable source before deeper acquisition work starts.
 - `ffq` and `pysradb` are useful lightweight metadata cross-checkers, especially when nf-core/Nextflow is too heavy for a scout.
 
 **Contract:** every adapter writes the same fields: provider, query, accession, organism, taxid, material type, assembly/read metadata, download URL, checksum when available, license/terms note, timestamp, tool version.
 
-**Sources:** [SRA Toolkit](https://github.com/ncbi/sra-tools), [SRA in the Cloud](https://www.ncbi.nlm.nih.gov/sra/docs/sra-cloud/), [ENA programmatic access](https://ena-docs.readthedocs.io/en/latest/retrieval/programmatic-access.html), [GWH API docs](https://ngdc.cncb.ac.cn/gwh/api_documents), [ffq](https://github.com/pachterlab/ffq), [pysradb](https://github.com/saketkc/pysradb).
+**Sources:** [SRA Toolkit](https://github.com/ncbi/sra-tools), [SRA in the Cloud](https://www.ncbi.nlm.nih.gov/sra/docs/sra-cloud/), [ENA programmatic access](https://ena-docs.readthedocs.io/en/latest/retrieval/programmatic-access.html), [GWH API docs](https://ngdc.cncb.ac.cn/gwh/api_documents), [PubPlant](https://www.plabipd.de/pubplant_main.html), [ffq](https://github.com/pachterlab/ffq), [pysradb](https://github.com/saketkc/pysradb).
 
 ## Annotation And Cluster Visualization
 
@@ -114,6 +132,24 @@ The useful additions cluster into six categories:
 **Action:** keep as `watch-high` and re-check before the next cblaster/clinker investment.
 
 **Source:** [bioRxiv preprint](https://www.biorxiv.org/content/10.64898/2026.04.29.721675v1).
+
+### GATOR-GC, BGC-QUAST, BGC-Prophet, And PanBGC
+
+**Fit:** useful around the plantiSMASH/DeepBGC/Scan Cluster layer, but each tool should stay in a narrow role until a smoke run proves the handoff.
+
+- GATOR-GC is a targeted cluster-search tool for required and optional proteins. It is useful when BioSymphony already has a seed enzyme set and wants conserved windows around those proteins.
+- BGC-QUAST is a comparison and quality-assessment layer for BGC caller outputs. It can help compare antiSMASH, DeepBGC, and GECCO-style predictions once BioSymphony has normalized input formats.
+- BGC-Prophet is a transformer-style microbial/metagenome BGC predictor and classifier. Keep it out of the plant default path, but record it for microbial/fungal expansion.
+- PanBGC and PanBGC-DB are useful for bacterial/fungal pangenome-shaped family context. They are not plant defaults.
+
+**Integration shape:**
+
+- Add `targeted_cluster_windows.tsv`: query protein, required/optional role, contig, window coordinates, neighboring genes, distance thresholds, and support notes.
+- Add `bgc_caller_comparison.tsv`: region ID, caller, coordinates, class, overlap set, disagreement reason, and source file.
+- Add `microbial_bgc_triage.tsv` only for microbial/fungal campaigns.
+- Add `bgc_family_pan_context.tsv` only when a campaign asks for pangenome-family context.
+
+**Sources:** [GATOR-GC NAR article](https://academic.oup.com/nar/article/53/13/gkaf606/8192810), [GATOR-GC GitHub](https://github.com/chevrettelab/gator-gc), [BGC-QUAST preprint](https://www.biorxiv.org/content/10.64898/2026.05.04.722653v1.full-text), [BGC-QUAST GitHub](https://github.com/gurevichlab/bgc-quast), [BGC-Prophet NAR article](https://academic.oup.com/nar/article/53/7/gkaf305/8113170), [BGC-Prophet GitHub](https://github.com/HUST-NingKang-Lab/BGC-Prophet), [PanBGC-DB GitHub](https://github.com/ZiemertLab/PanBGC-DB), [PanBGC article](https://academic.oup.com/ismecommun/article/5/1/ycaf225/8346042).
 
 ## Plant Pathway, Synteny, Coexpression, And Chemistry Context
 
@@ -162,13 +198,24 @@ The useful additions cluster into six categories:
 
 **Sources:** [CoExpPhylo GitHub](https://github.com/bpucker/CoExpPhylo), [BMC Genomics article](https://link.springer.com/article/10.1186/s12864-025-12061-3).
 
+### ATTED-II v13
+
+**Fit:** public coexpression lookup before spending on campaign-specific transcript quantification. It is especially useful when a target or comparator species is covered well enough to provide gene-level neighborhood context.
+
+**Integration shape:**
+
+- Add `public_coexpression_context.tsv`: query gene, source species, matched public gene ID, coexpressed partner, score/rank, source release, URL or row ID, and ID-mapping caveat.
+- Use as context for candidate ranking; do not treat coexpression alone as cluster or enzyme proof.
+
+**Source:** [ATTED-II](https://atted.jp/).
+
 ### LOTUS, Rhea, RetroRules 2026
 
 **Fit:** adds non-gene context to pathway claims.
 
 - LOTUS provides referenced natural-product structure-organism occurrence pairs under CC0.
-- Rhea release 140 has 18,343 unique reaction quartets.
-- RetroRules 2026 is the reaction-template upgrade already flagged in the canonical tooling status.
+- Rhea release 141 reports 18,558 unique reaction quartets.
+- RetroRules current public download is release 3.0.0, with CC BY 4.0 terms and radius 0-10 templates.
 
 **Integration shape:**
 
@@ -176,7 +223,7 @@ The useful additions cluster into six categories:
 - Add `reaction_template_evidence.tsv`: route step, Rhea/RetroRules ID, EC, substrate/product mapping, radius/template, caveat.
 - Use this as plausibility and route context for review; route enzyme claims still need separate support.
 
-**Sources:** [LOTUS homepage](https://lotus.nprod.net/), [LOTUS manuscript](https://lotus.nprod.net/lotus-manuscript/), [Rhea statistics](https://www.rhea-db.org/statistics), [RetroRules 2026 NAR article](https://academic.oup.com/nar/article/54/D1/D1799/8373943).
+**Sources:** [LOTUS homepage](https://lotus.nprod.net/), [LOTUS manuscript](https://lotus.nprod.net/lotus-manuscript/), [Rhea statistics](https://www.rhea-db.org/statistics), [RetroRules downloads](https://retrorules.org/download), [RetroRules 2026 NAR article](https://academic.oup.com/nar/article/54/D1/D1799/8373943).
 
 ### BiG-SCAPE 2.0 / BiG-SLiCE 2.0
 
@@ -246,6 +293,18 @@ The useful additions cluster into six categories:
 
 **Sources:** [P2Rank GitHub](https://github.com/rdk/p2rank), [fpocket GitHub](https://github.com/Discngine/fpocket).
 
+### AF2BIND + PoseBench
+
+**Fit:** binding-site prediction and benchmark context before full docking spend. AF2BIND is a good smoke candidate because it turns protein structures into pocket/binding-site hypotheses, while PoseBench is better kept as a benchmark harness until BioSymphony has multiple pose generators to compare.
+
+**Integration shape:**
+
+- Add `binding_site_predictions.tsv`: structure ID, model backend, predicted site, residue set, ligand class or query ligand, score, and caveat.
+- Add `pose_benchmark_report.json` only when comparing multiple docking or pose-prediction backends.
+- Keep AF2BIND downstream of P2Rank/fpocket so the first smoke compares cheap pocket calls to a model-based binding-site signal.
+
+**Sources:** [AF2BIND GitHub](https://github.com/sokrypton/af2bind), [AF2BIND Nature Methods article](https://www.nature.com/articles/s41592-026-03011-2), [PoseBench GitHub](https://github.com/BioinfoMachineLearning/PoseBench).
+
 ### GNINA + PoseBusters + ProDock
 
 **Fit:** pragmatic docking and plausibility-check lane once pocket/state prep is controlled.
@@ -269,6 +328,7 @@ The useful additions cluster into six categories:
 - EnzPlacer fills EC1-3 novelty space, especially outside training-corpus comfort zones.
 - EnzyMM adds M-CSA-derived 3D catalytic-motif context.
 - ESM-C 300M, SaProt, and ProstT5 support protein-family maps and structure-aware similarity.
+- MAPred, ProtDETR, and TopEC are second-wave alternatives that add sequence plus 3Di, residue-level, or local 3D-structure signals. Watch them until the baseline `protein_function_votes.tsv` contract is stable.
 
 **Integration shape:**
 
@@ -276,7 +336,7 @@ The useful additions cluster into six categories:
 - Add `catalytic_site_evidence.tsv` for EnzyMM/site-template calls.
 - Add `plm_embedding_index.tsv` for embedding files, model, dimensionality, sequence hash, and downstream plot/table links.
 
-**Sources:** [HIT-EC GitHub](https://github.com/datax-lab/HIT-EC), [EnzPlacer GitHub](https://github.com/drxiangma/EnzPlacer), [EnzyMM GitHub](https://github.com/rayhackett/enzymm), [SaProt GitHub](https://github.com/westlake-repl/SaProt), [ProstT5 GitHub](https://github.com/mheinzinger/ProstT5).
+**Sources:** [HIT-EC GitHub](https://github.com/datax-lab/HIT-EC), [EnzPlacer GitHub](https://github.com/drxiangma/EnzPlacer), [EnzyMM GitHub](https://github.com/rayhackett/enzymm), [SaProt GitHub](https://github.com/westlake-repl/SaProt), [ProstT5 GitHub](https://github.com/mheinzinger/ProstT5), [MAPred GitHub](https://github.com/Rongdingyi/MAPred), [ProtDETR GitHub](https://github.com/yangzhao1230/ProtDETR), [TopEC GitHub](https://github.com/IBG4-CBCLab/TopEC).
 
 ## Provenance, Dossier Packaging, And Review Surfaces
 
@@ -372,6 +432,18 @@ figure-dossier/
 
 **Sources:** [Nextflow executors](https://www.nextflow.io/docs/latest/executor.html), [Wave containers](https://docs.seqera.io/nextflow/wave), [Fusion file system](https://docs.seqera.io/nextflow/fusion).
 
+### Snakemake 9, Apptainer 1.4, And Handoff Specs
+
+**Fit:** runtime portability and interface discipline for users outside the default RunPod wrapper path.
+
+- Snakemake 9 executor and storage plugins are useful for labs that already operate Snakemake profiles or cluster schedulers.
+- Apptainer 1.4 is the likely container path for university HPC sites where Docker is unavailable.
+- A2A, MCP, and Agents SDK handoff patterns are useful vocabulary for a future `agent-handoff-manifest.json`; keep them as interface references, not runtime dependencies.
+
+**Integration shape:** add these only after a real user path needs them. The first contract should be tiny: `Snakefile`, `snakemake-profile.yaml`, `apptainer.def`, or `agent-handoff-manifest.json`, each pointing at existing BioSymphony tables rather than introducing a parallel workflow model.
+
+**Sources:** [Snakemake executors](https://snakemake.readthedocs.io/en/v9.17.2/executing/executors.html), [Apptainer 1.4 release](https://apptainer.org/news/apptainer-1-4-0-20250318/), [A2A GitHub](https://github.com/a2aproject/A2A), [MCP tools specification](https://modelcontextprotocol.io/specification/2025-06-18/server/tools), [OpenAI Agents SDK handoffs](https://openai.github.io/openai-agents-python/handoffs/).
+
 ### dstack, SkyPilot, AWS/GCP Batch, Vast.ai, Lambda, CoreWeave
 
 **Fit:** overflow and portability experiments.
@@ -399,6 +471,10 @@ These are ordered by value-to-cost for the next operator pass.
 | F7 | Intra-cluster complex smoke | Enumerate pairs for one small public candidate locus, filter hard, model the top few pairs, and score interfaces | `cluster_complex_pairs.tsv`, `complex_model_scores.tsv`, `cluster_ppi_network.json` | small GPU candidate set |
 | F8 | Cloud artifact-pull abstraction | No paid biological run; test against a tiny volume/file set where the provider's object-storage API exists | `artifact-pull-report.json`, checksum report | maybe free/local + tiny pod |
 | F9 | Observable claim explorer prototype | Build from existing atlas TSV/JSON only | static `review/observable/` | local |
+| F10 | BGC caller and targeted-window comparison | Run BGC-QUAST on tiny antiSMASH/DeepBGC/GECCO-style public examples; run GATOR-GC on one small seed set | `bgc_caller_comparison.tsv`, `targeted_cluster_windows.tsv` | small CPU pod |
+| F11 | Public coexpression context | Query ATTED-II for a small public target/comparator set and normalize IDs | `public_coexpression_context.tsv` | local or no-cost HTTP |
+| F12 | AF2BIND binding-site smoke | Run AF2BIND on one existing public structure model and compare to P2Rank/fpocket pockets | `binding_site_predictions.tsv` | small GPU or CPU path, depending on setup |
+| F13 | HPC portability skeleton | Wrap one existing smoke lane in Snakemake plus Apptainer without changing the core BioSymphony tables | `Snakefile`, `snakemake-profile.yaml`, `apptainer.def` | local or HPC login node dry run |
 
 **Implementation note:** F4 has a first local implementation in
 `skills/biosymphony/scripts/genecluster_dossier_skeleton.py`: generated
@@ -412,7 +488,7 @@ fields, `genecluster_sra_runinfo.py` emits `read-accessions.tsv`, and
 `genecluster_preflight.py` checks both the no-network source-scout policy and
 normalized read-acquisition rows.
 
-F7 also has a local control-plane implementation: launch bundles now emit
+F8 also has a local control-plane implementation: launch bundles now emit
 `artifact_pull.yaml`, and `genecluster_preflight.py --artifact-pull-manifest`
 validates summary-only includes, raw/heavy excludes, max-byte limits, checksum
 mode, and local destination policy before any artifact sync happens.
@@ -427,8 +503,9 @@ the normal preflight.
 | AlphaFold3 | Defer as a BioSymphony default: parameter/terms gates and non-commercial constraints do not fit open worker lanes. |
 | Chai-2 | Defer: partner/API access belongs outside the current public repo lane. |
 | ESM-3 / ESM-C 6B | Defer for default workflow: gated/commercial surfaces; use ESM-C 300M, ESM-2, SaProt, and ProstT5 where appropriate. |
-| PanBGC / GECCO / antiSMASH as plant defaults | Defer for this workflow: bacterial/fungal or PKS/NRPS-heavy; plantiSMASH + DeepBGC remain the plant BGC defaults. |
-| NPAtlas / COCONUT as primary source context | Keep as chemistry background only; LOTUS is a better fit for taxon-compound occurrence claims. |
+| GECCO / antiSMASH as plant defaults | Defer for this workflow: bacterial/fungal or PKS/NRPS-heavy; plantiSMASH + DeepBGC remain the plant BGC defaults. |
+| PanBGC as default plant family context | Watch for bacterial/fungal or pangenome-shaped work; do not make it the plant default until a plant-fit smoke run proves the contract. |
+| NPAtlas / COCONUT 2.0 as primary source context | Keep as chemistry background only; LOTUS is a better fit for taxon-compound occurrence claims. |
 | Generic Streamlit/Shiny/Reflex dashboards | Defer as default. Static Quarto/Observable/HTML dossiers are better for durable review and handoff. |
 | Replacing RunPod with AWS/GCP immediately | Keep RunPod as the current checked default; AWS/GCP are overflow paths for SRA-heavy or regulated runs. |
 | Vast.ai for private data | Use only for public-data GPU overflow. |
