@@ -45,7 +45,16 @@ This refresh records recent public tools and databases that fill gaps in the rad
 | GATOR-GC | Required/optional-protein cluster search for known or suspected cluster families. | `targeted_cluster_windows.tsv`, `gator_gc_similarity.tsv` | Smoke after cblaster/Scan Cluster handoff shape is stable. |
 | BGC-QUAST | Compares antiSMASH, DeepBGC, and GECCO-style BGC calls and emits reviewable reports. | `bgc_caller_comparison.tsv`, `bgc-quast-report/` | Add a narrow BGC-caller comparison smoke. |
 | BGC-Prophet | Fast microbial/metagenome BGC triage using a transformer-style model. | `microbial_bgc_triage.tsv` | Watch for microbial/fungal expansion. |
+| BGCFlow | Snakemake workflow for pangenome-scale BGC analysis across genome collections. | `bgcflow_project_manifest.json`, `bgcflow_summary.tsv` | Watch for microbial/fungal or large comparator campaigns; prokaryotic focus. |
+| BiG-SCAPE 2 / BiG-SLiCE 2 | BGC similarity-family networks after candidate clusters are normalized. | `gcf_novelty.tsv`, `mibig_similarity.tsv` | Run externally; AGPL/current terms and microbial-bias caveats apply. |
+| IGUA | Content-agnostic gene-cluster family identification that is not limited to Pfam-domain representation. | `igua_gcf_assignments.tsv`, `cluster_family_graph.json` | GPL-3.0; use after candidate clusters have GenBank-style records. |
+| CHAMOIS | Secondary-metabolism chemical-hierarchy approximation for cluster class cross-checks. | `chemical_hierarchy_predictions.tsv` | Verify model assets, license, and benchmark fit before use. |
+| FunBGCeX | Fungal BGC extractor for fungal or endophyte campaigns. | `fungal_bgc_regions.tsv`, `fungal_bgc_manifest.json` | Scope to fungal campaigns; not a plant default. |
 | PanBGC / PanBGC-DB | Pangenome-style family context for BGC families. | `bgc_family_pan_context.tsv` | Watch for microbial/fungal family work. |
+| MEANtools | Multi-omics metabolite and pathway inference when expression and metabolomics evidence both exist. | `multiomics_metabolite_links.tsv`, `pathway_prediction_evidence.tsv` | Requires compatible public inputs; treat predictions as context, not proof. |
+| GNPS2 | Current public metabolomics analysis hub and workflow context for MS/MS evidence. | `metabolomics_dataset_ledger.tsv`, `gnps2_workflow_summary.tsv` | Public or approved spectra only; preserve dataset accessions and terms. |
+| PGAP2 | Pan-genome analysis reference for bacterial/fungal comparator sets. | `pangenome_context.tsv`, `gene_family_presence.tsv` | Not a plant default; resolve current license/dependency posture. |
+| chatBGC | RAG-style question layer over BGCFlow outputs. | `bgc_qa_index_manifest.json`, sanitized source-summary index | Use only over public summaries or approved local outputs. |
 | ATTED-II v13 | Public plant coexpression lookup before campaign-specific CoExpPhylo work. | `public_coexpression_context.tsv` | Add when species coverage fits. |
 | AF2BIND + PoseBench | Binding-site predictions and pose benchmark context before docking tables. | `binding_site_predictions.tsv`, `pose_benchmark_report.json` | Smoke AF2BIND after P2Rank/fpocket; watch PoseBench. |
 | MAPred / ProtDETR / TopEC | Second-wave EC/function-scoring alternatives with structure or residue-level signals. | `protein_function_votes.tsv` | Watch after HIT-EC/EnzyMM/DeepEC contracts settle. |

@@ -12,8 +12,8 @@ A broader tooling review looked beyond pin freshness and asked which new tools, 
 Headline additions to consider for future smoke flights:
 
 - **Stage 0 acquisition:** NCBI Datasets adapters, `nf-core/fetchngs`, SRA/ENA/GWH metadata normalization, PubPlant, `ffq`, and `pysradb`.
-- **Annotation / cluster cards:** AGAT plus `pyGenomeViz`; keep Scan Cluster as high-fit but blocked until a public runnable repo/package is confirmed. GATOR-GC, BGC-QUAST, BGC-Prophet, and PanBGC are radar-only additions for targeted cluster windows, caller comparison, and microbial/fungal expansion.
-- **Plant evidence:** PMN 17 / PlantCyc, PGDD 2.0, Gramene Plants, Ensembl Plants release 62, PlantPan, CoExpPhylo, ATTED-II, LOTUS, Rhea, and RetroRules 2026.
+- **Annotation / cluster cards:** AGAT plus `pyGenomeViz`; keep Scan Cluster as high-fit but blocked until a public runnable repo/package is confirmed. GATOR-GC, BGC-QUAST, BGC-Prophet, BGCFlow, BiG-SCAPE 2 / BiG-SLiCE 2, IGUA, CHAMOIS, FunBGCeX, PanBGC, PGAP2, and chatBGC are radar-only additions for targeted cluster windows, caller comparison, pangenome context, review interfaces, and microbial/fungal expansion.
+- **Plant evidence:** PMN 17 / PlantCyc, PGDD 2.0, Gramene Plants, Ensembl Plants release 62, PlantPan, CoExpPhylo, ATTED-II, LOTUS, GNPS2, MEANtools, Rhea, and RetroRules 2026.
 - **Structure / docking:** Boltz-2, OpenFold3, P2Rank, fpocket, AF2BIND, GNINA, PoseBench, PoseBusters, and normalized pocket/pose tables.
 - **Dossiers:** Workflow Run RO-Crate / Process Run Crate, Data Package v2, `check-jsonschema`, Observable Framework, igv-reports/JBrowse, Molstar/Nightingale.
 - **Runtime:** RunPod REST + network-volume + S3-compatible artifact pulls, `rclone`/`s5cmd`, Nextflow/Wave/Fusion as a future portability layer, Snakemake/Apptainer for HPC portability, A2A/MCP/Agents SDK handoff patterns as interface references, and dstack/SkyPilot only for overflow experiments.

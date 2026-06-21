@@ -264,6 +264,7 @@ support, not proof of physical clustering or biosynthesis.
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
 | OrthoFinder 3 | Orthogroups, gene trees, and scalable core-assign comparative genomics | copyleft-code | GPLv3; strong default orthology layer but invoke externally. |
+| PGAP2 | Pan-genome analysis pipeline | restricted-or-review | Useful for bacterial/fungal comparator sets and side campaigns; not a plant default. |
 | SonicParanoid / Proteinortho / Broccoli | Orthology alternatives | restricted-or-review | Useful for benchmarking sensitive families or large species sets; resolve package licenses. |
 | MCScanX | Synteny/collinearity | permissive-code | Classic synteny lane; current maintained fork reports BSD-2-Clause. |
 | JCVI MCscan | Python synteny workflow and plots | permissive-code | Good modern plotting/workflow support; JBrowse 2 can consume `.anchors` in recent workflows. |
@@ -290,7 +291,8 @@ support, not proof of physical clustering or biosynthesis.
 | COCONUT | Open natural product database | open-data-with-terms | Useful broad natural-product chemical context; preserve license and version. |
 | LOTUS | Natural products occurrence database | open-data-with-terms | Useful taxon-compound occurrence evidence; preserve source and confidence. |
 | KNApSAcK | Plant metabolite/species associations | open-data-with-terms/restricted-or-review | Useful plant occurrence context; check download and redistribution terms. |
-| GNPS / MassIVE | Public metabolomics and molecular networking | open-data-with-terms/account-or-api-terms | Useful when public MS/MS evidence exists; preserve dataset accession and terms. |
+| GNPS2 / GNPS / MassIVE | Public metabolomics and molecular networking | open-data-with-terms/account-or-api-terms | Useful when public MS/MS evidence exists; preserve dataset accession, workflow, and terms. Hosted uploads are public-inputs-only unless explicitly approved. |
+| MEANtools | Multi-omics metabolite and pathway inference | restricted-or-review | Useful when public expression and metabolomics evidence both exist; treat predictions as route/context support, not enzyme proof. |
 | BRENDA | Enzyme function and kinetic context | restricted-or-review | Powerful but license-controlled; use derived summaries only after review. |
 | Rhea / ChEBI / PubChem | Reaction and compound normalization | open-data-with-terms | Good for stable identifiers; preserve release/download date and source terms. |
 | RetroRules 2026 | Reaction-template evidence | open-data-with-terms | CC BY 4.0 plus upstream source terms; use as reaction-template plausibility, not enzyme proof. |
@@ -311,7 +313,13 @@ levels, not final natural-product claims.
 | antiSMASH 8+ | General BGC caller and comparative output format | copyleft-code; AGPL | Complementary lane, not primary plant truth; local/container preferred for non-public data. |
 | GECCO | CRF-based BGC prediction | copyleft-code | GPLv3; better suited to microbial/metagenomic BGCs but useful exploratory contrast. |
 | DeepBGC | Deep-learning BGC detection/classification | permissive-code | MIT; microbial/fungal-trained context, so treat plant results as exploratory only. |
+| BGCFlow | Pangenome-scale BGC workflow | permissive-code; verify wrapped tools | Useful for microbial/fungal or comparator campaigns; prokaryotic focus, so do not promote as a plant default without a smoke run. |
 | BiG-SCAPE 2 / BiG-SLiCE 2 | BGC similarity networks | copyleft-code | AGPL-family current code; useful for broader cluster families; run externally and record terms. |
+| BGC-Prophet | Deep-learning BGC caller | restricted-or-review | Watchlist caller; evaluate against plantiSMASH/DeepBGC/antiSMASH on public fixtures before use. |
+| IGUA | Gene-cluster family identification | copyleft-code | GPL-3.0; content-agnostic GCF assignment over GenBank clusters, useful after candidate cluster normalization. |
+| CHAMOIS | Secondary-metabolism cluster chemical-hierarchy prediction | restricted-or-review | Candidate-class cross-check; verify license, model assets, and benchmark fit before use. |
+| FunBGCeX | Fungal BGC extractor | restricted-or-review | Fungal/endophyte-specific lane; not a plant default. |
+| chatBGC | Question layer over BGCFlow outputs | permissive-code; verify dependencies | Use only over sanitized public summaries or local approved outputs; never index private notes, raw logs, or unpublished data. |
 | CORASON | Core-region-based cluster phylogeny | copyleft-code/restricted-or-review | Useful around homologous cluster families; verify current packaging and dependencies. |
 | cblaster | Homologous gene cluster search | permissive-code | Excellent for cross-genome cluster similarity; remote NCBI mode needs email/rate-limit compliance and public-query caution. |
 | clinker / clustermap.js | Gene cluster comparison visualization | permissive-code | MIT-compatible dossier visualization component. |

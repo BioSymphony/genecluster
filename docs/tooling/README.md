@@ -1,6 +1,6 @@
 # BioSymphony GeneCluster: tooling integration index
 
-**Status:** mirror of the canonical inventory plus a new unvalidated radar. The original integration plans are still useful for install shape and sample CLI, but the actual validated state lives in [`../biosymphony-tooling-status.md`](../biosymphony-tooling-status.md): 25 validated, 3 parked, 8 shelved-untested, 2 gated. The expansive next-candidate pass lives in [`../biosymphony-next-tooling-radar.md`](../biosymphony-next-tooling-radar.md).
+**Status:** mirror of the canonical inventory plus an unvalidated radar. The original integration plans are still useful for install shape and sample CLI, but the actual validated state lives in [`../biosymphony-tooling-status.md`](../biosymphony-tooling-status.md): 25 validated, 3 parked, 8 shelved-untested, 2 gated. The expansive next-candidate pass lives in [`../biosymphony-next-tooling-radar.md`](../biosymphony-next-tooling-radar.md), including the June 2026 additions for BGC workflows, metabolomics context, pangenomes, and review interfaces.
 
 This directory captures the integration plan for the recommended tool stack identified by the superpower-discovery survey. The authoritative ranking and rationale live in [`../biosymphony-genecluster-superpower-roadmap.md`](../biosymphony-genecluster-superpower-roadmap.md).
 
