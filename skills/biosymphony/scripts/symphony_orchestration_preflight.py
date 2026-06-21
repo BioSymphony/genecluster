@@ -132,9 +132,9 @@ def validate_payload(path: Path, *, warn_bytes: int, max_bytes: int, allow_boot_
     if isinstance(value, dict):
         env = value.get("env", {})
         if isinstance(env, dict):
-            leaked = [key for key, val in env.items() if key.endswith(("KEY", "TOKEN")) and val and val != "REDACTED"]
+            leaked = [key for key, val in env.items() if key.endswith(("KEY", "TOKEN")) and val and val != "MASKED"]
             if leaked:
-                warnings.append("payload contains non-redacted secret-like env values: " + ", ".join(sorted(leaked)))
+                warnings.append("payload contains unmasked secret-like env values: " + ", ".join(sorted(leaked)))
     return {
         "ok": not errors,
         "errors": errors,

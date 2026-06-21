@@ -9,15 +9,15 @@ The snapshot is ready for public publication only when all checks pass:
 - no local workstation paths or private automation paths appear in public docs
 - examples use public, synthetic, or placeholder data
 - provider launch examples require explicit credentials from environment variables or untracked secure env files
-- public examples validate without paid provider access
+- public examples pass checks without paid provider access
 - image examples use `<owner>` placeholders or repository-owner-derived names, not private registry owners
-- historical run notes redact provider run IDs, account numbers, volume IDs, signed URLs, and private issue IDs
+- historical run notes omit provider run IDs, account numbers, volume IDs, signed URLs, and private issue IDs
 
 ## GitHub Repository Settings
 
 Suggested About description:
 
-> Agent-native genome mining for natural products: turn molecule or pathway goals into biosynthetic gene-cluster discovery campaigns.
+> Agent skill kit for genome-mining campaigns from molecule or pathway goals to reviewable biosynthetic gene-cluster work packets.
 
 Suggested topics:
 
@@ -30,4 +30,4 @@ Suggested social preview image:
 
 `docs/diagrams/genecluster-social-preview.jpg`
 
-Initialize or commit a fresh public git history only after the scrub passes.
+Initialize or commit a fresh public git history only after the public release checks pass.

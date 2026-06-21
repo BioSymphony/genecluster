@@ -168,7 +168,7 @@ A correct antiSMASH 8 run typically reports **8-12 regions** on B. subtilis 168 
 
 | Field | Value |
 |---|---|
-| Provider run id | redacted |
+| Provider run id | omitted |
 | Cloud / Flavor / DC | SECURE / cpu5g (32 GB, 4 vCPU) / SECURE pool |
 | Image | `condaforge/mambaforge:latest` + bioconda `antismash 8.0.4` |
 | Cost | **~$0.017 (1.7¢)**, 5 min 17 sec at $0.184/hr |

@@ -554,4 +554,4 @@ These are things this doc cannot answer without actually running AWS jobs:
 ---
 
 *Document drafted 2026-05-11 as forward-research; no AWS validation runs have occurred.*
-*Update protocol: when an AWS run actually fires, add a "Validated" subsection mirroring the antiSMASH cookbook's format (redacted provider ID, region, wall, cost, observed gotchas).*
+*Update protocol: when an AWS run actually fires, add a "Validated" subsection mirroring the antiSMASH cookbook's format (provider ID omitted, region, wall, cost, observed gotchas).*

@@ -83,10 +83,10 @@ Deliverables:
 - documentation index
 - release safety doc
 - current tool inventory
-- historical notes with provider/private context redacted
+- summary notes with provider/private details omitted
 - tests and audits run by one command
 
 Exit criteria:
 
 - `make public-release-check` is the obvious public validation command
-- first public commit uses fresh history after the scrub passes
+- public release checks pass before publication

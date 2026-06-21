@@ -2607,7 +2607,7 @@ class GeneClusterAtlasSuperpowerTests(unittest.TestCase):
                 json.dumps(
                     {
                         "schema_version": "genecluster_provider_handoff.v1",
-                        "provider": {"adapter": "runpod_bridge", "mutation_owner": "host_side_hook"},
+                        "provider": {"adapter": "symphony-neocloud-bridge", "mutation_owner": "host_side_hook"},
                         "workload": {"stage_contract": "stage-contract.json", "route_decision": "route_decision.json"},
                         "artifact_egress": {"expected_artifacts": [{"path": "run-summary.json", "artifact_type": "summary_json"}]},
                         "safety": {
@@ -2634,7 +2634,7 @@ class GeneClusterAtlasSuperpowerTests(unittest.TestCase):
                 json.dumps(
                     {
                         "schema_version": "genecluster_provider_handoff.v1",
-                        "provider": {"adapter": "runpod_bridge", "mutation_owner": "host_side_hook"},
+                        "provider": {"adapter": "symphony-neocloud-bridge", "mutation_owner": "host_side_hook"},
                         "workload": {
                             "stage_contract": "stage-contract.json",
                             "route_decision": "route_decision.json",
@@ -2655,6 +2655,37 @@ class GeneClusterAtlasSuperpowerTests(unittest.TestCase):
             result = genecluster_atlas_contracts.validate_provider_handoff_manifest(provider)
 
         self.assertEqual([], result["errors"])
+
+    def test_provider_manifest_rejects_legacy_bridge_alias(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            provider = Path(tmp) / "provider_handoff_manifest.json"
+            legacy_adapter = "runpod" + "_bridge"
+            provider.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "genecluster_provider_handoff.v1",
+                        "provider": {"adapter": legacy_adapter, "mutation_owner": "host_side_hook"},
+                        "workload": {
+                            "stage_contract": "stage-contract.json",
+                            "route_decision": "route_decision.json",
+                            "cost_bounds": {"max_usd": "1.00", "stop_when_exceeded": "stop_provider_run"},
+                        },
+                        "artifact_egress": {
+                            "summary_only": True,
+                            "hash_algorithm": "sha256",
+                            "hash_ledger": "hashes.tsv",
+                            "expected_artifacts": [{"path": "run-summary.json", "artifact_type": "summary_json"}],
+                        },
+                        "cleanup": {"verify_pod_stopped": True, "verify_artifacts_fetched": True},
+                        "safety": {"credentials": [{"env_name": "RUNPOD_API_KEY", "source": "env"}]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            result = genecluster_atlas_contracts.validate_provider_handoff_manifest(provider)
+
+        self.assertFalse(result["ok"])
+        self.assertTrue(any("provider.adapter" in error for error in result["errors"]))
 
     def test_static_review_surface_validates_and_omits_raw_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

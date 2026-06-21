@@ -1,6 +1,6 @@
 # Public Release Safety
 
-BioSymphony GeneCluster is designed to publish the reusable control plane without publishing non-public run state or internal source material. A public snapshot should contain contracts, validators, examples, templates, and summary runbooks. It should not contain operational secrets, provider state, raw biological data, or private tracker context.
+BioSymphony GeneCluster is designed to publish the reusable control plane without publishing non-public run state or internal source material. A public snapshot should contain contracts, check scripts, examples, templates, and summary runbooks. It should exclude operational secrets, provider state, raw biological data, and private tracker context.
 
 ## Must Stay Out
 
@@ -12,9 +12,9 @@ BioSymphony GeneCluster is designed to publish the reusable control plane withou
 
 ## Allowed Public Material
 
-- Public-safe ledgers, schemas, templates, and validators.
+- Public-safe ledgers, schemas, templates, and check scripts.
 - Public examples with synthetic, placeholder, or already-public accession data.
-- Summary-only historical notes with provider identifiers redacted.
+- Summary-only notes with provider identifiers omitted.
 - Cloud dispatch templates that require credentials from environment variables or untracked secure stores.
 - Review-surface examples that contain summaries, hashes, caveats, and provenance, not raw/heavy source data.
 
@@ -26,14 +26,14 @@ Run this before any public commit or archive:
 make public-release-check
 ```
 
-The check intentionally fails on local runtime folders, bytecode caches, provider artifacts, heavy biological extensions, local absolute paths, private registry owners, personal emails, and known historical provider IDs.
+The check fails on local runtime folders, bytecode caches, provider artifacts, heavy biological extensions, local absolute paths, private registry owners, personal emails, and known non-public provider IDs.
 
 ## Provider Dispatch Rules
 
 - Default dispatch output must live under `.runtime/provider-dispatch/` or another ignored path.
 - Do not write API keys into payload files, launch manifests, or container environment.
 - Prefer provider storage, S3/GCS, SSH, or operator-side tools for artifact pull.
-- If HTTP proxy pull is unavoidable, serve only a summary directory, keep the TTL short, and never expose raw data or credentials.
+- If HTTP proxy pull is unavoidable, serve only a summary directory, keep the TTL short, and expose no raw data or credentials.
 - A public launch manifest may contain placeholders and operator-side command shapes, but not real keys, account IDs, volume IDs, pod IDs, or local private-key paths.
 
 ## First Public Commit

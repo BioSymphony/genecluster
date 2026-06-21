@@ -113,14 +113,14 @@ def env_or_payload(value: str, env_name: str) -> str:
     return os.environ.get(env_name, "").strip() or value
 
 
-def redact_payload(data: dict[str, Any]) -> dict[str, Any]:
-    redacted = json.loads(json.dumps(data))
-    if redacted.get("containerRegistryAuthId"):
-        redacted["containerRegistryAuthId"] = "REDACTED"
-    for key in list(redacted.get("env", {})):
+def mask_payload(data: dict[str, Any]) -> dict[str, Any]:
+    masked = json.loads(json.dumps(data))
+    if masked.get("containerRegistryAuthId"):
+        masked["containerRegistryAuthId"] = "MASKED"
+    for key in list(masked.get("env", {})):
         if key.endswith("KEY") or key.endswith("TOKEN") or key in {"RUNPOD_API_KEY", "GITHUB_TOKEN"}:
-            redacted["env"][key] = "REDACTED"
-    return redacted
+            masked["env"][key] = "MASKED"
+    return masked
 
 
 def provider_runtime_env(provider: dict[str, Any], *, run_id: str) -> dict[str, str]:
@@ -265,7 +265,7 @@ def main() -> int:
     parser.add_argument("--payload-warn-bytes", type=int, default=DEFAULT_PAYLOAD_WARN_BYTES)
     parser.add_argument("--payload-max-bytes", type=int, default=DEFAULT_PAYLOAD_MAX_BYTES)
     parser.add_argument("--skip-git-ref-check", action="store_true", help="Do not verify that the bundle path exists in the local Git ref before launching.")
-    parser.add_argument("--dry-run", action="store_true", help="Print redacted REST payload and do not launch.")
+    parser.add_argument("--dry-run", action="store_true", help="Print masked REST payload and do not launch.")
     args = parser.parse_args()
 
     manifest_path = args.launch_manifest.resolve()
@@ -337,9 +337,9 @@ def main() -> int:
             print(f"ERROR: {error}", file=sys.stderr)
         raise SystemExit(2)
     if args.dry_run:
-        redacted = redact_payload(body)
-        redacted["_preflight"] = payload_check
-        print(json.dumps(redacted, indent=2, sort_keys=True))
+        masked = mask_payload(body)
+        masked["_preflight"] = payload_check
+        print(json.dumps(masked, indent=2, sort_keys=True))
         return 0
 
     response = create_pod(api_key, body)

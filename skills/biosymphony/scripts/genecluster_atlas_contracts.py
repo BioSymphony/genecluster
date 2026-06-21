@@ -569,6 +569,12 @@ def find_secret_values(data: Any, path: str = "$") -> list[str]:
     return errors
 
 
+PROVIDER_HANDOFF_ADAPTERS = {
+    "symphony-neocloud-bridge",
+    "symphony_neocloud_bridge",
+}
+
+
 def validate_provider_handoff_manifest(path: Path) -> dict[str, Any]:
     data, json_result = load_json(path, "provider_handoff_manifest.json")
     errors = list(json_result["errors"])
@@ -582,9 +588,10 @@ def validate_provider_handoff_manifest(path: Path) -> dict[str, Any]:
     provider = data.get("provider", {})
     if not isinstance(provider, dict):
         errors.append("provider_handoff_manifest.json provider must be an object")
-    elif provider.get("adapter") not in {"runpod_bridge", "runpod-bridge"}:
-        errors.append("provider_handoff_manifest.json provider.adapter must be runpod_bridge")
-    if provider.get("mutation_owner", "host_side_hook") not in {"host_side_hook", "runpod_bridge"}:
+    elif provider.get("adapter") not in PROVIDER_HANDOFF_ADAPTERS:
+        errors.append("provider_handoff_manifest.json provider.adapter must be symphony-neocloud-bridge")
+    mutation_owner = provider.get("mutation_owner", "host_side_hook")
+    if mutation_owner not in {"host_side_hook", *PROVIDER_HANDOFF_ADAPTERS}:
         errors.append("provider_handoff_manifest.json provider.mutation_owner must keep paid mutation with host-side bridge hooks")
     workload = data.get("workload", {})
     if not isinstance(workload, dict):

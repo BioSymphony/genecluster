@@ -138,7 +138,7 @@ When a resource can appear in a dossier, record one of:
 | MultiQC | QC aggregation | copyleft-code | Primary QC report component; run externally and record version. |
 | BUSCO / compleasm | Assembly and gene-set completeness QC | permissive-code/open-data-with-terms | Use transcriptome/genome/protein mode; record lineage dataset version and dataset terms. |
 | QUAST / BUSCO plots / seqkit stats | Assembly and FASTA sanity checks | restricted-or-review | Record contig N50, scaffold count, ambiguous bases, and BUSCO lineage; resolve package licenses per environment. |
-| Workflow Run RO-Crate / Process Run Crate | Dossier provenance packaging | permissive-code/open standard | Good target for durable campaign provenance; redact private paths before export. |
+| Workflow Run RO-Crate / Process Run Crate | Dossier provenance packaging | permissive-code/open standard | Good target for durable campaign provenance; omit private paths from public exports. |
 | Data Package v2 / check-jsonschema | Tabular dossier schemas and validation | permissive-code | Validates compact table resource schemas; does not replace provenance. |
 
 ## Genome Annotation And Anchoring

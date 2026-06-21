@@ -7,13 +7,13 @@
 
 ![BioSymphony GeneCluster banner](docs/diagrams/genecluster-retro-synth-banner.jpg)
 
-**Agent-native genome mining for natural products: turn molecule or pathway goals into biosynthetic gene-cluster discovery campaigns.**
+**A skill repo for agents running long-horizon genome-mining campaigns.**
 
-BioSymphony GeneCluster turns a pathway, target molecule, or biosynthetic gap into a genome-mining campaign. You point Claude Code, Codex, Symphony, or your preferred agent at the biological question, and the agent scouts public plant, fungal, and microbial genomes and transcriptomes, searches for candidate genes, anchors hits in genomic context, compares synteny across species, predicts enzyme function, detects gene clusters, and maps the evidence back to plausible natural-product pathways.
+BioSymphony GeneCluster helps Claude Code, Codex, Symphony, and other agent harnesses work through long comparative-genomics tasks without losing track of inputs, controls, routes, tool runs, and review packets. You give the agent a pathway, target molecule, or biosynthetic gap. The repo gives the agent reusable skill instructions, ledgers, runners, checks, and examples for turning that question into a genome-mining campaign.
 
-A request like *"find the benzylisoquinoline alkaloid gene cluster in Berberis vulgaris using Coptis chinensis as the canonical reference,"* *"assemble pathway evidence for a target molecule starting from Coptis chinensis and three Coptis relatives,"* or *"fill the missing step in this terpene pathway using Solanaceae candidates"* becomes a multi-stage, multi-agent mission the agent can carry through to a defensible answer. The same artifact contracts work whether a solo agent is running on a laptop or a multi-issue Linear DAG is fanning out across cloud GPUs.
+A request like *"find the benzylisoquinoline alkaloid gene cluster in Berberis vulgaris using Coptis chinensis as the canonical reference,"* *"assemble pathway support for a target molecule starting from Coptis chinensis and three Coptis relatives,"* or *"fill the missing step in this terpene pathway using Solanaceae candidates"* becomes a staged agent workflow. The same packet shape works for a solo agent on a laptop or for a multi-issue tracker graph with cloud workers.
 
-The skill supplies source scouts, query and control ledgers, route cards, candidate-search contracts, genome-context capture, BGC and function-jury integration, and reviewable pathway outputs.
+The skill supplies source scouts, query and control ledgers, route cards, candidate-search contracts, genome-context capture, BGC callers, function-scoring tools, and reviewable pathway outputs.
 
 ## How A Session Looks
 
@@ -21,24 +21,24 @@ You open this repo in Claude Code, Codex, or Symphony. You tell your agent:
 
 > I want to characterize the benzylisoquinoline alkaloid gene cluster across the Ranunculales. Start with *Coptis chinensis* as the canonical producer, then find related clusters in *Berberis vulgaris* and two more Berberidaceae. Tell me which enzymes are conserved, which look species-specific, and where the cluster boundaries land. Stay local for the control plane. We will discuss a RunPod launch once the route is set.
 
-The agent reads `skills/biosymphony/SKILL.md`, scouts NCBI Datasets and SRA for assembly and RNA-Seq state on the targets, drafts the campaign packet (manifest, source, query, and pathway ledgers), runs Stage 0 preflight, picks a defensible route (annotation-direct for Coptis and Berberis, transcript-first or rescue for the weaker comparators), records the claim ceiling, and reports back with the campaign packet, a candidate-gene shortlist anchored to BIA-cluster neighborhoods via synteny and JCVI MCScan, a function jury across HMMER + InterProScan + DeepEC + KEGG, and the recommended next bounded wave. You review and approve cloud launch when ready.
+The agent reads `skills/biosymphony/SKILL.md`, checks NCBI Datasets and SRA for assembly and RNA-Seq state, drafts the campaign packet, chooses a route for the available data, records what that route can support, and reports back with candidate genes, nearby genomic context, tool outputs, and the next bounded wave. You review and approve any cloud launch when ready.
 
-You do not need to memorize 50+ scripts or invoke them by hand. The agent does that. Your job is to set the mission, supervise, and approve.
+You set the biological question and review the packet. The repo gives the agent the repeatable operating path.
 
-<p align="center"><img src="docs/diagrams/genecluster-session-flow.png" alt="How a GeneCluster session looks: you set the mission and hold the cloud-launch approval; the agent runs every step in between" width="320"></p>
+<p align="center"><img src="docs/diagrams/genecluster-session-flow.png" alt="How a GeneCluster session looks: you set the campaign question and hold the cloud-launch approval; the agent runs every step in between" width="320"></p>
 
-## Missions You Can Run
+## Campaigns You Can Run
 
-- **Find a biosynthetic gene cluster in a new species.** Pick a known pathway (BIA, MIA, terpene, polyketide, custom) and a target species. The agent scouts public genomes and transcriptomes, runs candidate-gene search via homology and structure, anchors hits in genomic context via synteny and neighborhood capture, detects clusters with plantiSMASH, antiSMASH, and DeepBGC, and scores enzyme function across a tool jury.
-- **Fill gaps in a published pathway.** Point the agent at a known partial pathway plus the step that needs catalyzing. The agent runs structure-based and HMM-based candidate search across related species, ranks hits across function-prediction tools, and proposes the strongest candidates for wet-lab validation.
-- **Assemble pathway evidence toward a target molecule (bioprospecting).** Pick a target compound (terpenes like artemisinin or paclitaxel, or any plant secondary metabolite in your area). The agent assembles the candidate enzyme set from canonical and comparator species, scores evidence, and produces a pathway map you can hand to a wet lab or pathway-engineering team.
-- **Comparative atlas across a plant family with multi-agent fan-out.** Let Symphony workers, Claude Code workers, or your preferred agent take bounded waves in parallel: source scout, candidate search, BGC calling, synteny, function jury, review surface. Validators gate dispatch and pullback at every stage.
+- **Find a biosynthetic gene cluster in a new species.** Pick a known pathway (BIA, MIA, terpene, polyketide, custom) and a target species. The agent scouts public genomes and transcriptomes, runs candidate-gene search by homology and structure, anchors hits in genomic context, detects clusters with plantiSMASH, antiSMASH, and DeepBGC, and scores enzyme function across several tools.
+- **Fill gaps in a published pathway.** Point the agent at a known partial pathway plus the step that needs catalyzing. The agent searches related species, ranks candidates, and proposes the strongest follow-up targets.
+- **Assemble pathway support toward a target molecule.** Pick a target compound, such as a terpene or plant secondary metabolite. The agent assembles candidate enzymes from canonical and comparator species and produces a pathway map for review.
+- **Compare a pathway across a plant family.** Let Symphony workers, Claude Code workers, or your preferred agent take bounded waves in parallel: source scout, candidate search, BGC calling, synteny, function scoring, and review surface.
 - **Hunt for novel analogs and uncharacterized clusters.** Combine BGC callers (plantiSMASH, antiSMASH, DeepBGC) with structural homology (Foldseek + ProstT5) and function prediction (HMMER, InterProScan, DeepEC) to find candidate clusters your canonical query missed.
-- **Long-horizon comparative-genomics programs.** Every completed mission feeds new species rows, novelty windows, and cluster-confidence scores back into `data/pathway-species-catalog.tsv`, so the next mission starts richer than the last.
-- **Next-experiment design.** Convert evidence gaps into assay, sequencing, or metabolomics recommendations before spending wet-lab time or sequencing budget.
-- **Extend the kit with new tooling.** The `genecluster-superpowers` skill ships ready-to-invoke shortcuts for 25 validated tools, including Quarto, plantiSMASH 2.0.4, antiSMASH 8.0.4, DeepBGC, JCVI MCScan, MMseqs2, Foldseek + ProstT5, HMMER, InterProScan, ESM-C / ESM-2, ColabFold, KEGG/KAAS, EnzymeMap, DiffPaSS, DeepEC, igv-reports, pyGenomeTracks, and Cytoscape.js. Parked and gated tools carry re-entry recipes so future iterations resume from where the last one stopped.
+- **Long-horizon comparative-genomics programs.** Each completed campaign can add species rows, novelty windows, and cluster-confidence notes back into `data/pathway-species-catalog.tsv`, so later campaigns start with better context.
+- **Next-experiment design.** Convert open questions into assay, sequencing, or metabolomics recommendations before spending wet-lab time or sequencing budget.
+- **Extend the kit with new tooling.** The recommended-tool skill ships ready-to-invoke shortcuts for 25 checked tools, including Quarto, plantiSMASH 2.0.4, antiSMASH 8.0.4, DeepBGC, JCVI MCScan, MMseqs2, Foldseek + ProstT5, HMMER, InterProScan, ESM-C / ESM-2, ColabFold, KEGG/KAAS, EnzymeMap, DiffPaSS, DeepEC, igv-reports, pyGenomeTracks, and Cytoscape.js.
 
-<p align="center"><img src="docs/diagrams/biosymphony-genecluster-workflow.png" alt="The discovery engine every mission shares: a biology target becomes a ranked pathway map, then the campaign iterates" width="480"></p>
+<p align="center"><img src="docs/diagrams/biosymphony-genecluster-workflow.png" alt="The discovery engine every campaign shares: a biology target becomes a ranked pathway map, then the campaign iterates" width="480"></p>
 
 ## Use It With Your Agent Stack
 
@@ -51,24 +51,24 @@ GeneCluster is harness-agnostic. Wire it into whichever multi-agent setup fits y
 
 ## Local And Cloud Lanes
 
-<p align="center"><img src="docs/diagrams/genecluster-local-cloud-boundary.png" alt="Trust boundary: the control plane stays on your laptop, heavy compute runs on a provider (RunPod, Lambda, HPC), only compact summaries return, and raw data never leaves the cloud" width="760"></p>
+<p align="center"><img src="docs/diagrams/genecluster-local-cloud-boundary.png" alt="Trust boundary: the control plane stays on your laptop, heavy compute runs on a provider (RunPod, Lambda, HPC), compact summaries return, and raw data stays out of the repo" width="760"></p>
 
-- **Local laptop.** The entire control plane (preflight, source and route scouting, contracts, validators, summary evidence packet, review surface) runs on Python 3, `make`, and ripgrep. The demo harness produces the full campaign packet offline.
+- **Local laptop.** The control plane runs on Python 3, `make`, and ripgrep. It covers preflight, source and route scouting, contracts, checks, compact summaries, and review surfaces. The demo harness produces the full campaign packet offline.
 - **RunPod, AWS, GCP, Vast.ai, Lambda Labs.** Provider-neutral launch bundles and dispatch templates handle heavy candidate search, BLAST/MMseqs2/Foldseek workloads, plantiSMASH and antiSMASH BGC calling, structural model inference, and large transcriptome work. Provider state stays out of the source tree.
 - **SSH / HPC.** The same launch contracts work on your cluster.
 
-Agents escalate to cloud after a launch bundle and stage contract validate locally, so paid runs start with a known-good route and claim ceiling.
+Agents escalate to cloud after local checks pass for the launch bundle and stage contract.
 
-## Routes And Claim Ceilings
+## Routes And Review Limits
 
-GeneCluster never lets a campaign claim more than its data supports. Stage 0 classifies what the target genome and transcriptome actually contain, that choice selects an evidence route, and each route carries a hard claim ceiling, so a `transcript-first` run can never assert physical cluster boundaries.
+GeneCluster records what the available data can support. Stage 0 classifies the target genome and transcriptome state, that choice selects a route, and each route carries a review limit. A transcript-first run can nominate candidate genes, while physical cluster boundaries require genome coordinates.
 
-<p align="center"><img src="docs/diagrams/genecluster-route-claim-ceiling.png" alt="Route decision tree: data state selects the route, and each route caps the strongest claim allowed" width="700"></p>
+<p align="center"><img src="docs/diagrams/genecluster-route-claim-ceiling.png" alt="Route decision tree: data state selects the route, and each route records what the output can support" width="700"></p>
 
 ## What's In The Repo
 
-- `skills/biosymphony/`: campaign contracts, validators, scouts, normalizers, and remote runners.
-- `skills/genecluster-superpowers/`: 25-tool integration kit with per-tool quickstarts and runner scripts.
+- `skills/biosymphony/`: campaign contracts, checks, scouts, normalizers, and remote runners.
+- `skills/genecluster-superpowers/`: recommended-tool integration kit with per-tool quickstarts and runner scripts.
 - `pipeline/`: pipeline scaffolds, enrichment helpers, dockerstart builders.
 - `images/`: Docker build contexts and cloud-dispatch templates for RunPod, AWS, GCP, Vast.ai, Lambda Labs.
 - `docs/`: capability maps, campaign runbooks, tool inventories, cloud-runtime notes, atlas authoring guidance, architecture and workflow diagrams.
@@ -79,18 +79,18 @@ GeneCluster never lets a campaign claim more than its data supports. Stage 0 cla
 ## Start Here
 
 - [docs/capability-stack.md](docs/capability-stack.md): the full capability surface.
-- [docs/glossary.md](docs/glossary.md): terms-of-art used across the skill (claim ceiling, route card, evidence normalizer, maturity ladder, and more).
+- [docs/glossary.md](docs/glossary.md): terms-of-art used across the skill, including route cards, evidence normalizers, maturity ladders, and review limits.
 - [docs/agent-orchestrator-guide.md](docs/agent-orchestrator-guide.md): drive the repo with Codex, Claude Code, Symphony + Linear, `/goal`, or your own orchestrator.
-- [docs/genecluster-atlas-superpower-runbook.md](docs/genecluster-atlas-superpower-runbook.md): operating path from source scout to review surface.
-- [docs/biosymphony-tooling-status.md](docs/biosymphony-tooling-status.md): the 25 validated tools, parked re-entry recipes, gated tools.
-- [skills/genecluster-superpowers/SKILL.md](skills/genecluster-superpowers/SKILL.md): shortcut kit for extending the atlas with new tools.
+- [docs/genecluster-atlas-superpower-runbook.md](docs/genecluster-atlas-superpower-runbook.md): atlas campaign operating path from source scout to review surface.
+- [docs/biosymphony-tooling-status.md](docs/biosymphony-tooling-status.md): the 25 checked tools, parked re-entry recipes, gated tools.
+- [skills/genecluster-superpowers/SKILL.md](skills/genecluster-superpowers/SKILL.md): shortcut kit for adding checked tools to the atlas workflow.
 - [docs/architecture.md](docs/architecture.md): the control-plane model.
 - [docs/diagrams/biosymphony-genecluster-architecture.png](docs/diagrams/biosymphony-genecluster-architecture.png): execution-scale architecture diagram.
 - [docs/diagrams/biosymphony-genecluster-workflow.png](docs/diagrams/biosymphony-genecluster-workflow.png): discovery-engine workflow diagram.
 
 ## Verify The Skill Works
 
-You do not need to run anything by hand to use the skill. These commands exist for maintainers validating a release, curious onlookers confirming the snapshot is healthy, and as concrete examples of what your agent will invoke during a campaign.
+You do not need to run anything by hand to use the skill. These commands exist for maintainers, curious onlookers confirming the snapshot is healthy, and as concrete examples of what your agent will invoke during a campaign.
 
 Requirements: Python 3, `make`, ripgrep (`rg`). No paid provider access required.
 
@@ -98,7 +98,7 @@ Requirements: Python 3, `make`, ripgrep (`rg`). No paid provider access required
 make public-release-check
 ```
 
-Validates the full skill, runs the GeneCluster example preflight, generates the campaign issue drafts, produces the summary manifest, renders a review surface, and runs the unit tests.
+Checks the full skill, runs the GeneCluster example preflight, generates the campaign issue drafts, produces the summary manifest, renders a review surface, and runs the unit tests.
 
 ```bash
 make demo-campaign-dry-run
