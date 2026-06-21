@@ -5,7 +5,7 @@ This directory is the operating manual for the public GeneCluster control plane.
 ## Start Here
 
 - [capability-stack.md](capability-stack.md) - what the repo can do: campaign brain, tool lanes, execution lanes, and atlas outputs.
-- [glossary.md](glossary.md) - terms-of-art used across the skill, including route cards, evidence normalizers, maturity ladders, and review limits.
+- [glossary.md](glossary.md) - terms-of-art used across the skill, including route cards, support normalizers, maturity ladders, and review limits.
 - [agent-orchestrator-guide.md](agent-orchestrator-guide.md) - how capable agents should use the repo with local resources, tracker issue graphs, `/goal`, or cloud lanes.
 - [superpowers.md](superpowers.md) - how the skill helps agents handle graph-shaped scientific work.
 - [demo-campaign-dry-run.md](demo-campaign-dry-run.md) - one-command local harness for issue contracts, review packets, and review surfaces.

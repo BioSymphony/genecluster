@@ -1,11 +1,11 @@
 ---
 name: biosymphony
-description: Use when planning or executing BioSymphony GeneCluster campaigns to find biosynthetic gene clusters and assemble pathway evidence across genomes and transcriptomes. Applications include bioprospecting toward target molecules, pathway gap-filling, comparative atlas building, and novel-cluster discovery. The skill provides source/query ledgers, route scouting, candidate search, evidence scoring, claim checks, scientific issue contracts, validation, and provenance.
+description: Use when planning or executing BioSymphony GeneCluster campaigns to find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Applications include bioprospecting toward target molecules, pathway gap-filling, comparative atlas building, and novel-cluster discovery. The skill provides source/query ledgers, route scouting, candidate search, function scoring, claim checks, task contracts, check commands, and provenance.
 ---
 
 # BioSymphony
 
-BioSymphony GeneCluster turns "find this gene cluster" or "assemble this pathway" into comparative-genomics campaign contracts that bounded workers can execute and reviewers can inspect. It emphasizes public source ledgers, query and control resolution, route cards, candidate search, evidence scoring, BGC and function-jury integration, and claim-bounded pathway evidence packages.
+BioSymphony GeneCluster turns "find this gene cluster" or "assemble this pathway" into comparative-genomics campaign contracts that bounded workers can execute and reviewers can inspect. It gives agents public source ledgers, query and control resolution, route cards, candidate search, function scoring, BGC calls, and claim-bounded pathway review packets.
 
 ## Operating Model
 
@@ -14,9 +14,9 @@ worker fan-out. That can be Symphony + Linear, another tracker, a `/goal` setup,
 or a solo capable-agent pass for small work. Do not create a new daemon or
 background service for v1.
 
-BioSymphony is a control-plane skill kit for capable agents, not a replacement
-for the agent. Codex, Claude Code, Symphony-style workers, or a `/goal` system
-should use the repo to get proven campaign shapes, validation commands, issue
+BioSymphony is a control-plane skill kit for capable agents. Codex, Claude Code,
+Symphony-style workers, or a `/goal` system should use the repo to get proven
+campaign shapes, check commands, issue
 contracts, route cards, provider handoffs, and review artifacts. The agent
 should still make ordinary orchestration decisions, fill in small glue, choose
 when a tracker is worth using, and escalate to cloud only when route, artifacts,
@@ -24,10 +24,10 @@ and claim ceiling are clear.
 
 Use BioSymphony as a local-first skill kit:
 
-1. read every Markdown note under `.bioprospector-memory/` if the folder exists. These are durable lessons captured by past agents on this user's machine. Treat them as agent-process guidance, not as biology evidence or claim closeout. See the Local Memory section below.
+1. read every Markdown note under `.bioprospector-memory/` if the folder exists. These are durable lessons captured by past agents on this user's machine. Treat them as agent-process guidance, not as biology support or claim closeout. See the Local Memory section below.
 2. classify the requested campaign by local capability tier
 3. write Linear issues as scientific contracts
-4. validate contracts before dispatch
+4. check contracts before dispatch
 5. run only active waves through Symphony
 6. require figure manifests for serious artifacts
 7. preserve provenance in Linear comments and campaign artifacts
@@ -39,7 +39,7 @@ adapter, do that and keep the durable output in the campaign artifacts.
 ## Stage 0: Campaign data-research preflight (MANDATORY)
 
 **Every campaign MUST begin with a Stage 0 preflight.** No `genecluster_*`
-maturity-ladder step (L0 → L1 → ...) may proceed without a valid
+maturity-ladder step (L0 -> L1 -> ...) may proceed without a valid
 `campaign-launch-readiness.json` produced by `genecluster_campaign_preflight.py`.
 
 The preflight answers five operator-facing questions before any compute spend:
@@ -49,7 +49,7 @@ The preflight answers five operator-facing questions before any compute spend:
 | **Data** | assembly state, RNA-Seq breadth, annotation status. for target + N relatives | NCBI Datasets v2 + SRA esearch + NGDC GWH fallback |
 | **Inputs** | seed protein query set (UniProt anchors + controls) | KEGG REST + `data/pathway-species-catalog.tsv` + optional user TSV |
 | **Relevance** | pathway overlap. sister-family vs cross-family vs convergent producers | NCBI E-utilities taxonomy walk |
-| **Novelty** | existing publications mapping pathway-to-species; defensible novelty windows | catalog `key_publication_pmid` + multi-pass literature audit |
+| **Novelty** | existing publications mapping pathway-to-species; reviewable novelty windows | catalog `key_publication_pmid` + multi-pass literature check |
 | **Importance** | composite comparative-value ranking for sequencing-priority decisions | deterministic score: annotation + tissue breadth + recency + catalog comparative_value |
 
 ### Two operating modes
@@ -76,7 +76,7 @@ operator has *not* supplied a comparator list, the preflight invokes
 `genecluster_species_scout.py` to:
 
 1. Pull catalog-tracked producers of the target pathway.
-2. Walk NCBI taxonomy genus → family for sibling species with any public genome.
+2. Walk NCBI taxonomy genus -> family for sibling species with any public genome.
 3. For each candidate: query NCBI Datasets v2 (assembly), SRA esearch (breadth-by-tissue), NGDC GWH plants index (fallback when NCBI empty).
 4. Resolve the pathway against KEGG (`map00950` BIA, `map00901` MIA, etc.) and emit a KEGG-derived placeholder seed-query set (operator must resolve UniProt anchors before launch).
 
@@ -99,7 +99,7 @@ If `preflight_status != "ready"`, downstream stages MUST refuse to proceed.
 ### Enriching the catalog
 
 Each completed campaign feeds its findings back into `data/pathway-species-catalog.tsv`:
-new species rows, updated `key_publication_pmid` from the novelty audit, refined
+new species rows, updated `key_publication_pmid` from the novelty check, refined
 `comparative_value` once the campaign produces concrete synteny / cluster results,
 and a new `last_audit_date`. The catalog is the institutional memory, every
 campaign starts richer than the last.
@@ -114,15 +114,15 @@ Before making local capability claims, run:
 python3 skills/biosymphony/scripts/capability_probe.py --json
 ```
 
-Before packaging or reviewing the public BioSymphony skill, audit the skill
-tree for private-workshop overfitting:
+Before packaging or reviewing the public BioSymphony skill, run the public skill
+check:
 
 ```bash
 python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py \
   --skill-root skills/biosymphony
 ```
 
-Before dispatching a Linear issue body to Symphony, validate it:
+Before dispatching a Linear issue body to Symphony, check it:
 
 ```bash
 python3 skills/biosymphony/scripts/preflight_check.py path/to/issue.md
@@ -150,13 +150,13 @@ to run. Silent fallback to a different worker/team/provider mode is a hard
 stop, and any recovery from missing prompt/body/provider state must be marked as
 degraded in the worker closeout.
 
-Before accepting a figure dossier, validate its manifest:
+Before accepting a figure dossier, check its manifest:
 
 ```bash
 python3 skills/biosymphony/scripts/figure_manifest_check.py figure-dossier/figure_manifest.json
 ```
 
-Before dispatching or accepting a GeneCluster campaign prep artifact, validate
+Before dispatching or accepting a GeneCluster campaign prep artifact, check
 the user/campaign-specific ledgers:
 
 ```bash
@@ -182,7 +182,7 @@ python3 skills/biosymphony/scripts/genecluster_preflight.py \
 The pull manifest must stay `pull_summaries_only`, require post-pull checksums,
 exclude raw/heavy outputs, and keep local destinations under `.runtime` unless
 the operator explicitly reviews a different summary location.
-`--launch-manifest` validation follows and hashes this pointer when present, so
+`--launch-manifest` checking follows and hashes this pointer when present, so
 launch bundles fail preflight if the return-artifact policy drifts.
 
 Before planning or dispatching a GeneCluster Atlas campaign, run the source
@@ -207,7 +207,7 @@ python3 skills/biosymphony/scripts/genecluster_preflight.py \
 source scout must stay `metadata_only_no_network_no_raw_download`.
 
 When a campaign needs public read acquisition metadata, resolve SRA-style
-accessions before materialization and validate the normalized read contract:
+accessions before materialization and check the normalized read contract:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_sra_runinfo.py \
@@ -234,8 +234,8 @@ The query FASTA must include ACT2, GAPDH, and random-shuffle or negative
 controls. The route card must record rejected routes and claim ceilings before
 any worker wave starts.
 
-Before accepting GeneCluster Atlas jury, comparative, review, or provider
-handoff artifacts, validate the Atlas contracts:
+Before accepting GeneCluster Atlas function-scoring, comparative, review, or
+provider handoff artifacts, check the Atlas contracts:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_atlas_contracts.py \
@@ -328,7 +328,7 @@ python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
   --stage-contract .runtime/<bundle>/stage-contract.json
 ```
 
-After a provider run or summary pullback, validate declared primary outputs
+After a provider run or summary pullback, check declared primary outputs
 rather than trusting done markers alone:
 
 ```bash
@@ -339,7 +339,7 @@ python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
 ```
 
 For a real provider-only SRA run, regenerate with
-`--allow-provider-large-downloads`; execution-ready validation now fails if
+`--allow-provider-large-downloads`; execution-ready checking now fails if
 transcript-like SRA materialization is planned but the runner command lacks
 `--allow-large-downloads`.
 
@@ -352,7 +352,7 @@ python3 skills/biosymphony/scripts/genecluster_preflight.py \
 ```
 
 Before asking the operator for missing GeneCluster data links, query lists, or
-resource slots, audit the bundle inputs first:
+resource slots, check the bundle inputs first:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_input_audit.py \
@@ -362,7 +362,7 @@ python3 skills/biosymphony/scripts/genecluster_input_audit.py \
   --markdown-out .runtime/<bundle>/input-audit.md
 ```
 
-If the audit lists accessions or source URLs, do not ask the operator to provide
+If the input report lists accessions or source URLs, do not ask the operator to provide
 those same links again. Ask only generated `intake_interview.questions` whose
 answers are not already present in the ledgers or plans.
 
@@ -376,7 +376,7 @@ GeneCluster interview modes:
 If the user says "skip and go", "use defaults", "assume defaults", or "no
 interview", rerun with `--interview-mode skip` and use the generated assumptions
 as the campaign record. Do not use skip mode to bypass execution-ready, route,
-or real-target-search validators.
+or real-target-search checks.
 
 For live RunPod launches, use the generated `provider/runpod-docker-start.sh`
 or an equivalent status-and-idle wrapper, and monitor `runtime.uptimeInSeconds`
@@ -391,7 +391,7 @@ Watchers must poll both pod actuality (`runtime.uptimeInSeconds`, restart
 pattern, terminal state) and provider artifacts (`.dockerstart_status`, `run_summary.json`,
 `stage-progress.jsonl`, expected outputs). If artifacts prove `pipeline_exit=0`
 but the pod keeps restarting, stop the pod, mark lifecycle cleanup as degraded,
-and continue with artifact validation instead of waiting indefinitely.
+and continue with artifact checks instead of waiting indefinitely.
 
 For SRA-backed GeneCluster stages, never assume the accession in the intake
 ledger is the path to pass to `fasterq-dump`. Resolve experiment/sample/project
@@ -420,16 +420,16 @@ For provider-side raw data acquisition, follow
 is remote-heavy and local-light: raw reads, BAMs, indexes, DBs, work dirs, and
 scratch stay on the provider volume; local pullback defaults to compact
 summaries, ledgers, candidate tables, reports, provenance, versions, and claim
-audit. Compact derived FASTA/GTF artifacts may be pulled back for private review
+checks. Compact derived FASTA/GTF artifacts may be pulled back for private review
 only when useful, but raw/heavy artifacts should not be copied into the repo.
 
 When reporting RunPod outcomes, separate first-attempt orchestration status from
 final workload status. "Success" means declared artifacts were fetched,
-validated, hashed, and cleanup was verified. A DNS/API failure, duplicate-guard
+checked, hashed, and cleanup was verified. A DNS/API failure, duplicate-guard
 block, boot crash, or retry belongs in the outcome as a degraded/retried
 orchestration event even when the final pod workload succeeds. A failed
-operator-side cleanup after `pipeline_exit=0` is not a failed scientific run,
-but it is a degraded lifecycle event and must be reported with the cleanup
+operator-side cleanup after `pipeline_exit=0` is a degraded lifecycle event,
+and must be reported with the cleanup
 action taken.
 
 For private or auth-sensitive runner images, digest pinning is necessary but not
@@ -519,15 +519,15 @@ real target-organism success claim, `candidate-search-summary.json` must report
 `real_target_search_ok: true`, at least one completed target command, and
 nonzero target candidate rows; mock/dry-run summaries are hard failures.
 
-Before choosing a biological execution route, run the route audit:
+Before choosing a biological execution route, run the route check:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_route_audit.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json
 ```
 
-If transcriptome evidence is declared and the campaign is trying to make a
-full scientific route claim, the strict audit must pass:
+If transcriptome support is declared and the campaign is trying to make a
+full scientific route claim, the strict check must pass:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_route_audit.py \
@@ -535,13 +535,13 @@ python3 skills/biosymphony/scripts/genecluster_route_audit.py \
   --require-transcript-first
 ```
 
-When transcript evidence exists, transcript/ORF/protein candidate discovery is
-the primary route. Direct genome `tblastn` is rescue/support evidence unless no
+When transcript support exists, transcript/ORF/protein candidate discovery is
+the primary route. Direct genome `tblastn` is rescue/support unless no
 transcriptome route is available. A bundle may be technically RunPod-launchable
 for target nucleotide `tblastn` while still failing strict transcript-first
 scientific readiness; do not collapse those into the same claim.
 
-To audit claim boundaries for a candidate table:
+To check claim boundaries for a candidate table:
 
 ```bash
 python3 skills/biosymphony/scripts/genecluster_claim_audit.py \
@@ -588,11 +588,11 @@ Read only the relevant reference for the current task.
 
 ## Campaign Policy
 
-The flagship campaign for this public skill is the GeneCluster campaign family: find biosynthetic gene clusters and assemble pathway evidence across genomes and transcriptomes. Use it when the request is "find the cluster for this pathway in this species," "assemble pathway evidence toward this target molecule," "fill the gap in this published pathway," or "compare cluster topology across this family." The four canonical route specs live under `references/campaigns/genecluster-*.md` and the worked example is `examples/genecluster-coptis-bia-public-v0/`.
+The flagship campaign for this public skill is the GeneCluster campaign family: find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Use it when the request is "find the cluster for this pathway in this species," "assemble pathway support toward this target molecule," "fill the gap in this published pathway," or "compare cluster topology across this family." The four canonical route specs live under `references/campaigns/genecluster-*.md` and the worked example is `examples/genecluster-coptis-bia-public-v0/`.
 
-The same contract loop (source ledgers, query and control resolution, route cards with claim ceilings, candidate search, evidence scoring, claim checks, evidence package) also hosts related campaign patterns:
+The same contract loop (source ledgers, query and control resolution, route cards with claim ceilings, candidate search, function scoring, claim checks, review packet) also hosts related campaign patterns:
 
-- **Mechanistic Variant Atlas** (`references/campaigns/mechanistic-variant-atlas.md`, example `examples/egfr-resistance-v1/`). Use when the request is "explain why these variants produce this phenotype" or "audit these structural-mechanism claims." Exercises content-dependent branching, multi-claim ledger, and the claim auditor on a variant × metric matrix rather than a genome × cluster matrix.
+- **Mechanistic Variant Atlas** (`references/campaigns/mechanistic-variant-atlas.md`, example `examples/egfr-resistance-v1/`). Use when the request is "explain why these variants produce this phenotype" or "check these structural-mechanism claims." Exercises content-dependent branching, multi-claim ledger, and claim-boundary checks on a variant x metric matrix rather than a genome x cluster matrix.
 
 Tier B/C/D campaigns are experimental or remote until the capability probe proves the required tools exist.
 
@@ -600,7 +600,7 @@ Tier B/C/D campaigns are experimental or remote until the capability probe prove
 
 GeneCluster treats BioSymphony as the control plane and the selected provider as the execution plane. The skill must stay provider-neutral: `local_lite`, `local_full`, `runpod_pod`, `ssh_hpc`, `cloud_vm`, and future managed workflow backends all use the same manifest and artifact contracts. RunPod is the most mature heavy adapter in this repo today: it gets the strongest lifecycle, data-materialization, summary-sync, and self-check defaults first. Local full/HPC/cloud are supported when the user explicitly supplies comparable heavy storage, tools, and summary sync.
 
-For non-public campaigns, do not launch remote compute or fetch raw biological data unless the user explicitly asks for execution. Prep-only work may create manifests, ledgers, evidence skeletons, launch bundles, and Linear issue drafts under ignored local folders such as `.runtime/`.
+For non-public campaigns, do not launch remote compute or fetch raw biological data unless the user explicitly asks for execution. Prep-only work may create manifests, ledgers, review skeletons, launch bundles, and Linear issue drafts under ignored local folders such as `.runtime/`.
 
 Gene discovery workflows should assume sparse clues and messy input biology. Plan for homolog search, local BLAST/DIAMOND/MMseqs2 on the provider worker, domain/function labeling, deduplication, paralog/homeolog and splice/isoform review, neighboring-gene capture, coexpression and synteny only where supported, and explicit claim levels.
 
@@ -612,37 +612,37 @@ must explicitly prove the current maturity level:
 - `L2_provider_db_ready`: required reference/domain DBs are present
 - `L3_target_materialized_ready`: target species FASTA/protein/transcript/genome inputs and target indexes exist
 - `L4_raw_sra_pipeline_ready`: SRA reads were fetched/converted and either materialized into searchable target sequences or explicitly assembled/imported
-- `L5_claim_audited_dossier_ready`: legacy maturity id for a validated evidence package; target candidate hits, anchors/neighborhoods where supported, provenance, versions, and claim checks validate
+- `L5_claim_audited_dossier_ready`: legacy maturity id for a checked review packet; target candidate hits, anchors/neighborhoods where supported, provenance, versions, and claim checks pass
 
 For transcript-like public SRA inputs, the current blessed path can materialize
 provider-side target nucleotide FASTA and BLAST DBs, then run protein queries
 with `tblastn`. De novo transcriptome assembly and physical cluster claims are
 separate escalation lanes, not implied by `--allow-large-downloads`.
 
-The default GeneCluster discovery pattern is cross-species and evidence-checked:
+The default GeneCluster discovery pattern is cross-species and support-checked:
 canonical genes/proteins from source species A -> target species B search -> reciprocal/orthology scoring -> genome anchoring -> neighborhood capture -> pathway completeness matrix. The A-to-B ladder must preserve search direction, target DB identity, reciprocal rank/status, anchor method, anchor confidence, and coordinate confidence. Protein-to-genome fallback should use `miniprot` on the provider when GFF/protein IDs do not anchor cleanly.
 
 Run scopes:
 
-- `smoke`: metadata, ledgers, provenance, and evidence-package wiring
-- `candidate_search`: homolog/domain search, deduplication, ranking, and candidate evidence
+- `smoke`: metadata, ledgers, provenance, and review-packet wiring
+- `candidate_search`: homolog/domain search, deduplication, ranking, and candidate support
 - `genome_context`: coordinate anchoring, neighboring genes, and cluster claim gates
 - `coexpression`: expression/module support without cluster overclaims
-- `synteny`: orthology, paralogy, and conserved-neighborhood evidence
+- `synteny`: orthology, paralogy, and conserved-neighborhood support
 - `full_public_mining`: provider-neutral full public/approved-data mining
-- `next_experiment_design`: convert evidence gaps into assay/sequencing/metabolomics plans
+- `next_experiment_design`: convert open support gaps into assay/sequencing/metabolomics plans
 Campaign-specific aliases can exist in non-public examples for backward
 compatibility, but public skill behavior should default to generic scopes such
 as `smoke`, `candidate_search`, `genome_context`, `coexpression`, `synteny`,
 `full_public_mining`, and `next_experiment_design`.
 
-**Freshness.** When scoping a target, scan recent preprints (bioRxiv, chemRxiv) for newly characterized enzymes or pathway steps. Treat preprint-only evidence at `candidate` ceiling unless a peer-reviewed companion is also cited. When reopening a campaign that has been dormant for more than about three months, re-verify the `version` columns in `database-ledger.tsv` and `resource-ledger.tsv` against current upstream releases before claiming continuity with prior runs. Stale tool or database versions weaken any cross-campaign comparison claim and should be flagged in the closeout.
+**Freshness.** When scoping a target, scan recent preprints (bioRxiv, chemRxiv) for newly characterized enzymes or pathway steps. Treat preprint-only support at `candidate` ceiling unless a peer-reviewed companion is also cited. When reopening a campaign that has been dormant for more than about three months, re-check the `version` columns in `database-ledger.tsv` and `resource-ledger.tsv` against current upstream releases before claiming continuity with prior runs. Stale tool or database versions weaken any cross-campaign comparison claim and should be flagged in the closeout.
 
 ## Local Memory
 
 This skill keeps two kinds of agent-output. They do different jobs and should not be conflated.
 
-**Campaign-scoped self-learning ledger.** Every campaign emits a review trail: route decision, ledgers, claim checks, evidence package, closeout. That trail is *per campaign*, lives under `.runtime/<campaign-id>/`, and is what reviewers read to verify a specific run.
+**Campaign-scoped self-learning ledger.** Every campaign emits a review trail: route decision, ledgers, claim checks, review packet, closeout. That trail is *per campaign*, lives under `.runtime/<campaign-id>/`, and is what reviewers read to check a specific run.
 
 **Cross-campaign memory.** Some lessons are about how to operate the skill itself rather than about a particular campaign: a CLI flag that misbehaves, a fix recipe for an install failure, a pattern that consistently saves time. Those belong under `.bioprospector-memory/` at the repo root. The folder is gitignored, so memory stays on the user's machine and survives `git pull` from upstream. The agent reads it at the top of every session and writes new notes when it learns something durable. Lessons compound across campaigns. It exists for behavior change.
 
@@ -679,7 +679,7 @@ If a lesson can only be expressed by naming campaign-specific data, it belongs i
 
 Every Symphony worker should finish with:
 
-- validation commands run exactly as written
+- check commands run exactly as written
 - artifact paths and hashes recorded when applicable
 - touched areas summarized
 - caveats for predicted structures, affinity estimates, generated designs, and rendering assumptions

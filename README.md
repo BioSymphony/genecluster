@@ -79,7 +79,7 @@ GeneCluster records what the available data can support. Stage 0 classifies the 
 ## Start Here
 
 - [docs/capability-stack.md](docs/capability-stack.md): the full capability surface.
-- [docs/glossary.md](docs/glossary.md): terms-of-art used across the skill, including route cards, evidence normalizers, maturity ladders, and review limits.
+- [docs/glossary.md](docs/glossary.md): terms-of-art used across the skill, including route cards, support normalizers, maturity ladders, and review limits.
 - [docs/agent-orchestrator-guide.md](docs/agent-orchestrator-guide.md): drive the repo with Codex, Claude Code, Symphony + Linear, `/goal`, or your own orchestrator.
 - [docs/genecluster-atlas-superpower-runbook.md](docs/genecluster-atlas-superpower-runbook.md): atlas campaign operating path from source scout to review surface.
 - [docs/biosymphony-tooling-status.md](docs/biosymphony-tooling-status.md): the 25 checked tools, parked re-entry recipes, gated tools.

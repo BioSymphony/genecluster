@@ -1,6 +1,6 @@
 # Public Release Checklist
 
-This repo is a public-safe source snapshot, not a mirror of internal working repos. It intentionally excludes raw/heavy biological data, runtime outputs, provider responses, credentials, private tracker text, and local operator state.
+This repo is a public-safe source snapshot. It intentionally excludes raw/heavy biological data, runtime outputs, provider responses, credentials, private tracker text, and local operator state.
 
 The snapshot is ready for public publication only when all checks pass:
 

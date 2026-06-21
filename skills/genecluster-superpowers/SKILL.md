@@ -39,7 +39,7 @@ Current status (after the extended testing sweep and upstream freshness check, f
 | Tool | Status | Tier | Check task | Notes |
 |---|---|---|---|---|
 | **Quarto 1.9.37** | ✅ ADOPTED | blessed | (adopted) | Quarto atlas book live |
-| **plantiSMASH 2.0.4 (v7 boot recipe)** | ✅ ADOPTED | medium-add | checked | Upstream latest is 2.0.4; "v7" is BioSymphony's checked boot iteration, not a release. Raw editable installs had `straight.plugin` discovery blockers; use the non-editable source install + recipe. Detects multiple clusters per chromosome on public plant genomes. AGPL-3.0+. Review license terms before public service use. |
+| **plantiSMASH 2.0.4 (v7 boot recipe)** | ✅ ADOPTED | medium-add | checked | Upstream latest is 2.0.4; "v7" names BioSymphony's checked boot iteration. Raw editable installs had `straight.plugin` discovery blockers; use the non-editable source install + recipe. Detects multiple clusters per chromosome on public plant genomes. AGPL-3.0+. Review license terms before public service use. |
 | **antiSMASH 8.0.4** (bacterial / fungal) | ✅ ADOPTED | (added P12) | checked | Cookbook at `docs/biosymphony-antismash-cookbook.md`. Mambaforge + cpu5g. No `--taxon plants`. |
 | **DeepBGC** (plant BGC default) | ✅ ADOPTED | (added during testing) | checked | Tens of BGCs detected across multiple chromosomes on a public plant genome |
 | **JCVI MCScan** | ✅ ADOPTED | cheap-add | checked | Thousands of pairwise anchors between two public plant species |
@@ -99,7 +99,7 @@ Each `references/<tool>-quickstart.md` has the same shape: status, install one-l
 - [`cytoscape-js-snippet.md`](references/cytoscape-js-snippet.md), copy-paste viewer pattern
 
 **Parked. re-entry recipe required before retry (read `docs/biosymphony-tooling-status.md` first):**
-- [`cblaster-quickstart.md`](references/cblaster-quickstart.md), needs GFF→GenBank step OR NCBI Datasets fetch
+- [`cblaster-quickstart.md`](references/cblaster-quickstart.md), needs GFF -> GenBank step OR NCBI Datasets fetch
 - [`clean-hit-ec-quickstart.md`](references/clean-hit-ec-quickstart.md), bypass `CLEAN_infer_fasta.py`; DeepEC / ECPred is the checked alternative
 
 ## Sample invocation pattern
@@ -148,7 +148,7 @@ When a new tool gets recommended (via a focused tooling review or a new paper), 
 2. **Doc**, add `docs/tooling/<tool>.md` with install + sample CLI + integration point + open questions.
 3. **Install script**, extend `tools/recommended/install-{cheap,medium,heavy}.sh` with the new install (pin version where stable, leave a "or latest" comment otherwise).
 4. **Runner**, add `tools/recommended/<tool>/run-on-species.sh.template` for the canonical CLI shape, then promote to `skills/genecluster-superpowers/scripts/run-<tool>.sh` once the runner is concrete.
-5. **Quickstart**, add `skills/genecluster-superpowers/references/<tool>-quickstart.md` (≤300 words, terse).
+5. **Quickstart**, add `skills/genecluster-superpowers/references/<tool>-quickstart.md` (300 words or fewer, terse).
 6. **Status table**, update this `SKILL.md`'s status table + the `tools/recommended/README.md` status table + `docs/biosymphony-genecluster-superpower-roadmap.md`.
 7. **Lessons**, if the tool's adoption codifies a non-obvious lesson (Cytoscape gradient bug, Quarto stub references, etc.), capture it inline in the quickstart and status table so future readers see it without external context.
 

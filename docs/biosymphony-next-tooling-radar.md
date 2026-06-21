@@ -154,7 +154,7 @@ The useful additions cluster into six categories:
 
 **Integration shape:**
 
-- Optional lane after transcript quantification, not a Stage 0 requirement.
+- Optional lane after transcript quantification.
 - Inputs: bait genes, per-species TPMs, CDS/pep FASTA, sample metadata.
 - Outputs: `coexpression_candidate_groups.tsv`, `coexpression_edges.tsv`, `bait_phylogeny.newick`, `coexpression-caveats.md`.
 
@@ -368,7 +368,7 @@ figure-dossier/
 
 **Fit:** only after BioSymphony lanes are stable enough to standardize. Nextflow can target local, AWS Batch, Google Batch, Kubernetes, and other executors; Wave can build/provision containers; Fusion can reduce object-store staging friction on supported platforms.
 
-**Integration shape:** profiles such as `local-smoke`, `runpod-docker-wrapper`, `awsbatch`, `google-batch`, and `k8s`. Treat this as a future portability layer, not a replacement for the current Symphony issue-contract model.
+**Integration shape:** profiles such as `local-smoke`, `runpod-docker-wrapper`, `awsbatch`, `google-batch`, and `k8s`. Treat this as a future portability layer alongside the current Symphony issue-contract model.
 
 **Sources:** [Nextflow executors](https://www.nextflow.io/docs/latest/executor.html), [Wave containers](https://docs.seqera.io/nextflow/wave), [Fusion file system](https://docs.seqera.io/nextflow/fusion).
 
@@ -425,7 +425,7 @@ the normal preflight.
 | Candidate | Decision |
 |---|---|
 | AlphaFold3 | Defer as a BioSymphony default: parameter/terms gates and non-commercial constraints do not fit open worker lanes. |
-| Chai-2 | Defer: partner/API access, not a public repo lane. |
+| Chai-2 | Defer: partner/API access belongs outside the current public repo lane. |
 | ESM-3 / ESM-C 6B | Defer for default workflow: gated/commercial surfaces; use ESM-C 300M, ESM-2, SaProt, and ProstT5 where appropriate. |
 | PanBGC / GECCO / antiSMASH as plant defaults | Defer for this workflow: bacterial/fungal or PKS/NRPS-heavy; plantiSMASH + DeepBGC remain the plant BGC defaults. |
 | NPAtlas / COCONUT as primary source context | Keep as chemistry background only; LOTUS is a better fit for taxon-compound occurrence claims. |

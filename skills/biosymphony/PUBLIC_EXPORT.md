@@ -15,7 +15,7 @@ skill must stay reusable and provider-neutral.
   execution mode.
 - Keep the campaign shape cross-species and goal-driven:
   source-species canonical proteins -> target-species datasets -> reciprocal
-  evidence -> anchoring -> neighborhoods -> reviewable pathway evidence package.
+  support -> anchoring -> neighborhoods -> reviewable pathway packet.
 - Ask only unanswered intake questions. If ledgers already include accessions,
   source URLs, query seeds, or provider choices, summarize them before asking
   the operator for anything.
@@ -39,10 +39,10 @@ Exclude these from a public skill release:
 
 Development workspaces may keep example fixtures and backward-compatible aliases
 while the skill is under development. Those are acceptable only when
-public-facing docs do not present them as defaults and validators prevent them
+public-facing docs do not present them as defaults and checks prevent them
 from becoming silent execution claims.
 
-## Required Audit
+## Required Check
 
 Before packaging or reviewing the public skill, run:
 
@@ -51,7 +51,7 @@ python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py \
   --skill-root skills/biosymphony
 ```
 
-The audit fails on hard private tokens in public skill paths and warns on
+The check fails on hard private tokens in public skill paths and warns on
 example-specific biological terms outside examples/tests/internal notes.
 Use `--include-code-warnings` for a deeper compatibility-code scan before a
 public release branch cleanup.

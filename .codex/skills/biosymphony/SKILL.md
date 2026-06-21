@@ -1,6 +1,6 @@
 ---
 name: biosymphony
-description: Use when planning or executing BioSymphony GeneCluster campaigns to find biosynthetic gene clusters and assemble pathway evidence across genomes and transcriptomes. Applications include bioprospecting toward target molecules, pathway gap-filling, comparative atlas building, and novel-cluster discovery. The skill provides source/query ledgers, route scouting, candidate search, evidence scoring, claim audits, scientific issue contracts, validation, and provenance.
+description: Use when planning or executing BioSymphony GeneCluster campaigns to find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Applications include bioprospecting toward target molecules, pathway gap-filling, comparative atlas building, and novel-cluster discovery. The skill provides source/query ledgers, route scouting, candidate search, function scoring, claim checks, task contracts, check commands, and provenance.
 ---
 
 # BioSymphony Skill Shim

@@ -162,7 +162,7 @@ def main() -> int:
             "tier_d_cloud_required": True,
         },
         "notes": [
-            "Tier A still requires campaign-specific validation commands.",
+            "Tier A still requires campaign-specific check commands.",
             "ChimeraX GUI + REST is the default render path on macOS.",
             "Tier B claims require exact tool/env probes before dispatch.",
         ],
