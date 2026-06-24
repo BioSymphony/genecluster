@@ -57,7 +57,7 @@ jobs:
         run: echo "IMAGE_NAME=${OWNER,,}/genecluster-superpowers" >> "$GITHUB_ENV"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Free disk space
         # Image is ~5-7 GB; need extra room on the GHA runner.
