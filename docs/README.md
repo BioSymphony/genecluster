@@ -25,6 +25,7 @@ This directory is the operating manual for the public GeneCluster control plane.
 
 - [biosymphony-campaign-preflight-runbook.md](biosymphony-campaign-preflight-runbook.md) - Stage 0 source, query, and readiness preflight.
 - [genecluster-atlas-superpower-runbook.md](genecluster-atlas-superpower-runbook.md) - atlas campaign operating runbook.
+- [biosymphony-atlas-best-practices.md](biosymphony-atlas-best-practices.md) - atlas authoring, claim review, figure, and report guidance.
 - [biosymphony-atlas-obsidian-walkthrough.md](biosymphony-atlas-obsidian-walkthrough.md) - optional Obsidian editing view.
 - [biosymphony-antismash-cookbook.md](biosymphony-antismash-cookbook.md) - antiSMASH public example pattern.
 
