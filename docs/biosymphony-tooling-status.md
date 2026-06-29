@@ -109,6 +109,12 @@ A tooling review swept the BGC / PLM / structure-prediction / EC / plant-2°-met
 | E9 | **Quarto 1.9 `llms.txt` native emission** ([Quarto 1.9 blog](https://quarto.org/docs/blog/posts/2026-03-24-1.9-release/)) | 2026-03 | Single flag in `_quarto.yml` emits LLM-readable atlas index. makes the rendered book AI-friendly without restructure | worth a smoke test | ~30 min, $0 |
 | E10 | **Quarto `pdf-standard` (PDF/A, PDF/UA)** | 2026-03 | Journal-grade accessible PDF for MECA submission. | monitor (only if we target an accessibility-strict journal) | ~1 h |
 
+### Design-program sidecar
+
+| # | Candidate | Date | What it adds | Verdict | Smoke cost |
+|---|---|---|---|---|---|
+| E11 | **Proto** (`evo-design/proto-language`, `evo-design/proto-tools`; MIT; hosted MCP at `https://mcp.evodesign.org/mcp`) | 2026-06 | Design-program layer for ranked sequence and construct candidates after GeneCluster has reviewed evidence. Proto expresses biological design as sequences or constructs plus generators, constraints, and optimizers. `proto-tools` wraps BLAST, MMseqs2, MAFFT, Foldseek, TM-align, InterProScan, NCBI retrieval, Evo2, ESM-family models, Chai-1, Boltz-2, and structure scorers. Hosted MCP supports discover -> inspect schema -> run -> fetch assets and design -> validate -> inspect metrics. | local public-data smoke for `next_experiment_design` | local CPU first |
+
 ### New reference data (Coptis MIA-specific; no campaign planned)
 
 Headline candidates to re-check before any MIA campaign: *Berberis vulgaris* chromosome-level genome + MpAO/MpDAR/MpSOS triad; *Uncaria rhynchophylla* T2T + UrCYP13; Chinese goldthread strictosidine pathway paper (13 functional genes + MsNPF2.6 transporter); interactomics Chinese goldthread paper (6 novel MDRs + charlamine BGC).
@@ -255,6 +261,7 @@ P450 family classification P450Rdb ✓ cross-species/p450-classification.qmd
 KEGG / pathway-completion KEGG mapper / KAAS ✓ <deep-dive>.qmd
 reaction-template matching EnzymeMap ✓ <deep-dive>.qmd
 co-evolving paralog pairing DiffPaSS ✓ <deep-dive>.qmd
+design-program sidecar Proto 🔬 cand docs/tooling/proto.md
 domain calls HMMER + InterProScan ✓ <deep-dive>.qmd
 phylogenetic placement IQ-TREE ✓ <deep-dive>.qmd
 structure prediction ColabFold ✓ <deep-dive>.qmd

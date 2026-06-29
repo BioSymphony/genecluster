@@ -15,7 +15,7 @@ The useful additions cluster into six categories:
 1. Stage 0 data acquisition and source-ledger hardening.
 2. Plant pathway, synteny, coexpression, and metabolite support sources.
 3. Protein structure, protein-complex, pocket, docking, and enzyme-function lanes.
-4. Durable provenance and table-schema checks for figure dossiers.
+4. Durable provenance and table-schema checks for figure packages.
 5. Static review surfaces for genome, structure, and claim inspection.
 6. RunPod hardening plus portable cloud overflow paths.
 
@@ -27,13 +27,14 @@ The useful additions cluster into six categories:
 | 2 | AGAT + `pyGenomeViz` | The cblaster/clinker parked slot exposed annotation-format friction. AGAT is the GFF sanitation workhorse; `pyGenomeViz` gives lightweight static HTML/SVG cluster review without requiring a full browser app. | `annotation-normalization-report.tsv`, `cluster-neighborhood.svg`, `cluster-neighborhood.html` | GPL-3.0 for AGAT; smoke on messy plant GFFs. |
 | 3 | PMN 17 / PlantCyc | The repo still frames PlantCyc as PMN 16. PMN 17 is a real upgrade and the best plant-specific pathway/reaction source when license terms are acceptable. | `pmn_pathway_coverage.tsv`, `pmn-reaction-evidence.tsv` | Manual PMN license form; cache outside repo. |
 | 4 | PGDD 2.0 / Gramene Plants / PlantPan | BioSymphony needs better source-scout enrichment before running custom synteny. These are plant-specific support sources for precomputed synteny, pangenome, pathway, expression, and orthology context. | `external-synteny-evidence.tsv`, `pangenome-context.tsv` | Species coverage is crop-biased; preserve release numbers. |
-| 5 | Workflow Run RO-Crate + Process Run Crate + Data Package v2 | Figure dossiers need interoperable provenance without forcing every worker into a full workflow engine. RO-Crate captures runs; Data Package/check-jsonschema checks compact tables. | `ro-crate-metadata.json`, `datapackage.json`, `validation-report.json` | Decide private-path omission policy. |
+| 5 | Workflow Run RO-Crate + Process Run Crate + Data Package v2 | Figure packages need interoperable provenance without forcing every worker into a full workflow engine. RO-Crate captures runs; Data Package/check-jsonschema checks compact tables. | `ro-crate-metadata.json`, `datapackage.json`, `validation-report.json` | Use a path-redaction policy. |
 | 6 | Boltz-2 + OpenFold3 + P2Rank/fpocket + GNINA/PoseBusters | Structure work is more useful when the agent records complexes, pockets, docking boxes, pose plausibility, and affinity triage in tables. | `protein_structure_models.tsv`, `binding_pockets.tsv`, `ligand_pose_scores.tsv` | GPU pods and ligand-prep discipline; predictions are triage support. |
 | 7 | Intra-cluster protein-complex prediction | A candidate BGC locus can contain adjacent proteins whose functions only make sense as a physical complex or enzyme assembly. This lane turns that into a bounded hypothesis test instead of a full proteome-scale screen. | `cluster_complex_pairs.tsv`, `complex_model_scores.tsv`, `cluster_ppi_network.json` | Candidate/preprint lane; use small public loci first and keep claims hypothesis-level. |
 | 8 | LOTUS + Rhea + RetroRules 2026 + ATTED-II | Gene/pathway review is stronger when paired with metabolite occurrence, reaction-template, and public coexpression context, especially for alkaloid route claims. | `metabolite_occurrence.tsv`, `reaction_template_evidence.tsv`, `public_coexpression_context.tsv` | Occurrence and coexpression support context only; synonym and ID cleanup required. |
 | 9 | Observable Framework + igv-reports/JBrowse + Molstar/Nightingale | Quarto remains the report spine, but dense review needs sortable claim tables, self-contained locus cards, and pinned protein-structure scenes. | `review/` static site manifest plus per-card HTML/state files | Keep canonical narrative in Quarto; avoid server-only apps. |
 | 10 | RunPod S3 artifact pull + rclone/s5cmd | RunPod stays default, but artifact retrieval should prefer direct object-style pulls where available and fall back to proxy-pod pulls only when needed. | `artifact_pull.yaml`, `artifact-pull-report.json` | S3 API is datacenter-limited; keep raw FASTQ/BAM out of the repo. |
 | 11 | Nextflow/Wave/Fusion, Snakemake/Apptainer, dstack, SkyPilot | Useful later for standardized overflow lanes, portable smoke jobs, HPC execution, and eventually AWS/GCP Batch after the Symphony/RunPod wrappers stabilize. | provider-neutral `launch-manifest.json` to `nextflow.config`, `Snakefile`, `apptainer.def`, `dstack.yml`, or `sky.yaml` | More credentials/config surface; wait for stable wrapper contracts. |
+| 12 | Proto / Evo Design stack | Design-program layer after GeneCluster has a reviewed candidate map. Useful for typed sequence/construct units, generators, constraints, optimizers, and ranked outputs. | `proto-design-candidates.tsv`, `proto-constraint-scores.tsv`, `proto-run-metadata.json` | Local public-data smoke first; hosted MCP uses public inputs and environment credentials. |
 
 ## June 2026 Tool Intake
 
@@ -60,6 +61,7 @@ This refresh records recent public tools and databases that fill gaps in the rad
 | MAPred / ProtDETR / TopEC | Second-wave EC/function-scoring alternatives with structure or residue-level signals. | `protein_function_votes.tsv` | Watch after HIT-EC/EnzyMM/DeepEC contracts settle. |
 | Apptainer 1.4 + Snakemake 9 plugins | HPC runtime path for sites where Docker or Nextflow is awkward. | `apptainer.def`, `Snakefile`, `snakemake-profile.yaml` | Add when an HPC user appears. |
 | A2A / MCP / Agents SDK handoff patterns | Shared vocabulary for task, tool, and artifact handoff manifests. | `agent-handoff-manifest.json` | Watch; keep the skill runtime-agnostic. |
+| Proto / Evo Design stack | Sequence/construct design architecture and standardized tool execution pattern. | `proto-design-candidates.tsv`, `proto-constraint-scores.tsv`, `proto-run-metadata.json` | Keep as radar until a local public smoke proves exports. |
 
 ## Stage 0 Acquisition And Source Scouting
 
@@ -347,7 +349,33 @@ This refresh records recent public tools and databases that fill gaps in the rad
 
 **Sources:** [HIT-EC GitHub](https://github.com/datax-lab/HIT-EC), [EnzPlacer GitHub](https://github.com/drxiangma/EnzPlacer), [EnzyMM GitHub](https://github.com/rayhackett/enzymm), [SaProt GitHub](https://github.com/westlake-repl/SaProt), [ProstT5 GitHub](https://github.com/mheinzinger/ProstT5), [MAPred GitHub](https://github.com/Rongdingyi/MAPred), [ProtDETR GitHub](https://github.com/yangzhao1230/ProtDETR), [TopEC GitHub](https://github.com/IBG4-CBCLab/TopEC).
 
-## Provenance, Dossier Packaging, And Review Surfaces
+### Proto / Evo Design
+
+**Fit:** design-program sidecar after BioSymphony has reviewed candidate genes, clusters, structures, or evidence gaps. Proto defines sequence or construct units, generates candidates, scores constraints, and optimizes toward a ranked shortlist.
+
+What to borrow even before live integration:
+
+- `proto-language` vocabulary for sequences, segments, constructs, generators, constraints, optimizers, and programs.
+- `proto-tools` style Input / Config / Output wrappers for bioinformatics tools and biological-AI models.
+- Hosted MCP access pattern for discover -> inspect schema -> run -> fetch assets and design -> validate -> run -> inspect metrics.
+
+**Integration shape:** keep Proto outputs compact:
+
+```text
+proto-design/
+  proto-program.py
+  proto-program-export/
+  proto-design-candidates.tsv
+  proto-constraint-scores.tsv
+  proto-run-metadata.json
+  validation-report.json
+```
+
+**Run shape:** use public inputs for hosted MCP. Keep credentials, runtime caches, and model caches outside git. Record tool licenses in `proto-run-metadata.json`.
+
+**Sources:** [Proto about](https://proto.evodesign.org/about), [Proto MCP docs](https://proto.evodesign.org/docs/mcp/introduction), [`proto-language`](https://github.com/evo-design/proto-language), [`proto-tools`](https://github.com/evo-design/proto-tools), [`proto-client`](https://github.com/evo-design/proto-client). See [`tooling/proto.md`](tooling/proto.md) for the BioSymphony-specific review.
+
+## Provenance, Package, And Review Surfaces
 
 ### Workflow Run RO-Crate + Process Run Crate
 
@@ -368,7 +396,7 @@ This refresh records recent public tools and databases that fill gaps in the rad
 
 **Integration shape:**
 
-- Add `datapackage.json` to figure dossiers and provider handoffs.
+- Add `datapackage.json` to figure packages and provider handoffs.
 - Use `check-jsonschema` in `genecluster_atlas_contracts.py` or a companion checker for manifest schemas and table resource schemas.
 
 **Sources:** [Data Package GitHub](https://github.com/frictionlessdata/datapackage), [check-jsonschema GitHub](https://github.com/python-jsonschema/check-jsonschema).
@@ -395,7 +423,7 @@ This refresh records recent public tools and databases that fill gaps in the rad
 **Integration shape:**
 
 ```
-figure-dossier/
+figure-package/
   figure_manifest.json
   ro-crate-metadata.json
   datapackage.json
@@ -474,7 +502,7 @@ These are ordered by value-to-cost for the next operator pass.
 | F1 | Source-acquisition adapter smoke | NCBI Datasets + ENA/GWH metadata queries + 3-accession fetchngs test | normalized `source-ledger.tsv`, `read-accessions.tsv`, checksums | small CPU pod, minutes |
 | F2 | Annotation and small cluster card smoke | AGAT normalize one messy GFF; render one `pyGenomeViz` neighborhood | `annotation-normalization-report.tsv`, SVG/HTML card | small CPU pod, minutes |
 | F3 | PMN 17 paperwork + parser dry run | Submit license form; build parser against a tiny permitted local sample only | `pmn_pathway_coverage.tsv` schema and no bundled PMN data | manual gate |
-| F4 | Dossier provenance skeleton | Add RO-Crate + Data Package skeleton for an existing `.runtime` figure dossier | parseable `ro-crate-metadata.json`, `datapackage.json`, check report | local |
+| F4 | Review-package provenance skeleton | Add RO-Crate + Data Package skeleton for an existing `.runtime` figure package | parseable `ro-crate-metadata.json`, `datapackage.json`, check report | local |
 | F5 | Pocket/docking table smoke | P2Rank + fpocket on one ColabFold model; PoseBusters on one known ligand pose | `binding_pockets.tsv`, `posebusters.json` | small CPU pod, minutes |
 | F6 | Boltz-2 clean-image smoke | One protein-ligand YAML on a fresh GPU pod | model CIF/PDB, confidence JSON, affinity TSV | small GPU pod, minutes |
 | F7 | Intra-cluster complex smoke | Enumerate pairs for one small public candidate locus, filter hard, model the top few pairs, and score interfaces | `cluster_complex_pairs.tsv`, `complex_model_scores.tsv`, `cluster_ppi_network.json` | small GPU candidate set |
@@ -484,12 +512,12 @@ These are ordered by value-to-cost for the next operator pass.
 | F11 | Public coexpression context | Query ATTED-II for a small public target/comparator set and normalize IDs | `public_coexpression_context.tsv` | local or no-cost HTTP |
 | F12 | AF2BIND binding-site smoke | Run AF2BIND on one existing public structure model and compare to P2Rank/fpocket pockets | `binding_site_predictions.tsv` | small GPU or CPU path, depending on setup |
 | F13 | HPC portability skeleton | Wrap one existing smoke lane in Snakemake plus Apptainer without changing the core BioSymphony tables | `Snakefile`, `snakemake-profile.yaml`, `apptainer.def` | local or HPC login node dry run |
+| F14 | Proto design-program smoke | Run a local public toy program with open components, export results, and convert them into BioSymphony ledgers | `proto-design-candidates.tsv`, `proto-constraint-scores.tsv`, `proto-run-metadata.json` | local CPU first |
 
-**Implementation note:** F4 has a first local implementation in
-`skills/biosymphony/scripts/genecluster_dossier_skeleton.py`: generated
-GeneCluster dossier skeletons now include `datapackage.json` and
-`ro-crate-metadata.json` plus `validation-report.json`, and
-`genecluster_preflight.py --dossier-manifest` checks those sidecars.
+**Implementation note:** F4 has a first local implementation. Generated
+GeneCluster review packages now include `datapackage.json`,
+`ro-crate-metadata.json`, and `validation-report.json`; preflight checks those
+sidecars.
 
 F1 also has a first local contract hardening pass: `genecluster_source_scout.py`
 now emits self-identifying source-scout rows with provider/accession/material
@@ -515,7 +543,7 @@ the normal preflight.
 | GECCO / antiSMASH as plant defaults | Defer for this workflow: bacterial/fungal or PKS/NRPS-heavy; plantiSMASH + DeepBGC remain the plant BGC defaults. |
 | PanBGC as default plant family context | Watch for bacterial/fungal or pangenome-shaped work; do not make it the plant default until a plant-fit smoke run proves the contract. |
 | NPAtlas / COCONUT 2.0 as primary source context | Keep as chemistry background only; LOTUS is a better fit for taxon-compound occurrence claims. |
-| Generic Streamlit/Shiny/Reflex dashboards | Defer as default. Static Quarto/Observable/HTML dossiers are better for durable review and handoff. |
+| Generic Streamlit/Shiny/Reflex dashboards | Defer as default. Static Quarto/Observable/HTML review packets are better for durable review and handoff. |
 | Replacing RunPod with AWS/GCP immediately | Keep RunPod as the current checked default; AWS/GCP are overflow paths for SRA-heavy or regulated runs. |
 | Vast.ai for private data | Use only for public-data GPU overflow. |
 | Object storage as executable POSIX workdir | Park unless a workflow/filesystem layer handles it. Use object stores for inputs, caches, and derived artifact pulls. |
@@ -527,8 +555,9 @@ Keep the current checked atlas stack and add **one narrow smoke flight per gap**
 
 1. Acquisition ledgers.
 2. Annotation/cluster visualization.
-3. Dossier provenance.
+3. Review-package provenance.
 4. Pocket/docking tables.
 5. RunPod artifact pulls.
+6. Proto design-program sidecar for next-experiment design.
 
 That gives BioSymphony the most leverage: better inputs, better review cards, better provenance, and better cloud hygiene before spending time on heavier AF3-class or workflow-engine rewrites.

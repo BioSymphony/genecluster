@@ -17,6 +17,7 @@ This directory captures the integration plan for the recommended tool stack iden
 | PlantCyc PMN 16 + P450Rdb |, | cheap-add (DB-only) | PlantCyc gated; P450Rdb validated | enzyme-function agent (solo) | [plantcyc-p450rdb.md](plantcyc-p450rdb.md) |
 | Cytoscape.js 3.33.3 |, | cheap-add | adopted in atlas viewer snippets | reporting agent (solo) | [cytoscape-js.md](cytoscape-js.md) |
 | Quarto 1.9.37 | ★5 | blessed report spine | adopted | reporting agent (solo, high-confidence) | [quarto.md](quarto.md) |
+| Proto |, | design-layer candidate | track for next-experiment design and sequence-optimization flow | design / model-routing agent | [proto.md](proto.md) |
 
 ## How to read these docs
 
@@ -43,3 +44,5 @@ Each subdirectory under `tools/recommended/<tool>/` carries a `*.sh.template` st
 ## When to actually integrate
 
 Default trigger: a campaign produces an output that the existing pipeline cannot explain (twilight-zone homologs, missing cluster signal, novel-EC requests) and the relevant tool is the cheapest fix on the table. At that point, start from the status in `docs/biosymphony-tooling-status.md`: adopted tools can be reused, parked tools need their re-entry recipe, and newer upstream releases need a smoke test before replacing a validated pin.
+
+Use Proto after BioSymphony has a reviewed candidate map. It is a design-program layer for ranked sequence and construct candidates.
