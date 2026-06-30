@@ -134,7 +134,7 @@ Do not store tokens in repo files, `.env`, `env.sh`, ledgers, or Linear issue bo
 Expected RunPod operator setup:
 
 ```bash
-export RUNPOD_API_KEY=<from secure local secret store>
+Load `RUNPOD_API_KEY` from the operator's secure local secret store before launch.
 export GENECLUSTER_RUNPOD_NETWORK_VOLUME_ID=<volume id>
 export GENECLUSTER_RUNPOD_DATACENTER=<datacenter id>
 ```

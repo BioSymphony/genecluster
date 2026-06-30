@@ -1,0 +1,4 @@
+interface:
+  display_name: "BioSymphony GeneCluster"
+  short_description: "Gene-cluster campaign planning"
+  default_prompt: "Use $biosymphony to plan a public-safe GeneCluster campaign."

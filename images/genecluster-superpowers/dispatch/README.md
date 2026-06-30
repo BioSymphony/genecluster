@@ -74,20 +74,22 @@ BIOSYMPHONY_DISPATCH_BUCKET=<your-dispatch-bucket> \
 
 ### Vast.ai (cheapest GPU)
 
+Load `VASTAI_API_KEY` from your secure local secret store before running.
+
 ```
 RUN_ID=<run-id> \
 USE_INTERRUPTIBLE=1 VAST_GPU=RTX_4090 VAST_MAX_HOURLY_USD=0.35 \
 BIOSYMPHONY_STAGING_S3_PREFIX=s3://<your-dispatch-bucket> \
-VASTAI_API_KEY=<from-secure-store> \
  ./vastai-dispatch.sh clean ghcr.io/<owner>/genecluster-superpowers:v0.1 \
  /path/to/clean-boot.sh /workspace
 ```
 
 ### Lambda Labs (simple GPU)
 
+Load `LAMBDA_API_KEY` from your secure local secret store before running.
+
 ```
 RUN_ID=<run-id> \
-LAMBDA_API_KEY=<from-secure-store> \
 LAMBDA_SSH_KEY_NAME=<lambda-ssh-key-name> \
 LAMBDA_SSH_PRIVATE_KEY_PATH=<lambda-ssh-private-key-path> \
 LAMBDA_INSTANCE_TYPE=gpu_1x_h100 \

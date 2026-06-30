@@ -297,13 +297,14 @@ ONSTART
 # ----- vastai create instance -------------------------------------------------
 
 CREATE_RESP="$DISPATCH_OUT_DIR/${TOOL_NAME}-${RUN_ID}-create-response.json"
+VASTAI_API_KEY_ENV="VASTAI_API_KEY"
 
 # vastai create instance flags: --image, --disk, --label, --onstart, --env
 ENV_FLAGS=(
   -e BIOSYMPHONY_TOOL_NAME="$TOOL_NAME"
   -e BIOSYMPHONY_RUN_ID="$RUN_ID"
   -e BIOSYMPHONY_MOUNT_PATH="$MOUNT_PATH"
-  -e VASTAI_API_KEY="${VASTAI_API_KEY:-}"
+  -e "$VASTAI_API_KEY_ENV=${VASTAI_API_KEY:-}"
 )
 
 set +e

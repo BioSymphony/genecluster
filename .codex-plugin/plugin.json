@@ -1,0 +1,23 @@
+{
+  "name": "biosymphony-genecluster",
+  "version": "0.1.0",
+  "description": "BioSymphony GeneCluster skills for public-safe biosynthetic gene-cluster campaign planning and tooling.",
+  "author": {
+    "name": "BioSymphony",
+    "url": "https://github.com/BioSymphony"
+  },
+  "homepage": "https://github.com/BioSymphony/genecluster",
+  "repository": "https://github.com/BioSymphony/genecluster",
+  "license": "MIT",
+  "keywords": ["gene-clusters", "biosynthesis", "comparative-genomics"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "BioSymphony GeneCluster",
+    "shortDescription": "Gene-cluster campaign skills",
+    "longDescription": "Public-safe GeneCluster skills for biosynthetic gene-cluster search, pathway support, comparative atlas planning, route scouting, and tooling extension.",
+    "developerName": "BioSymphony",
+    "category": "Research",
+    "capabilities": ["Skills"],
+    "defaultPrompt": ["Use $biosymphony to plan a public-safe GeneCluster campaign."]
+  }
+}

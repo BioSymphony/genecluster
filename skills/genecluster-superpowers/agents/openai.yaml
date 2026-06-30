@@ -1,0 +1,4 @@
+interface:
+  display_name: "GeneCluster Superpowers"
+  short_description: "GeneCluster tooling extensions"
+  default_prompt: "Use $genecluster-superpowers to plan a public-safe GeneCluster tooling extension."

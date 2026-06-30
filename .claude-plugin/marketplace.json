@@ -1,0 +1,22 @@
+{
+  "name": "biosymphony-genecluster",
+  "owner": {
+    "name": "BioSymphony"
+  },
+  "metadata": {
+    "version": "0.1.0",
+    "description": "Public-safe GeneCluster skills for biosynthetic gene-cluster campaigns."
+  },
+  "plugins": [
+    {
+      "name": "biosymphony-genecluster",
+      "displayName": "BioSymphony GeneCluster",
+      "source": "./",
+      "description": "Plan public-safe biosynthetic gene-cluster campaigns.",
+      "category": "life-sciences",
+      "tags": ["gene-clusters", "biosynthesis", "genomics"],
+      "strict": false,
+      "skills": ["./skills/biosymphony", "./skills/genecluster-superpowers"]
+    }
+  ]
+}

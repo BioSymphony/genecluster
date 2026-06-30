@@ -207,12 +207,13 @@ PY
 export LAMBDA_REGION LAMBDA_INSTANCE_TYPE LAMBDA_SSH_KEY_NAME TOOL_NAME RUN_ID
 
 LAUNCH_RESP="$DISPATCH_OUT_DIR/${TOOL_NAME}-${RUN_ID}-launch-response.json"
+LAMBDA_AUTH_HEADER=$(printf '%s:' "$LAMBDA_API_KEY" | base64 | tr -d '\n')
 
 set +e
 HTTP_CODE=$(curl -sS \
   -o "$LAUNCH_RESP" -w "%{http_code}" \
   -X POST "https://cloud.lambdalabs.com/api/v1/instance-operations/launch" \
-  -u "${LAMBDA_API_KEY}:" \
+  -H "Authorization: Basic $LAMBDA_AUTH_HEADER" \
   -H "Content-Type: application/json" \
   --data-binary @"$PAYLOAD_FILE")
 CURL_RC=$?
@@ -259,7 +260,7 @@ for i in $(seq 1 60); do
   set +e
   STATUS_RESP=$(curl -sS \
     -X GET "https://cloud.lambdalabs.com/api/v1/instances/${INSTANCE_ID}" \
-    -u "${LAMBDA_API_KEY}:")
+    -H "Authorization: Basic $LAMBDA_AUTH_HEADER")
   set -e
   INSTANCE_IP=$(python3 -c "
 import json,sys
@@ -334,7 +335,7 @@ print(json.dumps({
   "status_push_prefix": "$STATUS_PUSH_PREFIX",
   "ssh_command": "ssh -i <ssh-private-key> ubuntu@$INSTANCE_IP",
   "monitor_command": "ssh -i <ssh-private-key> ubuntu@$INSTANCE_IP cat ${MOUNT_PATH}/${TOOL_NAME}/${RUN_ID}/STATUS",
-  "terminate_command": "operator-side: curl -sS -X POST -u '<lambda-api-key>:' -H 'Content-Type: application/json' -d '{\"instance_ids\":[\"$INSTANCE_ID\"]}' https://cloud.lambdalabs.com/api/v1/instance-operations/terminate",
+  "terminate_command": "operator-side: set LAMBDA_AUTH_HEADER from LAMBDA_API_KEY, then curl -sS -X POST -H 'Authorization: Basic $LAMBDA_AUTH_HEADER' -H 'Content-Type: application/json' -d '{\"instance_ids\":[\"$INSTANCE_ID\"]}' https://cloud.lambdalabs.com/api/v1/instance-operations/terminate",
 }, indent=2))
 PY
 
@@ -358,7 +359,8 @@ Tail logs:
     "tail -f ${MOUNT_PATH}/${TOOL_NAME}/${RUN_ID}/logs/boot.log"
 
 Terminate (no preserve, Lambda has no stop/hibernate):
-  curl -sS -X POST -u '${LAMBDA_API_KEY}:' \\
+  curl -sS -X POST \\
+    -H "Authorization: Basic $LAMBDA_AUTH_HEADER" \\
     -H 'Content-Type: application/json' \\
     -d '{"instance_ids":["$INSTANCE_ID"]}' \\
     https://cloud.lambdalabs.com/api/v1/instance-operations/terminate

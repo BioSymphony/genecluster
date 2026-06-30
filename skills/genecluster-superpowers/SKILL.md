@@ -1,6 +1,6 @@
 ---
 name: genecluster-superpowers
-description: Use when extending the BioSymphony GeneCluster comparative atlas with new tooling, sequence/structure search, biosynthetic-gene-cluster (BGC) detection, synteny ribbons, EC prediction, plant-aware reference databases, interactive viewers, or scientific report rendering. Packages the recommended-tool survey, the extended testing sweep, and the upstream freshness check as ready-to-invoke shortcuts. **Canonical tool-status inventory: `docs/biosymphony-tooling-status.md`** (25 checked / 3 parked / 8 shelved / 2 gated).
+description: Use when extending BioSymphony GeneCluster with public-safe sequence or structure search tooling, BGC detection, synteny views, EC prediction, reference databases, interactive viewers, or report rendering.
 ---
 
 # GeneCluster Superpowers

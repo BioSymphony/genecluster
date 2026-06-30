@@ -163,8 +163,10 @@ Base: `https://cloud.lambda.ai/api/v1/`, Basic auth with API key as username, bl
 
 Launch:
 ```bash
-curl -u "$LAMBDA_API_KEY:" -X POST \
+LAMBDA_AUTH_HEADER="$(printf '%s:' "$LAMBDA_API_KEY" | base64 | tr -d '\n')"
+curl -X POST \
   https://cloud.lambda.ai/api/v1/instance-operations/launch \
+  -H "Authorization: Basic $LAMBDA_AUTH_HEADER" \
   -H "Content-Type: application/json" \
   -d '{
     "region_name": "us-west-1",
@@ -178,8 +180,10 @@ curl -u "$LAMBDA_API_KEY:" -X POST \
 
 Terminate:
 ```bash
-curl -u "$LAMBDA_API_KEY:" -X POST \
+LAMBDA_AUTH_HEADER="$(printf '%s:' "$LAMBDA_API_KEY" | base64 | tr -d '\n')"
+curl -X POST \
   https://cloud.lambda.ai/api/v1/instance-operations/terminate \
+  -H "Authorization: Basic $LAMBDA_AUTH_HEADER" \
   -H "Content-Type: application/json" \
   -d '{ "instance_ids": ["<id>"] }'
 ```
@@ -205,8 +209,10 @@ docker run --gpus all --rm \
   ghcr.io/<org>/genecluster-runner:latest \
   bash /work/boot.sh
 # Self-terminate
-curl -u "$LAMBDA_API_KEY:" -X POST \
+LAMBDA_AUTH_HEADER="$(printf '%s:' "$LAMBDA_API_KEY" | base64 | tr -d '\n')"
+curl -X POST \
   https://cloud.lambda.ai/api/v1/instance-operations/terminate \
+  -H "Authorization: Basic $LAMBDA_AUTH_HEADER" \
   -d '{"instance_ids":["'$(curl -s http://169.254.169.254/latest/meta-data/instance-id)'"]}'
 ```
 

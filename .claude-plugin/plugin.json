@@ -1,0 +1,11 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "biosymphony-genecluster",
+  "version": "0.1.0",
+  "description": "BioSymphony GeneCluster skills for public-safe biosynthetic gene-cluster campaign planning and tooling.",
+  "author": {
+    "name": "BioSymphony",
+    "url": "https://github.com/BioSymphony"
+  },
+  "skills": ["./skills/biosymphony", "./skills/genecluster-superpowers"]
+}
