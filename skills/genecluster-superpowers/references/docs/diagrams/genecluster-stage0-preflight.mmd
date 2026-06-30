@@ -1,0 +1,23 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":24,"rankSpacing":52}}}%%
+flowchart TB
+  M["Mission<br/>pathway · target · comparators"]:::source
+  D["Data<br/>assembly · RNA-Seq"]:::source
+  I["Inputs<br/>seeds + controls"]:::query
+  R["Relevance<br/>pathway · taxonomy"]:::compare
+  NOV["Novelty<br/>publications · window"]:::context
+  IMP["Importance<br/>comparative rank"]:::function
+  G{"Stage 0 gate<br/>launch-readiness.json"}:::gate
+  GO["Proceed → route + L1…L5"]:::output
+  HOLD["Hold or<br/>next-experiment-design"]:::heavy
+  M --> D & I & R & NOV & IMP
+  D & I & R & NOV & IMP --> G
+  G -->|ready| GO
+  G -.->|blocked| HOLD
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef query fill:#231803,stroke:#fbbf24,color:#fff5e0,stroke-width:2px;
+  classDef compare fill:#190f30,stroke:#c084fc,color:#f4ecff,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;
+  classDef heavy fill:#0e1420,stroke:#64748b,color:#cbd5e1,stroke-width:1.6px;

@@ -1,0 +1,18 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":40,"rankSpacing":58}}}%%
+flowchart LR
+  CAND["Candidate<br/>protein"]:::search
+  CAND --> H["HMMER · Pfam"]:::function
+  CAND --> IPS["InterProScan"]:::function
+  CAND --> DEC["DeepEC · EC"]:::function
+  CAND --> KEGG["KEGG / KAAS · KO"]:::function
+  CAND --> CLEAN["CLEAN<br/>where validated"]:::function
+  H --> JURY{"Function jury<br/>aggregate vote"}:::gate
+  IPS --> JURY
+  DEC --> JURY
+  KEGG --> JURY
+  CLEAN --> JURY
+  JURY --> OUT["protein_function_jury.tsv<br/>consensus + confidence"]:::output
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;

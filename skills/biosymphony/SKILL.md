@@ -58,7 +58,7 @@ The preflight answers five operator-facing questions before any compute spend:
 knows which sister species and which seed proteins to run, pass them explicitly:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_campaign_preflight.py \
+python3 scripts/genecluster_campaign_preflight.py \
   --target "Coptis chinensis" \
   --pathway BIA \
   --campaign-id coptis-bia-example \
@@ -104,41 +104,41 @@ new species rows, updated `key_publication_pmid` from the novelty check, refined
 and a new `last_audit_date`. The catalog is the institutional memory, every
 campaign starts richer than the last.
 
-See `docs/biosymphony-campaign-preflight-runbook.md` for the full operator runbook.
+See `references/docs/biosymphony-campaign-preflight-runbook.md` for the full operator runbook.
 
 ## Required Checks
 
 Before making local capability claims, run:
 
 ```bash
-python3 skills/biosymphony/scripts/capability_probe.py --json
+python3 scripts/capability_probe.py --json
 ```
 
 Before packaging or reviewing the public BioSymphony skill, run the public skill
 check:
 
 ```bash
-python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py \
+python3 scripts/biosymphony_public_skill_audit.py \
   --skill-root skills/biosymphony
 ```
 
 Before dispatching a Linear issue body to Symphony, check it:
 
 ```bash
-python3 skills/biosymphony/scripts/preflight_check.py path/to/issue.md
+python3 scripts/preflight_check.py path/to/issue.md
 ```
 
 Before dispatching a rendered worker prompt, provider payload, or snapshot-based
 handoff, run the orchestration preflight:
 
 ```bash
-python3 skills/biosymphony/scripts/symphony_orchestration_preflight.py \
+python3 scripts/symphony_orchestration_preflight.py \
   --rendered-prompt path/to/rendered-prompt.md
 
-python3 skills/biosymphony/scripts/symphony_orchestration_preflight.py \
+python3 scripts/symphony_orchestration_preflight.py \
   --provider-payload path/to/provider-payload.json
 
-python3 skills/biosymphony/scripts/symphony_orchestration_preflight.py \
+python3 scripts/symphony_orchestration_preflight.py \
   --git-ref <private-run-branch> \
   --required-path .runtime/<bundle>/launch-manifest.json
 ```
@@ -153,14 +153,14 @@ degraded in the worker closeout.
 Before accepting a figure dossier, check its manifest:
 
 ```bash
-python3 skills/biosymphony/scripts/figure_manifest_check.py figure-dossier/figure_manifest.json
+python3 scripts/figure_manifest_check.py figure-dossier/figure_manifest.json
 ```
 
 Before dispatching or accepting a GeneCluster campaign prep artifact, check
 the user/campaign-specific ledgers:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --project-goals <campaign-dir>/project-goals.yaml \
   --pathway-steps <campaign-dir>/pathway-steps.tsv \
@@ -175,7 +175,7 @@ Provider launch bundles also include `artifact_pull.yaml`, a summary-only pull
 contract that controls which returned files may be copied back locally:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --artifact-pull-manifest <bundle-dir>/artifact_pull.yaml
 ```
 
@@ -189,15 +189,15 @@ Before planning or dispatching a GeneCluster Atlas campaign, run the source
 scout, then the route scout. The source scout is deterministic and registry-only:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_source_scout.py \
+python3 scripts/genecluster_source_scout.py \
   --campaign <campaign-dir>/campaign-manifest.json \
-  --query-registry skills/biosymphony/references/genecluster-query-registry.tsv \
+  --query-registry references/genecluster-query-registry.tsv \
   --out-dir .runtime/genecluster-source-scout \
   --json
 
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
-  --query-registry skills/biosymphony/references/genecluster-query-registry.tsv \
-  --required-claims skills/biosymphony/references/required-claims.tsv \
+python3 scripts/genecluster_preflight.py \
+  --query-registry references/genecluster-query-registry.tsv \
+  --required-claims references/required-claims.tsv \
   --source-ledger .runtime/genecluster-source-scout/source-ledger.tsv
 ```
 
@@ -210,19 +210,19 @@ When a campaign needs public read acquisition metadata, resolve SRA-style
 accessions before materialization and check the normalized read contract:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_sra_runinfo.py \
+python3 scripts/genecluster_sra_runinfo.py \
   --data-ledger <campaign-dir>/data-ledger.tsv \
   --out-dir .runtime/genecluster-sra-runinfo \
   --json
 
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --read-accessions .runtime/genecluster-sra-runinfo/read-accessions.tsv
 ```
 
 Then run the route scout and keep both outputs with the campaign packet:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_annotation_scout.py \
+python3 scripts/genecluster_annotation_scout.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --query-fasta <campaign-dir>/query-with-controls.faa \
   --source-ledger .runtime/genecluster-source-scout/source-ledger.tsv \
@@ -238,7 +238,7 @@ Before accepting GeneCluster Atlas function-scoring, comparative, review, or
 provider handoff artifacts, check the Atlas contracts:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_atlas_contracts.py \
+python3 scripts/genecluster_atlas_contracts.py \
   --cluster-calls .runtime/genecluster-atlas/cluster_calls.tsv \
   --bgc-consensus .runtime/genecluster-atlas/bgc_consensus.tsv \
   --protein-function-votes .runtime/genecluster-atlas/protein_function_votes.tsv \
@@ -253,7 +253,7 @@ To normalize compact mocked or already-run lane outputs into Atlas contracts
 without running external tools:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_atlas_normalizers.py \
+python3 scripts/genecluster_atlas_normalizers.py \
   all \
   --out-dir .runtime/genecluster-atlas
 ```
@@ -261,7 +261,7 @@ python3 skills/biosymphony/scripts/genecluster_atlas_normalizers.py \
 To build the first static summary-only review surface:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_review_surface.py \
+python3 scripts/genecluster_review_surface.py \
   --final-deliverable .runtime/<atlas>-final-deliverable \
   --out-dir .runtime/genecluster-atlas/review \
   --json
@@ -274,12 +274,12 @@ hashes, and caveats only.
 To create a summary-only GeneCluster dossier skeleton from candidate hits:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_dossier_skeleton.py \
+python3 scripts/genecluster_dossier_skeleton.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --candidate-hits <campaign-dir>/fixtures/candidate_hits.tsv \
   --out .runtime/genecluster-dossier-smoke
 
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --dossier-manifest .runtime/genecluster-dossier-smoke/dossier-manifest.json
 ```
 
@@ -291,7 +291,7 @@ remote storage.
 To intake an old spreadsheet-style GeneCluster request into a private campaign bundle without fetching data:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_excel_intake.py \
+python3 scripts/genecluster_excel_intake.py \
   --workbook "/path/to/private/demo.xlsx" \
   --out .runtime/private-genecluster-intake \
   --campaign-id genecluster-private-demo-v0
@@ -300,7 +300,7 @@ python3 skills/biosymphony/scripts/genecluster_excel_intake.py \
 Before declaring a GeneCluster prep repo clean, scan for local raw/heavy sequence artifacts:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --repo-root . \
   --scan-local-artifacts
 ```
@@ -308,14 +308,14 @@ python3 skills/biosymphony/scripts/genecluster_preflight.py \
 To prepare execution without launching compute, generate provider-neutral launch bundles:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_launch_bundle.py \
+python3 scripts/genecluster_launch_bundle.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --provider-class <local_lite|local_full|runpod_pod|ssh_hpc|cloud_vm> \
   --run-scope candidate_search \
   --run-id genecluster-candidate-search-prep \
   --out .runtime/genecluster-launch-candidate-search
 
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --launch-manifest .runtime/genecluster-launch-candidate-search/launch-manifest.json
 ```
 
@@ -324,7 +324,7 @@ stage contract. This catches untested shell pipelines that are launchable but
 lack stage outputs, checkpoint markers, timeout budgets, or watcher rules:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
+python3 scripts/genecluster_stage_contract.py \
   --stage-contract .runtime/<bundle>/stage-contract.json
 ```
 
@@ -332,7 +332,7 @@ After a provider run or summary pullback, check declared primary outputs
 rather than trusting done markers alone:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
+python3 scripts/genecluster_stage_contract.py \
   --stage-contract .runtime/<bundle>/stage-contract.json \
   --artifact-root .runtime/<bundle>-summary \
   --check-expected-outputs
@@ -346,7 +346,7 @@ transcript-like SRA materialization is planned but the runner command lacks
 To require actual launch readiness after RunPod env vars, volume metadata, and an image digest are set:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_preflight.py \
+python3 scripts/genecluster_preflight.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json \
   --execution-ready
 ```
@@ -355,7 +355,7 @@ Before asking the operator for missing GeneCluster data links, query lists, or
 resource slots, check the bundle inputs first:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_input_audit.py \
+python3 scripts/genecluster_input_audit.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json \
   --require-known-data \
   --interview-mode standard \
@@ -404,7 +404,7 @@ before candidate search.
 Use the resolver before writing or dispatching an SRA-backed pipeline:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_sra_runinfo.py \
+python3 scripts/genecluster_sra_runinfo.py \
   --data-ledger <campaign-dir>/data-ledger.tsv \
   --out-dir .runtime/<bundle>/sra-runinfo
 ```
@@ -447,7 +447,7 @@ with the generic gzip/base64 helper and keep the generated script below the
 local byte ceiling before any paid API call:
 
 ```bash
-python3 skills/biosymphony/scripts/build_runpod_dockerstart.py \
+python3 scripts/build_runpod_dockerstart.py \
   --template pipeline/<wave>/dockerstart.sh.template \
   --pipeline pipeline/<wave>/run.sh \
   --input QUERY_FASTA=path/to/query-sequences.faa \
@@ -461,7 +461,7 @@ If the RunPod MCP create-pod tool cannot express `networkVolumeId` or
 ```bash
 # Optional: source a local secure env file outside the repo.
 # source /path/to/secure/runpod.env
-python3 skills/biosymphony/scripts/genecluster_runpod_rest_launch.py \
+python3 scripts/genecluster_runpod_rest_launch.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json \
   --git-ref <private-run-branch> \
   --bundle-path .runtime/<bundle> \
@@ -501,14 +501,14 @@ Before any worker posts a final success claim for a real target-organism search,
 run the stage/progress and contract self-checks:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
+python3 scripts/genecluster_stage_contract.py \
   --stage-contract .runtime/<bundle>/stage-contract.json \
   --progress-jsonl .runtime/<run_id>-summary/stage-progress.jsonl \
   --require-terminal
 ```
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_contract_self_check.py \
+python3 scripts/genecluster_contract_self_check.py \
   --summary-dir .runtime/<run_id>-summary \
   --require-real-target-search
 ```
@@ -522,7 +522,7 @@ nonzero target candidate rows; mock/dry-run summaries are hard failures.
 Before choosing a biological execution route, run the route check:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_route_audit.py \
+python3 scripts/genecluster_route_audit.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json
 ```
 
@@ -530,7 +530,7 @@ If transcriptome support is declared and the campaign is trying to make a
 full scientific route claim, the strict check must pass:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_route_audit.py \
+python3 scripts/genecluster_route_audit.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json \
   --require-transcript-first
 ```
@@ -544,7 +544,7 @@ scientific readiness; do not collapse those into the same claim.
 To check claim boundaries for a candidate table:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_claim_audit.py \
+python3 scripts/genecluster_claim_audit.py \
   --candidate-hits <summary-dir>/candidate_hits.tsv \
   --out .runtime/genecluster-claim-audit.jsonl \
   --claim-ledger .runtime/genecluster-claim-ledger.md \
@@ -554,7 +554,7 @@ python3 skills/biosymphony/scripts/genecluster_claim_audit.py \
 To prepare Symphony/Linear planning issues without dispatching workers:
 
 ```bash
-python3 skills/biosymphony/scripts/genecluster_issue_dry_run.py \
+python3 scripts/genecluster_issue_dry_run.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --run-scope full_public_mining \
   --out .runtime/genecluster-linear-full-public-mining
@@ -578,21 +578,21 @@ python3 skills/biosymphony/scripts/genecluster_issue_dry_run.py \
 - GeneCluster live run checklist: `references/genecluster-live-run-checklist.md`
 - Local memory note template: `references/memory-note-template.md`
 - Claim pressure-test pattern: `references/claim-pressure-test-pattern.md`
-- Cross-skill real-run lessons: `../../docs/biosymphony-real-run-lessons.md`
+- Cross-skill real-run lessons: `references/docs/biosymphony-real-run-lessons.md`
 - Public skill export policy: `PUBLIC_EXPORT.md`
 - Sibling campaign pattern (variant-effect atlas): `references/campaigns/mechanistic-variant-atlas.md`
-- GeneCluster example data: `examples/genecluster-coptis-bia-public-v0/`
-- Variant-atlas example data: `examples/egfr-resistance-v1/`
+- GeneCluster example data: use operator-supplied public fixtures or synthetic fixtures from the active checkout.
+- Variant-atlas example data: use operator-supplied public fixtures or synthetic fixtures from the active checkout.
 
 Read only the relevant reference for the current task.
 
 ## Campaign Policy
 
-The flagship campaign for this public skill is the GeneCluster campaign family: find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Use it when the request is "find the cluster for this pathway in this species," "assemble pathway support toward this target molecule," "fill the gap in this published pathway," or "compare cluster topology across this family." The four canonical route specs live under `references/campaigns/genecluster-*.md` and the worked example is `examples/genecluster-coptis-bia-public-v0/`.
+The flagship campaign for this public skill is the GeneCluster campaign family: find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Use it when the request is "find the cluster for this pathway in this species," "assemble pathway support toward this target molecule," "fill the gap in this published pathway," or "compare cluster topology across this family." The canonical route specs live under `references/campaigns/`. Use public or synthetic fixtures from the active checkout when a worked example is needed.
 
 The same contract loop (source ledgers, query and control resolution, route cards with claim ceilings, candidate search, function scoring, claim checks, review packet) also hosts related campaign patterns:
 
-- **Mechanistic Variant Atlas** (`references/campaigns/mechanistic-variant-atlas.md`, example `examples/egfr-resistance-v1/`). Use when the request is "explain why these variants produce this phenotype" or "check these structural-mechanism claims." Exercises content-dependent branching, multi-claim ledger, and claim-boundary checks on a variant x metric matrix rather than a genome x cluster matrix.
+- **Mechanistic Variant Atlas** (`references/campaigns/mechanistic-variant-atlas.md`). Use when the request is "explain why these variants produce this phenotype" or "check these structural-mechanism claims." Exercises content-dependent branching, multi-claim ledger, and claim-boundary checks on a variant x metric matrix rather than a genome x cluster matrix.
 
 Tier B/C/D campaigns are experimental or remote until the capability probe proves the required tools exist.
 

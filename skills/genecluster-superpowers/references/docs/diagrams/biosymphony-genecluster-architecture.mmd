@@ -1,0 +1,26 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":50,"rankSpacing":56}}}%%
+flowchart TB
+  Goal["Biology goal<br/>pathway · species<br/>target molecule"]:::source
+  S0{"Stage 0<br/>preflight gate"}:::gate
+  Local["Local control plane<br/>route choice · claim ceiling<br/>contracts · validators"]:::context
+  Work["Agent work waves<br/>source scout · query<br/>search · comparison"]:::search
+  Execute["Execution lane<br/>laptop · HPC/SSH · cloud GPU"]:::function
+  Heavy[("Heavy data stays put<br/>raw reads · indexes")]:::heavy
+  Results["Compact results<br/>candidate tables · cluster calls<br/>function scores · figures"]:::output
+  Next["Next bounded wave<br/>tighten queries · add species<br/>escalate · design experiment"]:::query
+  Stop["Hold or<br/>next-experiment-design"]:::heavy
+  Goal --> S0
+  S0 -->|ready| Local
+  S0 -.->|blocked| Stop
+  Local --> Work --> Execute --> Results --> Next
+  Execute -.-> Heavy
+  Next -->|enriches catalog| Goal
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef query fill:#231803,stroke:#fbbf24,color:#fff5e0,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef compare fill:#190f30,stroke:#c084fc,color:#f4ecff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
+  classDef gate fill:#2a0a12,stroke:#fb7185,color:#ffe6ea,stroke-width:2.2px;
+  classDef heavy fill:#0e1420,stroke:#64748b,color:#cbd5e1,stroke-width:1.6px;

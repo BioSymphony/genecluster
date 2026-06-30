@@ -1,0 +1,14 @@
+/* synth-lab neon glow + edge-label colour, injected at render time via mmdc --cssFile.
+   No geometry changes (no padding/bg) so edge labels are not pushed past the canvas. */
+.node.source rect,.node.source polygon,.node.source path{filter:drop-shadow(0 0 5px rgba(45,212,191,.55))}
+.node.query rect,.node.query polygon,.node.query path{filter:drop-shadow(0 0 5px rgba(251,191,36,.5))}
+.node.search rect,.node.search polygon,.node.search path{filter:drop-shadow(0 0 5px rgba(34,211,238,.55))}
+.node.context rect,.node.context polygon,.node.context path{filter:drop-shadow(0 0 5px rgba(96,165,250,.55))}
+.node.compare rect,.node.compare polygon,.node.compare path{filter:drop-shadow(0 0 5px rgba(192,132,252,.55))}
+.node.function rect,.node.function polygon,.node.function path{filter:drop-shadow(0 0 5px rgba(251,146,60,.55))}
+.node.output rect,.node.output polygon,.node.output path{filter:drop-shadow(0 0 6px rgba(244,114,182,.6))}
+.node.gate rect,.node.gate polygon,.node.gate path{filter:drop-shadow(0 0 6px rgba(251,113,133,.6))}
+.node.heavy rect,.node.heavy polygon,.node.heavy path{filter:drop-shadow(0 0 3px rgba(100,116,139,.4))}
+.edgePaths path,.flowchart-link{filter:drop-shadow(0 0 2px rgba(139,233,253,.45))}
+/* edge labels: light cyan text (no background pill — diagram bg is solid dark) */
+.edgeLabel,.edgeLabel span,.edgeLabel p,.edgeLabel .nodeLabel{color:#cfeeff !important;fill:#cfeeff !important;background-color:transparent !important}

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# tools/recommended/plantismash/run-on-species.sh.template
+#
+# STATUS: validated on RunPod through the BioSymphony v7 boot recipe.
+#
+# What this would do for the BIA atlas:
+#   Run plantiSMASH 2.0.4 against a single species genome FASTA + GFF, producing
+#   plantismash-detected BGC clusters (12 BGC types incl. BIA / terpene /
+#   saccharide). Output is joined to our anchor-driven cluster table by
+#   coordinate overlap so every cluster the existing pipeline missed becomes a
+#   row in the postprocess xlsx.
+#
+# Inputs:
+#   {SPECIES_SLUG}     e.g. "stephania-tetrandra"
+#   {GENOME_FASTA}     path to the species genome FASTA (in .runtime/<species>-summary/)
+#   {OUTPUT_DIR}       where to drop plantiSMASH outputs; conventionally
+#                      .runtime/plantismash-out/{species}/
+#
+# Outputs:
+#   ${OUTPUT_DIR}/*.gbk              , parsed plantiSMASH region records
+#   ${OUTPUT_DIR}/index.html         , interactive web view
+#
+# Where output feeds in:
+#   - pipeline/genecluster_annotation_direct/run.py (new stage `plantismash_detect`)
+#   - your downstream postprocess script adds plantismash_cluster_id /
+#     plantismash_type / plantismash_substrate_prediction columns to the
+#     clusters-diamond sheet, plus a new plantismash-only-clusters sheet.
+
+set -euo pipefail
+
+SPECIES_SLUG="{SPECIES_SLUG}"               # e.g. stephania-tetrandra
+GENOME_INPUT="{GENOME_INPUT}"               # absolute path to genome FASTA/GFF/GBFF
+OUTPUT_DIR="{OUTPUT_DIR}"                   # absolute path
+PLANTISMASH_CMD=(conda run -n plantismash plantismash)
+
+mkdir -p "${OUTPUT_DIR}"
+
+"${PLANTISMASH_CMD[@]}" \
+  --taxon plants \
+  --genefinding-tool none \
+  --outputfolder "${OUTPUT_DIR}" \
+  "${GENOME_INPUT}"
+
+echo "plantiSMASH 2.0.4 on ${SPECIES_SLUG} → ${OUTPUT_DIR}"

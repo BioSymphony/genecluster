@@ -1,0 +1,29 @@
+%%{init: {"theme":"base","themeVariables":{"lineColor":"#8be9fd","fontSize":"16px","edgeLabelBackground":"#0a1024"},"flowchart":{"htmlLabels":true,"useMaxWidth":true,"diagramPadding":24,"padding":13,"nodeSpacing":50,"rankSpacing":56}}}%%
+flowchart TB
+  Target["Biology target<br/>pathway · molecule<br/>species · gap"]:::source
+  Seeds["Seeds + controls<br/>known enzymes<br/>domains · decoys"]:::query
+  Sources["Public genomes &<br/>transcriptomes<br/>NCBI · SRA · UniProt<br/>KEGG · MIBiG"]:::source
+  Search["Candidate search<br/>BLAST · DIAMOND<br/>MMseqs2 · HMMER · Foldseek"]:::search
+  Context["Genome context<br/>coordinates · neighborhoods<br/>cluster windows"]:::context
+  Compare["Comparative genomics<br/>orthology · paralogs · synteny"]:::compare
+  Function["Function jury<br/>BGC callers · EC/KO<br/>structure signals"]:::function
+  Pathway["Pathway map<br/>ranked enzymes · cluster<br/>hypotheses · route"]:::output
+  Next["Next search question<br/>missing step · new species<br/>stronger query"]:::query
+  Target --> Seeds
+  Target --> Sources
+  Seeds --> Search
+  Sources --> Search
+  Search --> Context
+  Context --> Compare
+  Context --> Function
+  Compare --> Pathway
+  Function --> Pathway
+  Pathway --> Next
+  Next -.->|iterate| Target
+  classDef source fill:#04231f,stroke:#2dd4bf,color:#defff8,stroke-width:2px;
+  classDef query fill:#231803,stroke:#fbbf24,color:#fff5e0,stroke-width:2px;
+  classDef search fill:#042330,stroke:#22d3ee,color:#dffaff,stroke-width:2px;
+  classDef context fill:#0a1738,stroke:#60a5fa,color:#e7f0ff,stroke-width:2px;
+  classDef compare fill:#190f30,stroke:#c084fc,color:#f4ecff,stroke-width:2px;
+  classDef function fill:#2a1404,stroke:#fb923c,color:#ffeede,stroke-width:2px;
+  classDef output fill:#2b0a1e,stroke:#f472b6,color:#ffe6f3,stroke-width:2px;
