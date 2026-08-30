@@ -17,7 +17,7 @@
 #   1. Builds (or reuses) a DIAMOND DB from the species proteome
 #   2. cblaster search: query enzyme set vs the DB; --max_distance 50000 / --min_hits 3
 #   3. cblaster extract: per-cluster GenBank slices
-#   4. clinker: synteny SVG + interactive HTML
+#   4. clinker: interactive HTML comparison
 #
 # Output: .runtime/campaign-<species>-summary/superpowers/cblaster/
 
@@ -42,9 +42,9 @@ if [[ -z "$SPECIES" ]]; then
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-SUMMARY_DIR="${REPO_ROOT}/.runtime/-summary"
+SUMMARY_DIR="${REPO_ROOT}/.runtime/campaign-${SPECIES}-summary"
 PROTEOME="${SUMMARY_DIR}/proteome.faa"
-QUERY_FASTA="${2:-${REPO_ROOT}/.runtime/<species>-launch/queries-with-controls.faa}"
+QUERY_FASTA="${2:-${REPO_ROOT}/.runtime/${SPECIES}-launch/queries-with-controls.faa}"
 OUTPUT_DIR="${SUMMARY_DIR}/superpowers/cblaster"
 
 if [[ ! -f "$PROTEOME" ]]; then
@@ -85,16 +85,14 @@ cblaster extract \
   --output "${OUTPUT_DIR}/clusters" \
   --format genbank
 
-# --- 4. clinker SVG + HTML ---------------------------------------------------
-echo "[4/4] clinker, synteny SVG + interactive HTML..."
+# --- 4. clinker HTML ---------------------------------------------------------
+echo "[4/4] clinker interactive HTML..."
 shopt -s nullglob
 gbks=( "${OUTPUT_DIR}/clusters"/*.gbk )
 if (( ${#gbks[@]} == 0 )); then
   echo "WARN: no GenBank slices produced; clinker step skipped." >&2
 else
-  clinker "${gbks[@]}" \
-    --output_html "${OUTPUT_DIR}/clinker.html" \
-    --output_svg "${OUTPUT_DIR}/clinker.svg"
+  clinker "${gbks[@]}" --plot "${OUTPUT_DIR}/clinker.html"
 fi
 
 echo

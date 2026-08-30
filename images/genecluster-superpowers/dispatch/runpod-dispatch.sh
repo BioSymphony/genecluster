@@ -17,7 +17,7 @@
 #
 # Lessons baked in (do not rip out):
 #   * dockerStartCmd has a ~64 KB POST-body ceiling. Boot scripts >50 KB
-#     should self-fetch their large payloads from S3/GCS/catbox; this
+#     should self-fetch their large payloads from private object storage; this
 #     script's wrapper is intentionally tiny.
 #   * No inline heredocs in dockerStartCmd.
 #   * Network volumes attach in SECURE cloud only.
@@ -33,8 +33,7 @@
 # Args:
 #   $1  TOOL_NAME             short identifier (alnum + dash); used in run-id
 #                             and as a tag on the pod
-#   $2  IMAGE                 container image (default: condaforge/mambaforge:latest)
-#                            : pass the superpowers image once it's pushed
+#   $2  IMAGE                 digest-pinned container image
 #   $3  BOOT_SCRIPT_PATH      absolute path to the bash boot script (this is
 #                             the "real work" payload that the wrapper will exec)
 #   $4  MOUNT_PATH            mount point for the network volume (default /workspace)
@@ -60,11 +59,7 @@
 #   <tool>-<run_id>-pod-id                 pod ID alone (for monitors)
 #   <tool>-<run_id>-launch.json            human-readable manifest
 #
-# Cost model (RunPod, 2026-05 indicative):
-#   CPU 8-core 32 GB:    ~$0.30/h SECURE, ~$0.13/h COMMUNITY
-#   GPU RTX 4090 24 GB:  ~$0.60/h SECURE, ~$0.34/h COMMUNITY
-#   Network volume:      ~$0.07/GB-month
-# Volumes pin you to SECURE; budget accordingly.
+# Verify current pricing, capacity, and storage terms before launch.
 
 set -euo pipefail
 
@@ -73,11 +68,11 @@ readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # ----- args + env -------------------------------------------------------------
 
 TOOL_NAME="${1:-}"
-IMAGE="${2:-condaforge/mambaforge:latest}"
+IMAGE="${2:-}"
 BOOT_SCRIPT_PATH="${3:-}"
 MOUNT_PATH="${4:-/workspace}"
 
-if [[ -z "$TOOL_NAME" || -z "$BOOT_SCRIPT_PATH" ]]; then
+if [[ -z "$TOOL_NAME" || -z "$IMAGE" || -z "$BOOT_SCRIPT_PATH" ]]; then
   cat >&2 <<USAGE
 usage: $0 <tool_name> [image] <boot_script_path> [mount_path]
 
@@ -88,9 +83,14 @@ required env:
 
 example:
   RUN_ID=<run-id> \\
-  $0 cblaster condaforge/mambaforge:latest \\
+  $0 cblaster <registry>/<image>@sha256:<digest> \\
      /path/to/cblaster-boot.sh /workspace
 USAGE
+  exit 64
+fi
+
+if [[ "$IMAGE" != *@sha256:* ]]; then
+  echo "FATAL: IMAGE must be pinned by digest" >&2
   exit 64
 fi
 
@@ -176,7 +176,7 @@ HELPER
 #
 # The wrapper is intentionally tiny (<2 KB) so dockerStartCmd stays well under
 # 64 KB even with a 30 KB boot script base64'd. Boot scripts >40 KB should
-# self-fetch from catbox/S3 instead of being embedded.
+# self-fetch from private, access-controlled object storage instead of being embedded.
 
 BOOT_B64="$(base64 < "$BOOT_SCRIPT_PATH" | tr -d '\n')"
 HELPER_B64="$(printf '%s' "$DOWNLOAD_HELPER" | base64 | tr -d '\n')"
@@ -195,7 +195,7 @@ WRAPPER_BYTES="${#DOCKER_START_CMD}"
 if (( WRAPPER_BYTES > 60000 )); then
   cat >&2 <<MSG
 FATAL: dockerStartCmd is ${WRAPPER_BYTES} bytes; >60 KB likely to silently fail.
-Move boot script payload to catbox.moe / S3 / GCS and have the boot script
+Move the boot script payload to private object storage and have the boot script
 self-fetch + sha256-verify.
 MSG
   exit 65

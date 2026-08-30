@@ -7,55 +7,52 @@ description: Use when planning or executing BioSymphony GeneCluster campaigns to
 
 BioSymphony GeneCluster turns "find this gene cluster" or "assemble this pathway" into comparative-genomics campaign contracts that bounded workers can execute and reviewers can inspect. It gives agents public source ledgers, query and control resolution, route cards, candidate search, function scoring, BGC calls, and claim-bounded pathway review packets.
 
-## Operating Model
+## Operating model
 
 Use the operator's existing orchestrator or tracker when the campaign needs
 worker fan-out. That can be Symphony + Linear, another tracker, a `/goal` setup,
 or a solo capable-agent pass for small work. Do not create a new daemon or
 background service for v1.
 
-BioSymphony is a control-plane skill kit for capable agents. Codex, Claude Code,
-Symphony-style workers, or a `/goal` system should use the repo to get proven
-campaign shapes, check commands, issue
-contracts, route cards, provider handoffs, and review artifacts. The agent
-should still make ordinary orchestration decisions, fill in small glue, choose
-when a tracker is worth using, and escalate to cloud only when route, artifacts,
-and claim ceiling are clear.
+BioSymphony is a control-plane skill kit for capable agents. Use it to get
+campaign shapes, check commands, issue contracts, route cards, provider
+handoffs, and review artifacts. Make ordinary orchestration decisions, write
+small adapters when needed, and choose whether a tracker adds value. Escalate
+to external compute only after the route, artifact contract, and claim ceiling
+are clear.
 
 Use BioSymphony as a local-first skill kit:
 
-1. read every Markdown note under `.bioprospector-memory/` if the folder exists. These are durable lessons captured by past agents on this user's machine. Treat them as agent-process guidance, not as biology support or claim closeout. See the Local Memory section below.
-2. classify the requested campaign by local capability tier
-3. write Linear issues as scientific contracts
-4. check contracts before dispatch
-5. run only active waves through Symphony
-6. require figure manifests for serious artifacts
-7. preserve provenance in Linear comments and campaign artifacts
+1. Classify the campaign by local capability tier.
+2. Write tracker-neutral work units as scientific contracts.
+3. Check each contract before dispatch.
+4. Run only active waves through the selected orchestrator.
+5. Require figure manifests for review artifacts.
+6. Preserve provenance in campaign artifacts and tracker comments.
 
-Do not treat every unencoded judgment as a missing feature. If a strong agent
-can reasonably choose the next bounded worker, adapt a ledger, or write a small
-adapter, do that and keep the durable output in the campaign artifacts.
+If an agent can choose the next bounded worker, adapt a ledger, or write a
+small adapter, let it do so. Keep the durable result in the campaign artifacts.
 
-## Stage 0: Campaign data-research preflight (MANDATORY)
+## Stage 0: Campaign data preflight
 
-**Every campaign MUST begin with a Stage 0 preflight.** No `genecluster_*`
-maturity-ladder step (L0 -> L1 -> ...) may proceed without a valid
+Every campaign must begin with a Stage 0 preflight. Do not start a
+`genecluster_*` maturity step until the preflight produces a valid
 `campaign-launch-readiness.json` produced by `genecluster_campaign_preflight.py`.
 
 The preflight answers five operator-facing questions before any compute spend:
 
 | Pillar | What it surfaces | Where it comes from |
 |---|---|---|
-| **Data** | assembly state, RNA-Seq breadth, annotation status. for target + N relatives | NCBI Datasets v2 + SRA esearch + NGDC GWH fallback |
+| **Data** | assembly state, RNA-Seq breadth, and annotation status for the target and its comparators | NCBI Datasets v2, SRA `esearch`, and the NGDC GWH fallback |
 | **Inputs** | seed protein query set (UniProt anchors + controls) | KEGG REST + `data/pathway-species-catalog.tsv` + optional user TSV |
-| **Relevance** | pathway overlap. sister-family vs cross-family vs convergent producers | NCBI E-utilities taxonomy walk |
+| **Relevance** | pathway overlap across related and convergent producers | NCBI E-utilities taxonomy walk |
 | **Novelty** | existing publications mapping pathway-to-species; reviewable novelty windows | catalog `key_publication_pmid` + multi-pass literature check |
 | **Importance** | composite comparative-value ranking for sequencing-priority decisions | deterministic score: annotation + tissue breadth + recency + catalog comparative_value |
 
 ### Two operating modes
 
-**Mode A. user-supplied comparators and queries.** When the operator already
-knows which sister species and which seed proteins to run, pass them explicitly:
+**Mode A: user-supplied comparators and queries.** If you know which comparator
+species and seed proteins to use, pass them explicitly:
 
 ```bash
 python3 scripts/genecluster_campaign_preflight.py \
@@ -71,18 +68,19 @@ The preflight cross-checks every comparator against `data/pathway-species-catalo
 and validates the seed-queries TSV (required columns, positive/negative controls,
 duplicate `query_id`s, missing UniProt anchors).
 
-**Mode B. auto-discover (default when no comparators provided).** When the
-operator has *not* supplied a comparator list, the preflight invokes
-`genecluster_species_scout.py` to:
+**Mode B: automatic discovery.** If you do not supply comparators, the preflight
+runs `genecluster_species_scout.py` to:
 
-1. Pull catalog-tracked producers of the target pathway.
-2. Walk NCBI taxonomy genus -> family for sibling species with any public genome.
-3. For each candidate: query NCBI Datasets v2 (assembly), SRA esearch (breadth-by-tissue), NGDC GWH plants index (fallback when NCBI empty).
-4. Resolve the pathway against KEGG (`map00950` BIA, `map00901` MIA, etc.) and emit a KEGG-derived placeholder seed-query set (operator must resolve UniProt anchors before launch).
+1. Select cataloged producers of the target pathway.
+2. Search the NCBI taxonomy from genus to family for related species with a public genome.
+3. Query NCBI Datasets v2, SRA `esearch`, and the NGDC GWH plants index for each candidate.
+4. Resolve the pathway against KEGG and create a placeholder seed-query set.
+
+Resolve the placeholder queries to UniProt anchors before launch.
 
 ### Required artifacts
 
-After a successful preflight, the campaign directory MUST contain:
+After a successful preflight, the campaign directory must contain:
 
 ```
 .runtime/<campaign-id>-preflight/
@@ -94,19 +92,18 @@ After a successful preflight, the campaign directory MUST contain:
 └── seed-query-candidates.tsv          # if KEGG resolved or operator-supplied
 ```
 
-If `preflight_status != "ready"`, downstream stages MUST refuse to proceed.
+If `preflight_status != "ready"`, stop the campaign.
 
 ### Enriching the catalog
 
-Each completed campaign feeds its findings back into `data/pathway-species-catalog.tsv`:
-new species rows, updated `key_publication_pmid` from the novelty check, refined
-`comparative_value` once the campaign produces concrete synteny / cluster results,
-and a new `last_audit_date`. The catalog is the institutional memory, every
-campaign starts richer than the last.
+After a campaign, update `data/pathway-species-catalog.tsv` with supported
+findings. Add new species, update `key_publication_pmid`, refine
+`comparative_value` from concrete synteny or cluster results, and set
+`last_audit_date`. Cite the evidence for each change.
 
 See `references/docs/biosymphony-campaign-preflight-runbook.md` for the full operator runbook.
 
-## Required Checks
+## Required checks
 
 Before making local capability claims, run:
 
@@ -139,16 +136,15 @@ python3 scripts/symphony_orchestration_preflight.py \
   --provider-payload path/to/provider-payload.json
 
 python3 scripts/symphony_orchestration_preflight.py \
-  --git-ref <private-run-branch> \
+  --git-ref <reviewed-git-ref> \
   --required-path .runtime/<bundle>/launch-manifest.json
 ```
 
-Rendered prompts must expose a non-empty issue body. Provider payloads must stay
-under the configured byte limit before any cloud API call. Snapshot/ref checks
-must prove the worker can actually see the scripts and bundles it is expected
-to run. Silent fallback to a different worker/team/provider mode is a hard
-stop, and any recovery from missing prompt/body/provider state must be marked as
-degraded in the worker closeout.
+Rendered prompts must contain a non-empty issue body. Keep provider payloads
+under the configured byte limit. Confirm that the worker can access each
+required script and bundle. Stop if the system silently selects a different
+worker, team, or provider mode. Mark any recovery from missing prompt, body, or
+provider state as degraded in the closeout.
 
 Before accepting a figure dossier, check its manifest:
 
@@ -288,13 +284,13 @@ The skeleton emits `dossier-manifest.json`, `datapackage.json`, and
 FASTA/GFF/FASTQ/BAM/database artifacts must remain provider-side or in approved
 remote storage.
 
-To intake an old spreadsheet-style GeneCluster request into a private campaign bundle without fetching data:
+To intake a public or synthetic spreadsheet-style request without fetching data:
 
 ```bash
 python3 scripts/genecluster_excel_intake.py \
-  --workbook "/path/to/private/demo.xlsx" \
-  --out .runtime/private-genecluster-intake \
-  --campaign-id genecluster-private-demo-v0
+  --workbook "<PUBLIC_OR_SYNTHETIC_WORKBOOK>.xlsx" \
+  --out .runtime/genecluster-example-intake \
+  --campaign-id genecluster-example-v0
 ```
 
 Before declaring a GeneCluster prep repo clean, scan for local raw/heavy sequence artifacts:
@@ -463,7 +459,7 @@ If the RunPod MCP create-pod tool cannot express `networkVolumeId` or
 # source /path/to/secure/runpod.env
 python3 scripts/genecluster_runpod_rest_launch.py \
   --launch-manifest .runtime/<bundle>/launch-manifest.json \
-  --git-ref <private-run-branch> \
+  --git-ref <reviewed-git-ref> \
   --bundle-path .runtime/<bundle> \
   --pod-id-out .runtime/<bundle>/runpod-main-pod-id.txt \
   --dry-run
@@ -560,7 +556,7 @@ python3 scripts/genecluster_issue_dry_run.py \
   --out .runtime/genecluster-linear-full-public-mining
 ```
 
-## Reference Map
+## Reference map
 
 - Capability tiers: `references/capability-matrix.md`
 - Linear issue contract: `references/contract-template.md`
@@ -576,9 +572,7 @@ python3 scripts/genecluster_issue_dry_run.py \
 - GeneCluster cross-species discovery engine: `references/genecluster-cross-species-discovery.md`
 - GeneCluster prep ROI triage: `references/genecluster-prep-roi.md`
 - GeneCluster live run checklist: `references/genecluster-live-run-checklist.md`
-- Local memory note template: `references/memory-note-template.md`
 - Claim pressure-test pattern: `references/claim-pressure-test-pattern.md`
-- Cross-skill real-run lessons: `references/docs/biosymphony-real-run-lessons.md`
 - Public skill export policy: `PUBLIC_EXPORT.md`
 - Sibling campaign pattern (variant-effect atlas): `references/campaigns/mechanistic-variant-atlas.md`
 - GeneCluster example data: use operator-supplied public fixtures or synthetic fixtures from the active checkout.
@@ -586,9 +580,13 @@ python3 scripts/genecluster_issue_dry_run.py \
 
 Read only the relevant reference for the current task.
 
-## Campaign Policy
+## Campaign policy
 
-The flagship campaign for this public skill is the GeneCluster campaign family: find biosynthetic gene clusters and assemble pathway support across genomes and transcriptomes. Use it when the request is "find the cluster for this pathway in this species," "assemble pathway support toward this target molecule," "fill the gap in this published pathway," or "compare cluster topology across this family." The canonical route specs live under `references/campaigns/`. Use public or synthetic fixtures from the active checkout when a worked example is needed.
+The main campaign family finds biosynthetic gene clusters and assembles pathway
+support across genomes and transcriptomes. Use it to find a cluster, assemble
+pathway support, investigate a pathway gap, or compare cluster topology. The
+route specifications are under `references/campaigns/`. Use public or synthetic
+fixtures for worked examples.
 
 The same contract loop (source ledgers, query and control resolution, route cards with claim ceilings, candidate search, function scoring, claim checks, review packet) also hosts related campaign patterns:
 
@@ -596,13 +594,22 @@ The same contract loop (source ledgers, query and control resolution, route card
 
 Tier B/C/D campaigns are experimental or remote until the capability probe proves the required tools exist.
 
-## GeneCluster Policy
+## GeneCluster policy
 
-GeneCluster treats BioSymphony as the control plane and the selected provider as the execution plane. The skill must stay provider-neutral: `local_lite`, `local_full`, `runpod_pod`, `ssh_hpc`, `cloud_vm`, and future managed workflow backends all use the same manifest and artifact contracts. RunPod is the most mature heavy adapter in this repo today: it gets the strongest lifecycle, data-materialization, summary-sync, and self-check defaults first. Local full/HPC/cloud are supported when the user explicitly supplies comparable heavy storage, tools, and summary sync.
+GeneCluster uses BioSymphony as the control plane and the selected compute lane
+as the execution plane. Keep the skill provider-neutral. The `local_lite`,
+`local_full`, `runpod_pod`, `ssh_hpc`, and `cloud_vm` lanes use the same manifest
+and artifact contracts. The RunPod adapter currently has the most complete
+lifecycle, data-materialization, summary-sync, and self-check support. Use
+another heavy lane only when it provides equivalent storage, tools, and summary
+sync.
 
 For non-public campaigns, do not launch remote compute or fetch raw biological data unless the user explicitly asks for execution. Prep-only work may create manifests, ledgers, review skeletons, launch bundles, and Linear issue drafts under ignored local folders such as `.runtime/`.
 
-Gene discovery workflows should assume sparse clues and messy input biology. Plan for homolog search, local BLAST/DIAMOND/MMseqs2 on the provider worker, domain/function labeling, deduplication, paralog/homeolog and splice/isoform review, neighboring-gene capture, coexpression and synteny only where supported, and explicit claim levels.
+Expect sparse clues and inconsistent biological inputs. Plan for homolog search,
+domain and function labels, deduplication, paralog and isoform review, and
+neighbor capture. Add coexpression and synteny only when the available data
+supports them. State the claim level for every result.
 
 Never infer scientific completion from runner flags alone. A final plan/comment
 must explicitly prove the current maturity level:
@@ -614,7 +621,7 @@ must explicitly prove the current maturity level:
 - `L4_raw_sra_pipeline_ready`: SRA reads were fetched/converted and either materialized into searchable target sequences or explicitly assembled/imported
 - `L5_claim_audited_dossier_ready`: legacy maturity id for a checked review packet; target candidate hits, anchors/neighborhoods where supported, provenance, versions, and claim checks pass
 
-For transcript-like public SRA inputs, the current blessed path can materialize
+For transcript-like public SRA inputs, the documented path can materialize
 provider-side target nucleotide FASTA and BLAST DBs, then run protein queries
 with `tblastn`. De novo transcriptome assembly and physical cluster claims are
 separate escalation lanes, not implied by `--allow-large-downloads`.
@@ -636,58 +643,27 @@ compatibility, but public skill behavior should default to generic scopes such
 as `smoke`, `candidate_search`, `genome_context`, `coexpression`, `synteny`,
 `full_public_mining`, and `next_experiment_design`.
 
-**Freshness.** When scoping a target, scan recent preprints (bioRxiv, chemRxiv) for newly characterized enzymes or pathway steps. Treat preprint-only support at `candidate` ceiling unless a peer-reviewed companion is also cited. When reopening a campaign that has been dormant for more than about three months, re-check the `version` columns in `database-ledger.tsv` and `resource-ledger.tsv` against current upstream releases before claiming continuity with prior runs. Stale tool or database versions weaken any cross-campaign comparison claim and should be flagged in the closeout.
 
-## Local Memory
+**Freshness.** Scan recent literature when you define a target. Treat
+preprint-only support at the `candidate` ceiling unless you also cite a
+peer-reviewed source. If a campaign has been inactive for more than three
+months, compare the `version` columns in `database-ledger.tsv` and
+`resource-ledger.tsv` with current upstream releases. Record version drift in
+the closeout.
 
-This skill keeps two kinds of agent-output. They do different jobs and should not be conflated.
+## Closeout standard
 
-**Campaign-scoped self-learning ledger.** Every campaign emits a review trail: route decision, ledgers, claim checks, review packet, closeout. That trail is *per campaign*, lives under `.runtime/<campaign-id>/`, and is what reviewers read to check a specific run.
+Every worker should finish with:
 
-**Cross-campaign memory.** Some lessons are about how to operate the skill itself rather than about a particular campaign: a CLI flag that misbehaves, a fix recipe for an install failure, a pattern that consistently saves time. Those belong under `.bioprospector-memory/` at the repo root. The folder is gitignored, so memory stays on the user's machine and survives `git pull` from upstream. The agent reads it at the top of every session and writes new notes when it learns something durable. Lessons compound across campaigns. It exists for behavior change.
+- Commands run exactly as written.
+- Artifact paths and hashes, when applicable.
+- A summary of changed areas.
+- Limits for predicted structures, affinity estimates, generated designs, and rendering assumptions.
+- A tracker-neutral closeout artifact with the outcome, checks, artifacts, limits, and next action.
+- An optional tracker comment that links to the closeout artifact without adding private content.
+- A literature-scan summary and any tool or database version drift.
 
-The two are complements: the ledger answers "what happened in this run, and is the claim sound?"; the memory answers "what should I do differently next time, regardless of campaign?"
-
-### Memory note path and shape
-
-Path: `.bioprospector-memory/YYYY-MM-DD-<slug>.md`
-
-Each note has five short sections:
-
-- **What happened.** One paragraph naming the failure mode or surprise, with enough detail that future-you can recognize the same situation again.
-- **What was tried.** Bulleted list of approaches that did not work, with one sentence each on why.
-- **What worked.** The minimal fix or pattern that resolved it. Code or commands when they help.
-- **When this applies.** Conditions under which to reach for this lesson. Be specific so the agent does not over-apply.
-- **What to skip.** Approaches that look tempting but are dead ends, so the next agent does not waste time re-running them.
-
-The template lives at `references/memory-note-template.md`. See also a worked example there.
-
-### What never goes in a memory note
-
-The folder is gitignored, but memory notes still get read by agents and can leak into other artifacts. Never write any of the following into a note:
-
-- secrets, tokens, API keys, signed URLs
-- private filesystem paths (use `~/...` or `<repo-root>/...` placeholders)
-- campaign-specific organism, accession, gene, or pathway identifiers (those belong in the campaign dossier, not in cross-campaign memory)
-- raw sequences (protein, nucleotide, or otherwise) or large outputs
-- provider-specific instance IDs, pod IDs, project IDs, account IDs
-- private-tracker URLs or ticket bodies
-
-If a lesson can only be expressed by naming campaign-specific data, it belongs in the campaign dossier, not in `.bioprospector-memory/`.
-
-## Closeout Standard
-
-Every Symphony worker should finish with:
-
-- check commands run exactly as written
-- artifact paths and hashes recorded when applicable
-- touched areas summarized
-- caveats for predicted structures, affinity estimates, generated designs, and rendering assumptions
-- a `<!-- symphony-outcome -->` block in the final Linear comment
-- any durable behavioral lesson written as a memory note under `.bioprospector-memory/` (see Local Memory section); skip when nothing new was learned
-- freshness re-checks recorded: preprint-scan summary for the target, plus any `version` column drift in `database-ledger.tsv` or `resource-ledger.tsv` that was updated mid-campaign
-
-## Rendering Defaults
+## Rendering defaults
 
 - PyMOL: use the app path for local ray-rendered static panels.
 - ChimeraX: default to GUI + REST for rendering on macOS.

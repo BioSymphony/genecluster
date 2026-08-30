@@ -18,7 +18,7 @@ This is not legal advice. Every campaign should record exact tool/database
 versions and re-check licenses before redistribution, publication, commercial
 use, or any upload to hosted services.
 
-## Licensing Policy
+## Licensing policy
 
 BioSymphony skill code should remain MIT licensed where possible.
 
@@ -52,7 +52,7 @@ Do not:
 - treat predicted BGCs, coexpression modules, or pathway assignments as
  experimentally validated chemistry
 
-## License Classes
+## License classes
 
 Use these classes in `resource-ledger.tsv` and campaign manifests:
 
@@ -73,7 +73,7 @@ Do not use `open-source` as a license class in ledgers. Resolve it to one of the
 classes above so automation can decide whether vendoring, redistribution, or
 commercial use requires review.
 
-## Use Mode Classes
+## Use mode classes
 
 Use these values in `use_mode` fields:
 
@@ -89,7 +89,7 @@ Use these values in `use_mode` fields:
 - `derived-summary`: small derived result tables
 - `deferred_remote_container`: planned remote tool, not used in the v0 run
 
-## Redistribution Policy Classes
+## Redistribution policy classes
 
 When a resource can appear in a dossier, record one of:
 
@@ -101,7 +101,7 @@ When a resource can appear in a dossier, record one of:
 - `do-not-vendor-code`
 - `public-inputs-only`
 
-## Workflow Engines And Packaging
+## Workflow engines and packaging
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -109,14 +109,14 @@ When a resource can appear in a dossier, record one of:
 | nf-core/fetchngs | Public accession import | permissive-code for pipeline; verify dependency licenses | Use for SRA/ENA/GEO/DDBJ metadata and samplesheets. |
 | nf-core/rnaseq | Reference RNA-seq lane | permissive-code for pipeline; verify dependency licenses | Use when a good genome/GFF exists; track STAR/Salmon/subread dependency licenses separately. |
 | nf-core/nanoseq | Long-read RNA-seq lane | permissive-code for pipeline; verify dependency licenses | Useful for ONT/direct RNA or cDNA lanes; dependency licenses vary. |
-| nf-core/modules | Reusable process modules | permissive-code for modules; verify wrapped tools | Good source for robust wrappers, but copy only license-compatible snippets with notices. |
+| nf-core/modules | Reusable process modules | permissive-code for modules; verify wrapped tools | Source of reusable wrappers; copy only license-compatible snippets and preserve notices. |
 | Snakemake | Alternative workflow engine | permissive-code | Good fallback for Pythonic rules and local lab servers. |
 | CWL / WDL | Portable workflow specifications | permissive-code for specs; engines vary | Useful if a collaborator already standardizes on these engines. |
 | Bioconda / conda-forge | Package channels | restricted-or-review | Use package-level license reports; do not assume all packages are permissive. |
 | Docker / OCI images | Reproducible environments | restricted-or-review | Pin image digests and maintain an image bill of materials. |
 | Apptainer / Singularity | HPC-friendly containers | permissive-code | Useful for university clusters where Docker is unavailable. |
 
-## Data Acquisition, QC, And Provenance
+## Data acquisition, QC, and provenance
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -141,7 +141,7 @@ When a resource can appear in a dossier, record one of:
 | Workflow Run RO-Crate / Process Run Crate | Dossier provenance packaging | permissive-code/open standard | Good target for durable campaign provenance; omit private paths from public exports. |
 | Data Package v2 / check-jsonschema | Tabular dossier schemas and validation | permissive-code | Validates compact table resource schemas; does not replace provenance. |
 
-## Genome Annotation And Anchoring
+## Genome annotation and anchoring
 
 Use this section when a GeneCluster campaign needs genomic coordinates, reliable
 gene models, or cross-assembly anchoring before calling BGCs.
@@ -165,7 +165,7 @@ gene models, or cross-assembly anchoring before calling BGCs.
 | EDTA / RepeatModeler / RepeatMasker / Dfam | Repeat annotation and masking | restricted-or-review | Plant genomes need repeat-aware annotation; Dfam/RepBase/RepeatMasker terms differ. |
 | NCBI Genome Annotation Pipeline output | Reference gene models when available | open-data-with-terms | Good for public references; preserve accession, assembly version, and annotation release. |
 
-## Transcriptome Assembly, Isoforms, Splicing, And Deduplication
+## Transcriptome assembly, isoforms, splicing, and deduplication
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -190,7 +190,7 @@ gene models, or cross-assembly anchoring before calling BGCs.
 | OrthoFinder longest-transcript helper | Orthology input de-isoforming | copyleft-code | Useful when preparing proteomes for comparative work; keep original isoform table in dossier. |
 | SUPPA2 / rMATS / MAJIQ | Alternative splicing analysis | restricted-or-review | Optional when splice regulation is part of the biological hypothesis; resolve package licenses first. |
 
-## Local Similarity Search And Sequence Stores
+## Local similarity search and sequence stores
 
 For private, unpublished, or proprietary inputs, use local BLAST/DIAMOND/MMseqs2
 databases or controlled containers. Public remote BLAST-like services are for
@@ -208,7 +208,7 @@ public or explicitly approved inputs only.
 | seqkit | FASTA/FASTQ table utilities | permissive-code | Good for reproducible counts, filtering, and checksums. |
 | sourmash / Mash | Sketching and contamination/context checks | permissive-code | Optional for accession sanity checks and public dataset triage. |
 
-## Homology, Domains, Enzymes, And Pathway Annotation
+## Homology, domains, enzymes, and pathway annotation
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -233,7 +233,7 @@ public or explicitly approved inputs only.
 | EnzPlacer | Novel-enzyme EC1-3 prediction | copyleft-code | GPL-3.0; run externally/containerized and do not vendor code. |
 | EnzyMM | 3D catalytic-site motif evidence | permissive-code | MIT; use as catalytic-site evidence only. |
 
-## Expression, Differential Expression, And Coexpression
+## Expression, differential expression, and coexpression
 
 Expression evidence should be tied back to sample metadata, tissue, treatment,
 developmental stage, and accession provenance. Coexpression is hypothesis
@@ -259,7 +259,7 @@ support, not proof of physical clustering or biosynthesis.
 | Camoco | Coanalysis molecular components | restricted-or-review | Useful gene-expression/genotype integration when applicable after license review. |
 | STRING / Cytoscape resources | Interaction/network context | restricted-or-review | Use for context only; commercial and redistribution terms can be restrictive. |
 
-## Orthology, Synteny, And Comparative Genomics
+## Orthology, synteny, and comparative genomics
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -277,7 +277,7 @@ support, not proof of physical clustering or biosynthesis.
 | D-GENIES / dotplotly | Whole-genome dotplot visualization | restricted-or-review | Good dossier visual lane; hosted use is public-inputs-only unless approved. |
 | ParaAT / KaKs_Calculator / PAML | Evolutionary rate estimates | restricted-or-review | Optional for duplicated cluster evolution; license and model assumptions need review. |
 
-## Specialized Metabolism Databases
+## Specialized metabolism databases
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -298,7 +298,7 @@ support, not proof of physical clustering or biosynthesis.
 | RetroRules 2026 | Reaction-template evidence | open-data-with-terms | CC BY 4.0 plus upstream source terms; use as reaction-template plausibility, not enzyme proof. |
 | P450Rdb | Plant cytochrome P450 reference database | open-data-with-terms | Cite source and prefer the validated mirrored copy/hash when the live host is unavailable. |
 
-## Plant BGC Calling And Neighborhood Visualization
+## Plant BGC calling and neighborhood visualization
 
 Plant BGC callers need genome/GFF quality, domain annotation quality, and
 biological review. Treat outputs as candidate neighborhoods with confidence
@@ -327,7 +327,7 @@ levels, not final natural-product claims.
 | Artemis / ACT / UGENE | Local genome neighborhood inspection | restricted-or-review | Optional manual review tools; do not rely on screenshots without source coordinates. |
 | JBrowse 2 / Apollo-style tracks | Neighborhood browser | permissive-code/restricted-or-review | Prefer JBrowse 2 for embedded dossier track browsing; review Apollo-style server dependencies separately. |
 
-## Protein Structure, Pockets, And Docking
+## Protein structure, pockets, and docking
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -338,7 +338,7 @@ levels, not final natural-product claims.
 | GNINA | Docking and CNN pose scoring | copyleft-code | Treat OpenBabel/GPL path as copyleft; run externally and do not vendor. |
 | PoseBusters | Docked-pose plausibility checks | permissive-code | Geometry/plausibility evidence only; not binding validation. |
 
-## Visualization, Dossier, And Evidence Tools
+## Visualization, evidence-package, and review tools
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -362,7 +362,7 @@ levels, not final natural-product claims.
 | Workflow Run RO-Crate / Process Run Crate | Machine-readable run provenance | permissive-code/open standard | Good for portability and provenance; keep `figure_manifest.json` as local contract. |
 | Data Package v2 / check-jsonschema | Machine-readable table schemas | permissive-code | Good for compact dossier table validation; not a provenance substitute. |
 
-## Runtime And Artifact Movement
+## Runtime and artifact movement
 
 | Resource | Role | License class | Notes |
 | --- | --- | --- | --- |
@@ -371,7 +371,7 @@ levels, not final natural-product claims.
 | dstack | Multi-provider job launcher | permissive-code/account-or-api-terms | Optional overflow launcher; credentials stay in local secret stores. |
 | SkyPilot | Multi-cloud AI/batch launcher | permissive-code/account-or-api-terms | Optional smoke/overflow launcher, not a provenance layer. |
 
-## Recommended Default Stack
+## Recommended default stack
 
 For personal or academic public-data GeneCluster campaigns, start with:
 
@@ -402,7 +402,7 @@ Put KEGG, BioCyc/MetaCyc, BRENDA, public webserver uploads,
 AGPL-as-a-service exposure, unreviewed PlantBGC-like tools, and bulk database
 redistribution behind explicit review.
 
-## Repositories And Indices To Monitor
+## Repositories and indices to monitor
 
 The skill should maintain a small monitoring list rather than pretending a
 static list stays current:
@@ -425,7 +425,7 @@ static list stays current:
 - JBrowse, igv.js, pyGenomeViz, MultiQC, Quarto, Observable, DuckDB, Datasette,
  Cytoscape.js, and Vega-Lite releases
 
-## Readiness Checks For A Campaign
+## Readiness checks for a campaign
 
 Before dispatching a GeneCluster run:
 
@@ -445,7 +445,7 @@ Before dispatching a GeneCluster run:
  `resource-ledger.tsv`, `data-ledger.tsv`, and `figure_manifest.json` into the
  dossier.
 
-## Practical Default
+## Practical default
 
 For personal or academic public-data campaigns, prefer:
 

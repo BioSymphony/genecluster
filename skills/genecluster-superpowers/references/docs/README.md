@@ -1,52 +1,45 @@
-# Documentation Map
+# Documentation
 
-This directory is the operating manual for the public GeneCluster control plane.
+Use this index to find the public campaign contracts, tool references, and review guidance.
 
-## Start Here
+## Core workflow
 
-- [capability-stack.md](capability-stack.md) - what the repo can do: campaign brain, tool lanes, execution lanes, and atlas outputs.
-- [glossary.md](glossary.md) - terms-of-art used across the skill, including route cards, support normalizers, maturity ladders, and review limits.
-- [agent-orchestrator-guide.md](agent-orchestrator-guide.md) - how capable agents should use the repo with local resources, tracker issue graphs, `/goal`, or cloud lanes.
-- [superpowers.md](superpowers.md) - how the skill helps agents handle graph-shaped scientific work.
-- [demo-campaign-dry-run.md](demo-campaign-dry-run.md) - one-command local harness for issue contracts, review packets, and review surfaces.
-- [architecture.md](architecture.md) - the public GeneCluster control-plane model.
-- [workflow-campaigns.md](workflow-campaigns.md) - campaign and issue-contract flow.
-- [model-routing.md](model-routing.md) - model/worker routing notes.
-- [diagrams/genecluster-issue-contract.png](diagrams/genecluster-issue-contract.png) - visual issue-contract lifecycle.
-- [diagrams/genecluster-provenance-traceback.png](diagrams/genecluster-provenance-traceback.png) - visual claim-to-source traceback.
-- [diagrams/genecluster-stage0-preflight.png](diagrams/genecluster-stage0-preflight.png) - mandatory Stage 0 five-pillar readiness gate.
-- [diagrams/genecluster-route-claim-ceiling.png](diagrams/genecluster-route-claim-ceiling.png) - route decision tree and review limits.
-- [diagrams/genecluster-maturity-ladder.png](diagrams/genecluster-maturity-ladder.png) - L0 to L5 maturity ladder with check gates.
-- [diagrams/genecluster-function-jury.png](diagrams/genecluster-function-jury.png) - multi-tool function scoring and consensus view.
-- [diagrams/genecluster-local-cloud-boundary.png](diagrams/genecluster-local-cloud-boundary.png) - local control plane vs cloud execution boundary.
-- [diagrams/genecluster-session-flow.png](diagrams/genecluster-session-flow.png) - human-in-the-loop session flow with approval gate.
+- [Capability stack](capability-stack.md) — supported campaign capabilities and limits.
+- [Glossary](glossary.md) — shared terms for routes, evidence, maturity, and review.
+- [Campaign workflow](workflow-campaigns.md) — artifact-first workflow from question to review packet.
+- [Architecture](architecture.md) — control plane, execution lanes, and evidence flow.
+- [Agent guide](agent-orchestrator-guide.md) — solo-agent, tracker, and custom-orchestrator use.
+- [Demo campaign](demo-campaign-dry-run.md) — local example packet and review surface.
 
-## Checks And Runbooks
+## Campaign and review guidance
 
-- [biosymphony-campaign-preflight-runbook.md](biosymphony-campaign-preflight-runbook.md) - Stage 0 source, query, and readiness preflight.
-- [genecluster-atlas-superpower-runbook.md](genecluster-atlas-superpower-runbook.md) - atlas campaign operating runbook.
-- [biosymphony-atlas-best-practices.md](biosymphony-atlas-best-practices.md) - atlas authoring, claim review, figure, and report guidance.
-- [biosymphony-atlas-obsidian-walkthrough.md](biosymphony-atlas-obsidian-walkthrough.md) - optional Obsidian editing view.
-- [biosymphony-antismash-cookbook.md](biosymphony-antismash-cookbook.md) - antiSMASH public example pattern.
+- [Campaign preflight](biosymphony-campaign-preflight-runbook.md) — source, query, and readiness checks.
+- [Atlas runbook](genecluster-atlas-superpower-runbook.md) — end-to-end atlas campaign path.
+- [Atlas best practices](biosymphony-atlas-best-practices.md) — claims, figures, and report review.
+- [Superpowers](superpowers.md) — how the kit handles graph-shaped scientific work.
+- [Model routing](model-routing.md) — choosing bounded worker roles.
 
-## Tool Status
+## Tools and execution
 
-- [biosymphony-tooling-status.md](biosymphony-tooling-status.md) - canonical public inventory of checked, parked, gated, and shelved tools.
-- [biosymphony-genecluster-superpower-roadmap.md](biosymphony-genecluster-superpower-roadmap.md) - recommended-tool roadmap.
-- [biosymphony-superpower-test-plan.md](biosymphony-superpower-test-plan.md) - historical tool-check protocol.
-- [tooling/README.md](tooling/README.md) - per-tool integration docs.
-- [cloud-runtimes/README.md](cloud-runtimes/README.md) - AWS, GCP, neocloud, and provider-portability notes.
+- [Tooling status](biosymphony-tooling-status.md) — current upstream versions, public baselines, and integration status.
+- [Per-tool guides](tooling/README.md) — concise setup and output contracts.
+- [Tooling radar](biosymphony-next-tooling-radar.md) — source-backed candidates that are not yet integrated.
+- [Cloud runtime guidance](cloud-runtimes/README.md) — portable, public-safe execution patterns.
 
-## Forward Research
+## Reference and roadmap
 
-- [biosymphony-next-tooling-radar.md](biosymphony-next-tooling-radar.md) - candidate future tools.
+- [Capability roadmap](biosymphony-genecluster-superpower-roadmap.md) — planned public additions.
+- [Tool-check protocol](biosymphony-superpower-test-plan.md) — repeatable validation method.
+- [Implementation plan](implementation-plan.md) — phased public-repo roadmap.
+- [Public release safety](public-release-safety.md) — publication boundaries and checks.
 
-## Release Ops
+## Diagrams
 
-- [public-release-safety.md](public-release-safety.md) - release hygiene rules for public snapshots.
-- [implementation-plan.md](implementation-plan.md) - phased public-repo roadmap (foundation, contracts, atlas outputs, and onward).
+The [diagrams](diagrams/) directory contains the campaign flow, issue contract, provenance trace, route decision, maturity ladder, function jury, and local/cloud trust-boundary diagrams.
 
-## Bundled Example
+## Bundled examples
 
-- [Coptis chinensis BIA example](../skills/biosymphony/examples/genecluster-coptis-bia-public-v0/README.md) - worked GeneCluster campaign packet used by the demo harness.
-- [egfr-resistance-v1 example](../skills/biosymphony/examples/egfr-resistance-v1/README.md) - sibling-pattern variant-effect atlas example (same contract loop on a different campaign topology).
+- [GeneCluster BIA example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/genecluster-coptis-bia-public-v0)
+- [Variant-effect atlas example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/egfr-resistance-v1)
+
+Examples use public or synthetic data only.

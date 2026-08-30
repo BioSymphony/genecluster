@@ -5,9 +5,11 @@ Last reviewed: 2026-04-29
 
 Use this campaign after public-data mining to design new RNA-seq, DNA-seq, metabolomics, or enzyme-validation experiments from evidence gaps.
 
-## Power Goal
+## Power goal
 
-Use this campaign to convert a GeneCluster evidence dossier into the next experiment that can resolve uncertainty. It should start from the same user power goals as mining campaigns: a few clues, messy raw sequences, tidy NCBI/BLAST resources, candidate homologs, possible neighboring genes, proposed domain functions, paralog/isoform ambiguity, splice variants, and a claim ledger that separates hypotheses from validated claims.
+Use this campaign to convert a GeneCluster evidence dossier into the next experiment that can resolve uncertainty. Public mode starts from public, synthetic, or placeholder clues, NCBI/BLAST resources, candidate homologs, possible neighboring genes, proposed domain functions, paralog/isoform ambiguity, splice variants, and a claim ledger that separates hypotheses from validated claims.
+
+Private sequences and local lab notes must remain in an approved private deployment and must never be copied into public issues, documentation, examples, or web tools.
 
 ## Inputs
 
@@ -16,9 +18,9 @@ Use this campaign to convert a GeneCluster evidence dossier into the next experi
 - unresolved claim list
 - available tissues, cultivars, treatments, and assay constraints
 - `candidate_hits.tsv`, `cluster_neighborhoods.tsv`, `domain-labels.tsv`, `isoform-groups.tsv`, and `claim-ledger.md` when present
-- raw clue ledger or notes describing messy pasted sequence, public accessions, NCBI/BLAST imports, and search modes already used
+- public clue ledger describing public accessions, NCBI/BLAST imports, and search modes already used
 
-## Gap Triage
+## Gap triage
 
 Classify each unresolved item before proposing new work:
 
@@ -50,7 +52,7 @@ Classify each unresolved item before proposing new work:
 - Prefer a cheap in silico cleanup wave before new assays when candidate ranking is blocked by paralogs, isoforms, splice variants, or missing database provenance.
 - Keep private sequences out of public BLAST or public design tools unless the user explicitly clears the privacy status.
 
-## Experiment Design Patterns
+## Experiment design patterns
 
 Use the smallest experiment that resolves the claim blocker:
 
@@ -62,7 +64,7 @@ Use the smallest experiment that resolves the claim blocker:
 - if pathway product claims are unresolved, design enzyme-expression assays, substrate panels, metabolomics, coexpression perturbation, or isotope-feeding experiments
 - if public-data provenance is weak, rerun tidy NCBI/BLAST imports through a versioned workflow before wet-lab follow-up
 
-## Vendor-Ready Scope Requirements
+## Vendor-ready scope requirements
 
 Vendor-facing outputs should include:
 
@@ -73,7 +75,7 @@ Vendor-facing outputs should include:
 - acceptance criteria tied to claim movement, for example "resolve splice variant used for candidate C17OMT hypothesis" rather than "generate RNA-seq"
 - decision rules for promoting, rejecting, or keeping each candidate as a hypothesis
 
-## Claim Movement
+## Claim movement
 
 Each proposed experiment should state the highest claim level it can support:
 

@@ -13,26 +13,17 @@
 #      multi-instance state, swap to Filestore (mount NFS).
 #   3. Tag instance with labels: tool=<tool>, biosymphony-run-id=<run_id>, project=biosymphony.
 #   4. Boot script self-uploads STATUS sentinels back to GCS every 30s.
-#   5. Self-delete via `gcloud compute instances delete` from boot script
-#      using the attached service account (see required roles below).
+#   5. Operator verifies outputs and deletes the instance.
 #
-# Required service account roles (attached to instance via --service-account):
-#   roles/storage.objectAdmin                    (read boot, write status/artifacts)
-#   roles/compute.instanceAdmin.v1               (self-delete)
-# Recommended: create dedicated SA `biosymphony-dispatch@<project>.iam.gserviceaccount.com`
-# and grant only `storage.objectAdmin` on the bucket + `compute.instanceAdmin`
-# scoped via instance label condition on `project=biosymphony`.
+# Attach a dedicated service account that can read only the input prefix and
+# write only the output prefix. Cleanup remains operator-side.
 #
 # Filestore alternative (for genuine networkVolume parity):
 #   --metadata=filestore-target=<nfs-ip>:/<share> and the wrapper mounts it.
 #   Filestore is ~$0.20/GB-month: pricier than persistent disk but mountable
 #   from many instances simultaneously, like RunPod's networkVolume.
 #
-# Cost model (us-central1, 2026-05 indicative on-demand):
-#   e2-standard-2  (2 vCPU /  8 GB):  ~$0.067/h
-#   e2-standard-4  (4 vCPU / 16 GB):  ~$0.134/h
-#   n2-standard-8  (8 vCPU / 32 GB):  ~$0.388/h
-#   g2-standard-4  (4 vCPU / 16 GB / 1xL4): ~$0.71/h
+# Verify current pricing, regional availability, and quotas before launch.
 #   pd-balanced disk: ~$0.10/GB-month
 #   Filestore (BASIC_HDD, 1 TiB minimum): ~$0.20/GB-month
 #   Spot (preemptible) is typically 60-91% cheaper.
@@ -108,6 +99,11 @@ fi
 if [[ ! -f "$BOOT_SCRIPT_PATH" ]]; then
   echo "FATAL: boot script not found: $BOOT_SCRIPT_PATH" >&2
   exit 66
+fi
+
+if [[ -n "$IMAGE" && "$IMAGE" != *@sha256:* ]]; then
+  echo "FATAL: container IMAGE must be pinned by digest" >&2
+  exit 64
 fi
 
 # Resolve project
@@ -207,10 +203,10 @@ GCS_PREFIX='${GCS_PREFIX}'
 IMAGE='${IMAGE}'
 WORKDIR="\${MOUNT}/\${TOOL}/\${RUN_ID}"
 
-# Install gsutil if missing (Debian images ship gcloud SDK in /snap or via apt).
+# Use an image that already contains a verified Google Cloud CLI.
 command -v gsutil >/dev/null 2>&1 || {
-  curl -sS https://sdk.cloud.google.com | bash >/tmp/gcloud-install.log 2>&1
-  source /root/google-cloud-sdk/path.bash.inc 2>/dev/null || true
+  echo "FATAL: gsutil is required in the worker image" >&2
+  exit 67
 }
 
 mkdir -p "\$MOUNT"
@@ -272,11 +268,8 @@ gsutil -q -m rsync -r -x '^(boot\.sh|biosymphony_helper\.sh)\$' . "\$GCS_PREFIX/
 echo "{\"stage\":\"complete\",\"boot_rc\":\$RC,\"ts\":\"\$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .self_stop_status
 gsutil -q cp .self_stop_status "\$GCS_PREFIX/status/.self_stop_status" 2>/dev/null || true
 
-# Idle window for operator inspection, then self-delete.
-sleep \$((${POD_TIMEOUT_HOURS} * 3600))
-NAME=\$(curl -sS -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/name)
-ZONE=\$(curl -sS -H "Metadata-Flavor: Google" http://metadata.google.internal/computeMetadata/v1/instance/zone | sed 's|.*/||')
-gcloud compute instances delete "\$NAME" --zone "\$ZONE" --quiet
+# Leave completion state for operator-side verification and cleanup.
+exit "\$RC"
 WRAPPER
 
 # Stage wrapper to GCS for audit

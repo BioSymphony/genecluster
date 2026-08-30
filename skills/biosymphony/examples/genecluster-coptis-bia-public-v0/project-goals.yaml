@@ -14,7 +14,7 @@ default_run_scope: full_campaign_24h
 database_tier: maximum
 execution_defaults:
   provider_class: runpod_pod
-  provider_role: internal_default
+  provider_role: optional_external_worker
   mount_path: /workspace
   remote_workdir_template: /workspace/genecluster/runs/{run_id}
   db_cache_root: /workspace/genecluster/db-cache

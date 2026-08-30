@@ -4,7 +4,7 @@
 # Lambda Labs Cloud dispatcher (simple GPU; parallel to runpod-dispatch.sh).
 #
 # Architecture:
-#   1. Stage boot.sh + helper.sh to a public-readable URL or S3 bucket.
+#   1. Stage boot.sh + helper.sh in private S3 and create presigned URLs.
 #      Lambda has no Docker container option: instances are bare Ubuntu VMs
 #      with PyTorch/CUDA pre-installed (Deep Learning Stack).
 #   2. POST to https://cloud.lambdalabs.com/api/v1/instance-operations/launch
@@ -13,7 +13,7 @@
 #      first SSH (auto-handled by Lambda's first-boot hook), or: preferred , 
 #      the dispatcher uploads boot.sh and triggers it via SSH.
 #   3. SSH to the new instance, copy boot.sh, exec it as a detached process.
-#   4. Boot script self-uploads STATUS sentinels to S3 / GCS / external URL.
+#   4. Boot script uploads STATUS sentinels to the approved output prefix.
 #   5. Termination is operator-side. Do not pass the Lambda API key into the
 #      instance or write it into launch manifests.
 #
@@ -40,8 +40,7 @@
 #   LAMBDA_API_KEY                              cloud.lambdalabs.com -> API
 #   LAMBDA_SSH_KEY_NAME                         pre-registered key name in Lambda
 #   LAMBDA_SSH_PRIVATE_KEY_PATH                 local path to matching private key
-#   BIOSYMPHONY_DISPATCH_BUCKET (S3) OR
-#     BIOSYMPHONY_STAGING_URL_BASE              external URL host
+#   BIOSYMPHONY_DISPATCH_BUCKET                  private S3 staging bucket
 #
 # Env (optional):
 #   LAMBDA_INSTANCE_TYPE      default 'gpu_1x_a10'   (cheapest GPU)
@@ -89,7 +88,7 @@ required env:
   LAMBDA_API_KEY
   LAMBDA_SSH_KEY_NAME              (pre-registered with Lambda)
   LAMBDA_SSH_PRIVATE_KEY_PATH      (local path)
-  BIOSYMPHONY_DISPATCH_BUCKET (for S3 staging) OR BIOSYMPHONY_STAGING_URL_BASE
+  BIOSYMPHONY_DISPATCH_BUCKET (for private S3 staging)
 
 example (single A10):
   LAMBDA_INSTANCE_TYPE=gpu_1x_a10 \\
@@ -176,16 +175,8 @@ if [[ -n "${BIOSYMPHONY_DISPATCH_BUCKET:-}" ]]; then
   HELPER_URL="$(aws s3 presign "$S3_PREFIX/helper.sh" --region "$AWS_REGION" --expires-in 43200)"
   STATUS_PUSH_PREFIX="$S3_PREFIX/status"
   STATUS_PUSH_MODE="s3"
-elif [[ -n "${BIOSYMPHONY_STAGING_URL_BASE:-}" ]]; then
-  BOOT_URL="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/boot.sh"
-  HELPER_URL="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/helper.sh"
-  STATUS_PUSH_PREFIX="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/status"
-  STATUS_PUSH_MODE="manual"
-  echo "WARN: manual staging, upload boot.sh + helper.sh to:"
-  echo "  $BOOT_URL"
-  echo "  $HELPER_URL"
 else
-  echo "FATAL: set BIOSYMPHONY_DISPATCH_BUCKET (S3) or BIOSYMPHONY_STAGING_URL_BASE (manual)" >&2
+  echo "FATAL: set BIOSYMPHONY_DISPATCH_BUCKET for private S3 staging" >&2
   exit 64
 fi
 

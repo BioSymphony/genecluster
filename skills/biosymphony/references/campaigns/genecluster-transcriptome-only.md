@@ -5,11 +5,13 @@ Last reviewed: 2026-04-29
 
 Use this campaign when transcriptomes exist but no suitable genome/GFF exists for physical cluster calls.
 
-## Power Goal
+## Power goal
 
-Use this campaign to turn a few pathway clues, raw sequences, NCBI/TSA records, public BLAST hits, or transcriptome assemblies into a deduplicated list of candidate transcripts and predicted proteins. It is optimized for homolog discovery, splice/isoform review, expression support, and proposed domain-function labeling when genome neighborhoods are unavailable.
+Use this campaign to turn a few public or synthetic pathway clues, NCBI/TSA records, public BLAST hits, or transcriptome assemblies into a deduplicated list of candidate transcripts and predicted proteins. It is optimized for homolog discovery, splice/isoform review, expression support, and proposed domain-function labeling when genome neighborhoods are unavailable.
 
-## Claim Boundary
+Public mode accepts only public, synthetic, or placeholder inputs. Private and unpublished sequences must remain in an approved private deployment and must never be pasted into public issues, documentation, examples, or web tools.
+
+## Claim boundary
 
 Allowed claims:
 
@@ -26,12 +28,12 @@ Forbidden claims:
 
 Transcriptome-only dossiers may say "candidate homolog", "domain-supported transcript", or "expression-supported pathway member". They must not say a candidate is physically clustered or that a transcript has a validated biochemical function unless that validation comes from an explicit experiment or citation.
 
-## Input Handling
+## Input handling
 
 Accept both tidy and messy inputs:
 
 - tidy resources: NCBI TSA/EST/SRA metadata, public transcript FASTA, protein FASTA, BLAST result exports, UniProt/InterPro/Pfam records, and published supplemental tables
-- messy resources: raw pasted DNA/protein sequence, mixed FASTA/non-FASTA text, ambiguous bases, partial ORFs, redundant isoform files, and fragmentary BLAST descriptions
+- public or synthetic mixed FASTA/non-FASTA text, ambiguous bases, partial ORFs, redundant isoform files, and fragmentary public BLAST descriptions
 
 Before search:
 
@@ -40,7 +42,7 @@ Before search:
 - retain the original clue text as provenance, but search only normalized FASTA or curated accession/version identifiers
 - mark private, unpublished, or uncertain-origin sequences so they are not sent to public web BLAST
 
-## Search Options
+## Search options
 
 Select and record one or more reproducible search lanes:
 
@@ -52,7 +54,7 @@ Select and record one or more reproducible search lanes:
 
 For public NCBI remote BLAST, record query accessions, program, database, date, filters, max targets, and job/result identifiers. For local or remote-container BLAST, record command, database path or accession snapshot, database date, e-value, identity, coverage, and filtering thresholds.
 
-## Isoform, Splice Variant, and Paralog Cleanup
+## Isoform, splice variant, and paralog cleanup
 
 Deduplicate before ranking:
 
@@ -64,7 +66,7 @@ Deduplicate before ranking:
 
 `candidate_hits.tsv` should include `dedupe_group`, `representative_id`, `isoform_status`, `splice_variant_status`, `paralog_status`, `orf_status`, and `dedupe_rationale`.
 
-## Domain and Function Labels
+## Domain and function labels
 
 Every candidate should have a proposed label derived from evidence rather than copied blindly from the top BLAST description:
 
@@ -88,7 +90,7 @@ Visual outputs should be compact transcript/protein schematics or tables showing
 9. Evidence ranking, domain-function labels, and reviewer caveats
 10. Transcriptome-only dossier export
 
-## Required Dossier Artifacts
+## Required evidence-package artifacts
 
 - `data-ledger.tsv`
 - `query-ledger.tsv`
@@ -102,7 +104,7 @@ Visual outputs should be compact transcript/protein schematics or tables showing
 
 Every candidate must include a caveat that transcriptome-only evidence cannot establish physical clustering.
 
-## Review Flags
+## Review flags
 
 Flag candidates when:
 

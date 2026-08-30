@@ -5,11 +5,11 @@ Last reviewed: 2026-04-29
 
 Use this campaign when an annotated genome or assembly/GFF can support physical genome-context analysis.
 
-## Power Goal
+## Power goal
 
 Use this campaign to move from homolog candidates to genome-localized hypotheses: find homologs from sparse input clues, anchor them to assemblies/GFFs, capture neighboring genes, label proposed domain functions, deduplicate paralogs and isoforms, and visualize candidate neighborhoods without confusing context evidence for validated pathway chemistry.
 
-## Claim Boundary
+## Claim boundary
 
 Allowed claims:
 
@@ -27,7 +27,7 @@ Forbidden claims:
 
 Genome context can support "candidate neighborhood" or "physical cluster hypothesis" language when coordinates are reproducible. It does not validate enzyme activity, metabolite production, or final pathway completion.
 
-## Input Handling
+## Input handling
 
 Required genome resources:
 
@@ -41,7 +41,7 @@ Optional clue resources:
 
 Before anchoring, normalize identifiers across GFF, protein FASTA, CDS FASTA, transcript FASTA, and BLAST tables. Record any identifier repair rules in provenance rather than silently editing IDs.
 
-## Search and Anchoring Options
+## Search and anchoring options
 
 Select lanes by resource quality:
 
@@ -54,7 +54,7 @@ Select lanes by resource quality:
 
 Search may run in a remote container or a configured local workdir outside this repo. Provider-local BLAST/DIAMOND/MMseqs/HMMER is the default; public webserver uploads and NCBI remote BLAST batch execution are not part of the v1 approved workflow. The dossier must record command provenance, database/accession versions, thresholds, and privacy decisions.
 
-## Neighborhood Capture
+## Neighborhood capture
 
 For each anchor candidate, capture an explicit genome window:
 
@@ -65,7 +65,7 @@ For each anchor candidate, capture an explicit genome window:
 
 Neighborhood tables should preserve raw annotation labels and proposed labels separately. Raw product names from GFFs are evidence inputs, not validated functions.
 
-## Visualization and Labels
+## Visualization and labels
 
 Produce a compact visualization for each priority locus:
 
@@ -76,7 +76,7 @@ Produce a compact visualization for each priority locus:
 
 Use "proposed" labels unless direct validation exists. Separate `proposed_domain_function`, `annotation_source`, `validated_function`, and `claim_level` in exported tables.
 
-## Paralogs, Isoforms, and Splice Variants
+## Paralogs, isoforms, and splice variants
 
 Genome-context ranking must not collapse biologically meaningful duplicates too early:
 
@@ -103,7 +103,7 @@ Genome-context ranking must not collapse biologically meaningful duplicates too 
 11. Evidence ranking and cluster claim audit
 12. Genome-context dossier export
 
-## Required Dossier Artifacts
+## Required evidence-package artifacts
 
 - `data-ledger.tsv`
 - `query-ledger.tsv`
@@ -123,7 +123,7 @@ Genome-context ranking must not collapse biologically meaningful duplicates too 
 
 Every physical-cluster claim must cite genome coordinates and the exact command/database that produced them.
 
-## Review Flags
+## Review flags
 
 Flag claims when:
 

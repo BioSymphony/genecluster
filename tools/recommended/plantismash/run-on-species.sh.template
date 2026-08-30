@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # tools/recommended/plantismash/run-on-species.sh.template
 #
-# STATUS: validated on RunPod through the BioSymphony v7 boot recipe.
+# STATUS: checked baseline 2.0.4; requires a reviewed non-editable installation.
 #
 # What this would do for the BIA atlas:
 #   Run plantiSMASH 2.0.4 against a single species genome FASTA + GFF, producing

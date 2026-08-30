@@ -1,23 +1,23 @@
 # Proto
 
-**Status:** candidate design layer; reviewed from public sources.
+**Status:** Planned. No public integration claim is made.
 
-Proto is Evo Design's framework for writing biological design programs. In BioSymphony, it fits after GeneCluster has a reviewed candidate map, when the next step is ranked sequence, construct, promoter, or protein-variant design.
+Proto is Evo Design's framework for biological design programs. It may fit after a GeneCluster campaign produces a reviewed candidate map. A later design stage could then rank sequences, constructs, promoters, or protein variants.
 
-## What It Adds
+## Relevant components
 
-- `proto-language`: typed sequences, regions, constructs, generators, constraints, optimizers, and programs.
-- `proto-tools`: shared Input / Config / Output wrappers for search, alignment, annotation, PLMs, structure prediction, scoring, and retrieval tools.
-- Hosted MCP: agent access for tool discovery, schema inspection, runs, asset fetches, program validation, and metrics.
+- `proto-language` defines typed sequences, regions, constructs, generators, constraints, optimizers, and programs.
+- `proto-tools` provides common input, configuration, and output wrappers for biological tools.
+- The hosted MCP service provides tool discovery, schema inspection, runs, asset retrieval, program validation, and metrics.
 
-## Good Uses
+## Possible uses
 
-- Turn open pathway questions into ranked design candidates.
-- Standardize multi-tool design runs behind one export shape.
-- Compare wrappers for BLAST, MMseqs2, MAFFT, Foldseek, TM-align, InterProScan, NCBI retrieval, Evo2, ESM-family models, Chai-1, Boltz-2, and interface scorers.
-- Reuse the program vocabulary even when execution stays local or on a provider.
+- Turn evidence gaps into ranked design candidates.
+- Give multiple design tools a consistent output contract.
+- Compare wrappers for search, alignment, annotation, protein-language models, structure prediction, scoring, and retrieval.
+- Reuse the program vocabulary when execution remains local or runs on external compute.
 
-## BioSymphony Output Shape
+## Proposed output contract
 
 ```text
 proto-design/
@@ -35,20 +35,20 @@ Record:
 - local or hosted execution
 - tools and models used
 - input provenance
-- candidate IDs, scores, thresholds, and ranks
-- exported artifact hashes
+- candidate identifiers, scores, thresholds, and ranks
+- artifact hashes
 
-## First Smoke
+## Evaluation procedure
 
-1. Use public toy inputs.
-2. Run locally with runtime and cache paths outside git, or under ignored `.runtime/`.
-3. Export results.
-4. Convert the export into `proto-design-candidates.tsv`, `proto-constraint-scores.tsv`, and `proto-run-metadata.json`.
-5. Check that credentials, model weights, raw inputs, and bulky outputs stayed out of the repo.
+1. Use public or synthetic inputs.
+2. Keep runtime files and caches outside Git or under ignored `.runtime/` storage.
+3. Export the result.
+4. Normalize the export to the proposed output contract.
+5. Confirm that credentials, model weights, raw inputs, and heavy outputs remain outside the repository.
 
-## Sources
+## Public sources
 
-- [Proto about](https://proto.evodesign.org/about)
+- [Proto overview](https://proto.evodesign.org/about)
 - [Proto MCP introduction](https://proto.evodesign.org/docs/mcp/introduction)
 - [Proto MCP setup](https://proto.evodesign.org/docs/mcp/setup)
 - [`evo-design/proto-language`](https://github.com/evo-design/proto-language)

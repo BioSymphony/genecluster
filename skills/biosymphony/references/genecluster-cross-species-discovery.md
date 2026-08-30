@@ -3,7 +3,7 @@
 Status: implemented contract v1
 Last reviewed: 2026-04-30
 
-## Core Pattern
+## Core pattern
 
 GeneCluster’s default discovery shape is:
 
@@ -11,7 +11,7 @@ GeneCluster’s default discovery shape is:
 
 This is intentionally broader than any one demo. It supports missing-gene searches, paralog-heavy families, transcriptome-only organisms, fragmented genomes, multi-target comparisons, BGC-like neighborhoods, non-plant metabolism, and private/provider-local datasets.
 
-## Required Ledgers And Plans
+## Required ledgers and plans
 
 Launch bundles carry these cross-species contracts:
 
@@ -23,7 +23,7 @@ Launch bundles carry these cross-species contracts:
 
 Raw SRA rows are not treated as indexable FASTA resources. They are marked `target_raw_sequence_source` with `provider_materialization_required`; only materialized transcript/protein/genome/GFF resources receive BLAST/DIAMOND/MMseqs/miniprot index targets.
 
-## Search Directions
+## Search directions
 
 Every candidate record should preserve:
 
@@ -34,7 +34,7 @@ Every candidate record should preserve:
 
 The candidate table records `source_species`, `target_species`, `target_db_id`, `search_direction`, `reciprocal_rank`, `reciprocal_best_hit`, `anchor_method`, `anchor_confidence`, and `coordinate_confidence`.
 
-## Anchor Confidence Ladder
+## Anchor confidence ladder
 
 Use the strongest available anchor:
 
@@ -47,14 +47,14 @@ Use the strongest available anchor:
 
 `miniprot` is the default provider-side fallback for protein-to-genome anchoring when GFF/protein identifiers fail. Domain-only and unanchored rows must remain claim-limited.
 
-## Claim Rules
+## Claim rules
 
 - Transcript-only evidence cannot prove a physical cluster.
 - Broad CYP/OMT/reductase/domain-family hits cannot prove product chemistry.
 - Cluster claims require coordinates and neighborhood evidence.
 - 24-hour runs must finish a complete dossier with `deferred_by_budget` rows instead of silently omitting slow lanes.
 
-## Summary Outputs
+## Summary outputs
 
 Provider workers should return only small outputs:
 

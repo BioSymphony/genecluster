@@ -7,7 +7,7 @@
 #   Run MMseqs2 iterative-profile search (--num-iterations 3) as a drop-in
 #   replacement for DIAMOND BLAST. Recovers +10-15% true orthologs at 25-40%
 #   identity, exactly the twilight zone where many BIA P450/methyltransferase
-#   paralogs sit. Output is BLAST-tabular so our existing parse_outfmt6 stays
+#   paralogs sit. Output is BLAST-tabular for compatibility with common parsers.
 #   usable.
 #
 # Inputs:

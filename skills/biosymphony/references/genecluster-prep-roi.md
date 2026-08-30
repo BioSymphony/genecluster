@@ -7,7 +7,7 @@ This note separates preparation that materially improves the first real
 provider-backed run from impressive but burdensome work that should stay
 optional until the candidate signal justifies it.
 
-## High-ROI Prep Before The First Real Run
+## High-ROI preparation before the first live run
 
 These items reduce wasted RunPod time, bad claims, and reruns.
 
@@ -112,7 +112,7 @@ These items reduce wasted RunPod time, bad claims, and reruns.
    - Treat wide-neighborhood hits as hypotheses until synteny, coexpression,
      phylogeny, or experimental evidence upgrades the claim.
 
-## Medium-ROI Prep
+## Medium-ROI preparation
 
 Do after candidate-search is proven or when the full run is definitely viable.
 
@@ -124,7 +124,7 @@ Do after candidate-search is proven or when the full run is definitely viable.
 - Synteny/coexpression lanes only when there are enough reference genomes or
   samples to make the evidence meaningful.
 
-## Low-ROI Or Burdensome Before First Signal
+## Low-ROI preparation before the first signal
 
 These remain useful later, but they should not block the first real run.
 
@@ -141,7 +141,7 @@ These remain useful later, but they should not block the first real run.
 - KEGG/BioCyc/BRENDA-derived bulk data unless licensing and redistribution
   terms are explicitly reviewed.
 
-## Current Gate Mapping
+## Current gate mapping
 
 Database ledgers use `run_gate`:
 
@@ -157,7 +157,7 @@ Database ledgers use `run_gate`:
 intentional: the platform remains ambitious, but the first run should be fast
 enough to learn something before paying for every maximum-tier resource.
 
-## Sources To Recheck Before Live Run
+## Sources to check before a live run
 
 - Selected provider storage and environment-variable docs.
 - Nextflow stable cache/resume docs.

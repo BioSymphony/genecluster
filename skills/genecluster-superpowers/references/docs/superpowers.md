@@ -1,29 +1,19 @@
-# BioSymphony Superpowers
+# What GeneCluster adds
 
-BioSymphony makes scientific rigor cheaper than skipping it. The public GeneCluster snapshot focuses that idea on comparative-genomics atlas campaigns: source ledgers, query controls, route cards, candidate search, evidence scoring, review surfaces, and claim audits.
+GeneCluster helps an agent manage scientific work that has many dependent parts.
 
-## Why This Is Better Than One Coding Session
+A single analysis can answer one question. A campaign must also track sources, controls, routes, tool outputs, conflicts, provenance, and review limits.
 
-A single coding session can solve one thread of work. BioSymphony is useful when the result is a graph: inputs, routes, controls, search outputs, comparative evidence, caveats, and provenance.
+## Core capabilities
 
-| Need | Single session | BioSymphony campaign |
-| --- | --- | --- |
-| Scientific scope | One evolving context | Durable campaign DAG |
-| Rigor | Depends on memory | Contract requires inputs, criteria, validation, dependencies, and outcome |
-| Parallelism | Mostly serial | Bounded workers can run source, route, search, QA, and report lanes |
-| Falsifiability | Claims can stay implicit | Every claim should terminate in a validation node |
-| Review | Manual chat review | Gates between waves |
-| Provenance | Local files plus chat | Ledgers, manifests, scripts, hashes, and review notes |
+- source and query ledgers;
+- route selection and claim limits;
+- bounded work-unit contracts;
+- candidate search and evidence normalization;
+- cluster, pathway, and synteny review;
+- figure and report manifests;
+- claim checks and closeout records.
 
-## Core GeneCluster Workflows
+## Public boundary
 
-1. Stage 0 campaign preflight: target pathway, species set, data availability, query controls, novelty, and risk.
-2. Route scout: choose annotation-direct, transcript-first, genome-context, synteny, transcriptome-only, rescue, or next-experiment design.
-3. Candidate search: run bounded search with positive and negative controls.
-4. Evidence normalization: collapse tool outputs into comparable ledgers without hiding disagreement.
-5. Claim audit: attach evidence level, caveat, source, and rejection reasons to each biological statement.
-6. Review surface: publish summary-only HTML/Markdown workbooks and figures.
-
-## Public Boundary
-
-The public superpower is the reusable contract and validation loop, not private provider state. Keep raw/heavy data, credentials, provider responses, private issue text, and local runtime outputs outside the public repo.
+The public value is the reusable contract and review method. Keep credentials, raw or heavy data, provider responses, private tracker content, and unpublished sequences outside the repository.

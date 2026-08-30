@@ -1,41 +1,49 @@
-# Public Release Safety
+# Public release safety
 
-BioSymphony GeneCluster is designed to publish the reusable control plane without publishing non-public run state or internal source material. A public snapshot should contain contracts, check scripts, examples, templates, and summary runbooks. It should exclude operational secrets, provider state, raw biological data, and private tracker context.
+The public repository contains reusable contracts, checks, examples, templates, and summary guidance.
 
-## Must Stay Out
+## Exclude these items
 
-- API keys, tokens, registry credentials, signed URLs, cookie dumps, and `.env` files.
-- Provider response JSON, pod or instance IDs, network volume IDs, account numbers, monitor URLs, and stop commands containing credentials.
-- Raw reads, private sequences, unpublished structures, controlled datasets, full genome mirrors, BLAST/DIAMOND/HMMER indexes, and model weights.
-- `.runtime/`, `logs/`, `artifacts/`, provider dispatch directories, bytecode caches, local app state, and private automation stack paths.
-- Private tracker text, private issue IDs, worker lane names, and local operator usernames or email addresses.
+Do not publish:
 
-## Allowed Public Material
+- credentials, tokens, signed URLs, cookies, or environment files;
+- account, provider, volume, pod, or instance identifiers;
+- raw reads, private sequences, controlled data, databases, indexes, or model weights;
+- runtime directories, logs, caches, or provider responses;
+- private tracker content, local paths, personal email addresses, or unpublished results.
 
-- Public-safe ledgers, schemas, templates, and check scripts.
-- Public examples with synthetic, placeholder, or already-public accession data.
-- Summary-only notes with provider identifiers omitted.
-- Cloud dispatch templates that require credentials from environment variables or untracked secure stores.
-- Review-surface examples that contain summaries, hashes, caveats, and provenance, not raw/heavy source data.
+## Allowed content
 
-## Required Check
+You can publish:
 
-Run this before any public commit or archive:
+- public or synthetic examples;
+- schemas, templates, validators, and wrappers;
+- stable public accessions and citations;
+- placeholder paths and credential variable names;
+- compact summaries, versions, hashes, and claim limits.
+
+## Run the checks
+
+Before publication, run:
 
 ```bash
 make public-release-check
 ```
 
-The check fails on local runtime folders, bytecode caches, provider artifacts, heavy biological extensions, local absolute paths, private registry owners, personal emails, and known non-public provider IDs.
+For a static-only review, run:
 
-## Provider Dispatch Rules
+```bash
+make public-audit-strict
+```
 
-- Default dispatch output must live under `.runtime/provider-dispatch/` or another ignored path.
-- Do not write API keys into payload files, launch manifests, or container environment.
-- Prefer provider storage, S3/GCS, SSH, or operator-side tools for artifact pull.
-- If HTTP proxy pull is unavoidable, serve only a summary directory, keep the TTL short, and expose no raw data or credentials.
-- A public launch manifest may contain placeholders and operator-side command shapes, but not real keys, account IDs, volume IDs, pod IDs, or local private-key paths.
+The checks find common problems. They do not replace manual review or a dedicated secret scanner.
 
-## First Public Commit
+## Dispatch rules
 
-Use a fresh public history after the checks pass. Do not copy private git history into the public repository.
+Store dispatch output in an ignored runtime directory. Keep credentials in the operator's secret store. Do not send provider API keys to workers.
+
+Use private storage, short-lived access, exact permissions, image digests, and verified downloads. Pull only approved summary files.
+
+## Release history
+
+Publish only reviewed public history. Do not copy non-public repository history into a public release.

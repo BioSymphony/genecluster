@@ -5,7 +5,7 @@ Last reviewed: 2026-04-30
 
 This note defines the provider-neutral execution contract for BioSymphony GeneCluster. RunPod is the best-supported heavy backend in this repo today, but the skill must also plan and validate local-lite, explicit local-full, SSH/HPC, generic cloud VM, and future managed workflow lanes.
 
-## Local Controller Policy
+## Local controller policy
 
 The local BioSymphony repo is the control plane only. It may contain:
 
@@ -18,7 +18,7 @@ The local BioSymphony repo is the control plane only. It may contain:
 
 It must not contain raw SRA/FASTQ files, BAM/CRAM/SAM files, large genome assemblies, BLAST databases, InterProScan databases, or workflow work directories.
 
-## Provider Classes
+## Provider classes
 
 - `local_lite`: safe public-skill default for metadata, ledgers, validation, and dossier rendering. No raw data downloads.
 - `local_full`: explicit opt-in heavy local execution. Requires a configured workdir outside the repo.
@@ -27,7 +27,7 @@ It must not contain raw SRA/FASTQ files, BAM/CRAM/SAM files, large genome assemb
 - `cloud_vm`: generic VM execution with a configured attached-volume workdir.
 - `managed_workflow`: deferred Nextflow/Seqera-style backend.
 
-## RunPod v0 Defaults
+## RunPod v0 defaults
 
 - Use a RunPod Pod, not Serverless, for the candidate-search workflow.
 - Mount a RunPod Network Volume at `/workspace`.
@@ -39,13 +39,13 @@ It must not contain raw SRA/FASTQ files, BAM/CRAM/SAM files, large genome assemb
 - Pull back only small summaries and manifests.
 - Use provider-local BLAST/DIAMOND/MMseqs/HMMER only. NCBI remote BLAST batch execution is not part of the approved search policy.
 
-## Local Full Defaults
+## Local full defaults
 
 - Requires an explicit heavy workdir outside the repo.
 - Must still block raw sequence data under the repo root.
 - Uses the same runner contract and artifact policy as remote providers.
 
-## Run Scopes
+## Run scopes
 
 - `smoke`: metadata/query resolution and validation only.
 - `candidate_search`: candidate search and small dossier.
@@ -57,7 +57,7 @@ full public mining as an escalation path after candidate evidence identifies a
 specific evidence gap worth a longer run. Private/example campaigns may define
 their own aliases, but public skill instructions should not depend on them.
 
-## Execution Maturity Gates
+## Execution maturity gates
 
 RunPod is the most complete heavy path today, but the same gates apply to
 `local_full`, `ssh_hpc`, and `cloud_vm` when the user supplies adequate storage
@@ -87,7 +87,7 @@ must agree that at least one built/present `target_*` index was searched and
 produced target candidate rows. The required final gate is
 `genecluster_contract_self_check.py --require-real-target-search`.
 
-## Biological Route Gate
+## Biological route gate
 
 Execution readiness and scientific route readiness are separate. A bundle can
 be technically launchable on RunPod for a provider-side target nucleotide
@@ -127,7 +127,7 @@ If the strict route audit fails, either downgrade the run language to
 candidate-smoke/rescue or implement the missing transcriptome/ORF/proteome and
 transcript-to-genome stages before launch.
 
-## Credential Policy
+## Credential policy
 
 Do not store tokens in repo files, `.env`, `env.sh`, ledgers, or Linear issue bodies.
 
@@ -141,7 +141,7 @@ export GENECLUSTER_RUNPOD_DATACENTER=<datacenter id>
 
 If object storage is added later, use the provider's normal environment variables or short-lived credentials from a secure store. Do not commit credentials.
 
-## Remote Image Requirements
+## Remote image requirements
 
 The remote image or setup script for heavy providers should include:
 
@@ -186,7 +186,7 @@ that assertion should be used only after an independent pull test or a known
 public registry policy. A pod with `desiredStatus: RUNNING` but no runtime is not
 evidence that a private image pulled successfully.
 
-## RunPod Lifecycle Guardrails
+## RunPod lifecycle guardrails
 
 RunPod Pod status needs a stronger check than `desiredStatus: RUNNING`.
 Treat a pod as truly started only after `runtime` is non-null and
@@ -231,7 +231,7 @@ python3 skills/biosymphony/scripts/symphony_orchestration_preflight.py \
   --provider-payload path/to/runpod-rest-payload.json
 ```
 
-## Summary Retrieval
+## Summary retrieval
 
 Preferred summary retrieval for serious runs is RunPod S3 / network-volume
 object access or another configured summary endpoint. The endpoint shape is
@@ -244,7 +244,7 @@ in `summary_sync_policy.include`, then stop/delete the pull pod. Do not rely on
 this fallback when provider capacity is tight; if no second pod can be
 provisioned, summary fetch stalls even if the main run finished correctly.
 
-## Run-Ready Bundle Contents
+## Run-ready bundle contents
 
 `genecluster_launch_bundle.py` now emits a portable launch bundle containing:
 
@@ -279,7 +279,7 @@ python3 skills/biosymphony/scripts/genecluster_preflight.py \
 
 Execution-ready validation intentionally fails if the image is still a placeholder, RunPod volume metadata is unresolved, required credentials are only named but not present, or DB/cache/search contracts are missing.
 
-## Maximum Database Tier
+## Maximum database tier
 
 The maximum tier is described by `database-ledger.tsv` and `cache-ledger.tsv`, not by local downloads. Provider caches may include:
 
@@ -291,7 +291,7 @@ The maximum tier is described by `database-ledger.tsv` and `cache-ledger.tsv`, n
 
 Network volumes are persistent execution storage, not archival storage. Cache ledgers therefore require backup policy fields.
 
-## Artifact Sync Policy
+## Artifact sync policy
 
 Remote-only:
 
@@ -335,7 +335,7 @@ Local allowed:
 - `export.xlsx`
 - compact HTML dossier pages
 
-## Failure Recovery
+## Failure recovery
 
 Every remote run should record:
 
@@ -355,7 +355,7 @@ does not make the lane successful when a required scope-gated database is
 missing or failed. Optional maximum-tier databases remain deferred unless the
 operator explicitly escalates.
 
-## Provider-Side Query And Cache Prep
+## Provider-side query and cache preparation
 
 Heavy launch bundles include DB bootstrap, data materialization, reference
 import, query resolution, target dataset DB/index planning, candidate search,
@@ -367,7 +367,7 @@ provider runner resolves public protein accessions from
 does not use NCBI remote BLAST; it only fetches small public seed FASTA records
 needed to run provider-local BLAST/DIAMOND/MMseqs/HMMER.
 
-For transcript-like SRA rows, the blessed RunPod path can materialize target
+For transcript-like SRA rows, the documented RunPod path can materialize target
 nucleotide FASTA under
 `/workspace/genecluster/runs/<run_id>/inputs/target-sequences/<dataset>/` with
 SRA Toolkit and then build a BLAST nucleotide DB. Candidate search uses

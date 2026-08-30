@@ -2,7 +2,7 @@
 
 Use this extension inside BioSymphony Linear issue contracts for GeneCluster work. It adds scientific claim boundaries, artifact contracts, agent handoffs, and review gates on top of the general `templates/linear-issue.md` structure.
 
-## Required GeneCluster Sections
+## Required GeneCluster sections
 
 GeneCluster issues should include these sections in addition to the base Linear issue contract sections:
 
@@ -23,7 +23,7 @@ error hypothesis, it must mark the issue as degraded in the closeout comment.
 Recovery is useful, but silent recovery is not acceptable evidence that the
 orchestration path is healthy.
 
-## Supported Run Scopes
+## Supported run scopes
 
 Use these scope names when drafting or dry-running GeneCluster issue sets:
 
@@ -39,7 +39,7 @@ Private or example campaigns may define campaign-specific aliases for backward
 compatibility. Public skill docs and issue templates should default to the
 generic scope names above.
 
-## Evidence Class
+## Evidence class
 
 - `transcript_hit`
 - `protein_hit`
@@ -49,7 +49,7 @@ generic scope names above.
 - `coexpression_supported`
 - `review_required`
 
-## Artifact Contract
+## Artifact contract
 
 Expected outputs must list concrete paths. The contract details should say which artifacts are local summaries and which large artifacts remain in provider-managed storage.
 
@@ -80,7 +80,7 @@ Artifact contracts must preserve these rules:
 - every claim row links to evidence and provenance identifiers
 - provider credentials are never recorded in issue bodies, ledgers, or dossiers
 
-## Review Gate
+## Review gate
 
 Every GeneCluster issue should state the decision needed before downstream work can depend on it. Typical review gates:
 
@@ -90,7 +90,7 @@ Every GeneCluster issue should state the decision needed before downstream work 
 - accept/reject physical-cluster claims only when genome coordinates and boundary logic are present
 - accept/reject next-experiment recommendations before vendor-facing or wet-lab planning
 
-## Handoff Notes
+## Handoff notes
 
 Handoff notes should name the exact artifact fields downstream agents may consume. Prefer stable identifiers such as:
 
@@ -105,7 +105,7 @@ Handoff notes should name the exact artifact fields downstream agents may consum
 
 State any preserved caveats directly in the handoff notes, especially transcriptome-only limits, broad-family false-positive risk, incomplete genome coordinates, and unresolved product chemistry.
 
-## Claim Boundary
+## Claim boundary
 
 Every GeneCluster issue should explicitly state:
 

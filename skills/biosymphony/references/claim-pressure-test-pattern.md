@@ -14,7 +14,7 @@ Skip it for:
 
 - routine candidate-hit tables
 - ledger validation
-- internal artifact checks that do not produce headline language
+- supporting artifact checks that do not produce headline language
 
 ## The three agents
 
@@ -43,7 +43,7 @@ Run the three in parallel. Each writes a short verdict file the orchestrator rea
 In practice the pass typically returns several specific overstatements per headline claim. Common patterns:
 
 - "absent from X" claims that turn out to be "alternate enzyme present"
-- "convergence" claims that depend on an ancestral-state reconstruction the campaign did not actually run
+- "convergence" claims that depend on an ancestral-state reconstruction the campaign did not run
 - "outstanding mystery" framing that ignores prior work in a sister taxon
 - thresholds chosen after the fact rather than pre-registered
 - mixing positive controls with novel discoveries in the same top-hit table
@@ -68,4 +68,3 @@ The pattern is intentionally a small fraction of campaign budget. On most provid
 
 - `skills/biosymphony/SKILL.md` — overall campaign orchestration and claim audit
 - `docs/glossary.md` — claim ceiling, route card, claim audit definitions
-- `docs/biosymphony-real-run-lessons.md` — separating primary evidence from context, and explicit claim levels

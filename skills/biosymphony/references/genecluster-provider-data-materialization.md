@@ -1,17 +1,17 @@
-# GeneCluster Provider Data Materialization
+# GeneCluster provider data materialization
 
 Status: public-skill rulebook
 Last reviewed: 2026-04-30
 
-GeneCluster should be remote-heavy and local-light. Large public genomes,
-SRA/ENA reads, FASTQ, BAM, indexes, assemblies, and database caches belong in
-the selected provider workdir or cache volume. The local repo should receive
-only compact review artifacts unless the operator explicitly requests more.
+Keep large public genomes, SRA or ENA reads, FASTQ, BAM, indexes, assemblies,
+and database caches in external work or cache storage. Return only compact
+review artifacts to the local workspace. Never copy raw or heavy data into the
+repository.
 
-RunPod is the blessed internal provider today, but these rules apply to
+RunPod is one documented provider adapter, but these rules apply to
 `runpod_pod`, `local_full`, `ssh_hpc`, and `cloud_vm`.
 
-## Default Policy
+## Default policy
 
 - Do not download raw biological data into the repo.
 - Do not commit raw FASTQ, BAM/CRAM/SAM, genome FASTA, large assemblies, BLAST
@@ -23,9 +23,9 @@ RunPod is the blessed internal provider today, but these rules apply to
 - Local pullback defaults to summaries, ledgers, small tables, reports,
   provenance, and claim audit.
 
-## Materialization Sequence
+## Materialization sequence
 
-For public SRA/genome inputs, the provider stage should follow this order:
+For public SRA or genome inputs, complete these steps in order:
 
 1. Resolve user-supplied accessions.
    - BioProject, SRS/SRX/ERX/DRX, or run IDs are all acceptable intake values.
@@ -75,7 +75,7 @@ For public SRA/genome inputs, the provider stage should follow this order:
    - Skill helper:
      `python3 skills/biosymphony/scripts/genecluster_stage_contract.py --stage-contract .runtime/<bundle>/stage-contract.json --artifact-root .runtime/<bundle>-summary --check-expected-outputs`
 
-## Local Pullback Boundary
+## Local pullback boundary
 
 Default small artifacts:
 
@@ -92,12 +92,6 @@ Default small artifacts:
 - provenance and versions
 - HTML/Markdown/Excel/CSV reports
 
-Optional local review artifacts for private runs:
-
-- compact predicted proteome FASTA
-- compact GFF/GTF needed for review
-- small query FASTA
-
 Never pull by default:
 
 - raw FASTQ
@@ -109,28 +103,17 @@ Never pull by default:
 - Nextflow work dirs
 - provider scratch/cache dirs
 
-## Why This Is Practical
+## Common failure modes
 
-The first full GeneCluster provider run showed that public raw data acquisition
-was straightforward once the wrapper assumptions were corrected:
+Prevent these contract errors:
 
-- NCBI Datasets genome fetch completed quickly.
-- `prefetch` plus `fasterq-dump` handled public SRA reads reliably after SRX to
-  SRR resolution.
-- The provider volume preserved completed stages across failed pod attempts.
-- Local review stayed small: compact tables, reports, proteome, and transcript
-  annotations were tens of MB, not hundreds of GB.
+- Passing an experiment accession to `fasterq-dump` after `prefetch` created a run-accession directory.
+- Assuming paired-end reads without checking the run metadata.
+- Starting a stage before all required helper tools are available.
+- Accepting warnings from required tool checks.
+- Starting unbounded context annotation without a fan-out limit.
 
-The expensive failures were not NCBI downloads. They were preventable contract
-bugs:
-
-- passing an SRX path to `fasterq-dump` after `prefetch` created an SRR folder
-- assuming paired-end reads when run metadata said single-end
-- missing helper tools in the container
-- treating warning-only tool checks as acceptable
-- running unbounded context annotation without a fanout gate
-
-## Acceptance Criteria
+## Acceptance criteria
 
 A provider-side data materialization stage is acceptable only when:
 
@@ -150,9 +133,9 @@ A provider-side data materialization stage is acceptable only when:
   - target searched
   - context lanes completed/deferred
 
-## Common Closeout Language
+## Closeout language
 
-Use precise wording:
+Use precise statements:
 
 - "Provider data materialization succeeded; raw files remain on provider
   volume."

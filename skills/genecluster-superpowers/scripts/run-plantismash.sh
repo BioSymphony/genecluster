@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # run-plantismash.sh: plantiSMASH 2.0.4 against one atlas species
 #
-# STATUS: validated on RunPod through the BioSymphony v7 boot recipe
+# STATUS: checked baseline 2.0.4; requires a reviewed non-editable installation
 # Required tools: plantiSMASH 2.0.4 command or conda env named plantismash
 # Install: bash tools/recommended/install-medium.sh
 #

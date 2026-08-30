@@ -2,7 +2,7 @@
 
 Use this reference before claiming a campaign can run locally.
 
-## Tier A: Local Now
+## Tier A: local now
 
 Verified baseline is operator-specific. Confirm with
 `skills/biosymphony/scripts/capability_probe.py --json` before claiming a
@@ -26,7 +26,7 @@ Good Tier A campaigns:
 - provenance traceback
 - caption and QA workflows
 
-## Tier B: Installable Experimental
+## Tier B: installable and experimental
 
 Do not claim these as installed unless `capability_probe.py` confirms them:
 
@@ -38,7 +38,7 @@ Do not claim these as installed unless `capability_probe.py` confirms them:
 - MDAnalysis or MDTraj
 - Boltz-1 local lanes
 
-## Tier C: Manual Or Licensed
+## Tier C: manual or licensed
 
 Requires manual setup, license, or careful local policy:
 
@@ -48,7 +48,7 @@ Requires manual setup, license, or careful local policy:
 - ISOLDE
 - advanced cryo-EM refinement beyond ChimeraX visualization
 
-## Tier D: Cloud Or Remote
+## Tier D: cloud or remote
 
 Treat as future remote lanes:
 

@@ -18,6 +18,16 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DB_DIR="${REPO_ROOT}/.runtime/databases"
 mkdir -p "$DB_DIR"
 
+verify_sha256() {
+ local expected="$1" file="$2" actual
+ if command -v sha256sum >/dev/null 2>&1; then
+  actual="$(sha256sum "$file" | awk '{print $1}')"
+ else
+  actual="$(shasum -a 256 "$file" | awk '{print $1}')"
+ fi
+ [[ "$actual" == "$expected" ]] || { echo "ERROR: SHA-256 mismatch for $file" >&2; exit 1; }
+}
+
 ############################################################
 # 1. plantiSMASH 2.0.4 via source + conda
 ############################################################
@@ -30,16 +40,14 @@ else
  exit 1
 fi
 
-PLANTISMASH_REF="${PLANTISMASH_REF:-plantismash-2.0.4}"
+PLANTISMASH_REF="${PLANTISMASH_REF:?Set PLANTISMASH_REF to the reviewed plantiSMASH commit SHA}"
 PLANTISMASH_SRC="${DB_DIR}/plantismash-src/${PLANTISMASH_REF}"
 if [[ ! -d "${PLANTISMASH_SRC}/.git" ]]; then
  mkdir -p "$(dirname "$PLANTISMASH_SRC")"
- git clone --depth 1 --branch "$PLANTISMASH_REF" \
- https://github.com/plantismash/plantismash.git "$PLANTISMASH_SRC"
-else
- git -C "$PLANTISMASH_SRC" fetch --tags --force origin "$PLANTISMASH_REF"
- git -C "$PLANTISMASH_SRC" checkout "$PLANTISMASH_REF"
+ git clone --filter=blob:none https://github.com/plantismash/plantismash.git "$PLANTISMASH_SRC"
 fi
+git -C "$PLANTISMASH_SRC" fetch --depth 1 origin "$PLANTISMASH_REF"
+git -C "$PLANTISMASH_SRC" checkout --detach FETCH_HEAD
 
 if ! "$CONDA_BIN" env list | awk '{print $1}' | grep -qx plantismash; then
  "$CONDA_BIN" env create -n plantismash -f "${PLANTISMASH_SRC}/environment.yml"
@@ -58,8 +66,10 @@ if [[ ! -f "${MIBIG_DIR}/.installed" ]]; then
  mkdir -p "$MIBIG_DIR"
  # MIBiG 4.0 download URL (NAR Dec 2024)
  MIBIG_URL="https://dl.secondarymetabolites.org/mibig/mibig_json_4.0.tar.gz"
+ MIBIG_SHA256="${MIBIG_SHA256:?Set MIBIG_SHA256 to the published archive SHA-256}"
  TMP_TAR="$(mktemp -t mibig.XXXXXX.tar.gz)"
  curl -fsSL -o "$TMP_TAR" "$MIBIG_URL"
+ verify_sha256 "$MIBIG_SHA256" "$TMP_TAR"
  tar xzf "$TMP_TAR" -C "$MIBIG_DIR"
  rm -f "$TMP_TAR"
  : > "${MIBIG_DIR}/.installed"

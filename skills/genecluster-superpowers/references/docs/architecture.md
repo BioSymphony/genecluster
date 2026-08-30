@@ -1,91 +1,39 @@
 # Architecture
 
-## Core Thesis
+BioSymphony GeneCluster is an artifact-first control plane for comparative-genomics campaigns. It separates campaign reasoning from heavy execution while preserving a traceable path from each conclusion to its source.
 
-Comparative-genomics atlas work is not one command. It is a claim graph:
+## Core components
 
-1. Define the pathway, target species, comparator set, and claim ceiling.
-2. Scout public source availability and resolve seed queries with controls.
-3. Select the least-overclaiming route: annotation-direct, transcript-first, genome-context, synteny, or next-experiment design.
-4. Run bounded search and annotation lanes with explicit validation artifacts.
-5. Normalize evidence into ledgers, model-jury tables, and comparative atlas views.
-6. Review claims, caveats, versions, and provenance before publishing an evidence package.
+### Campaign packet
 
-The orchestration layer is useful because each stage has clear inputs, outputs, validation commands, dependencies, and review gates.
+The packet defines the biological question, scope, controls, route, evidence ledgers, acceptance checks, and review limits. It is the durable contract for both solo and multi-worker campaigns.
 
-## System Diagram
+### Evidence ledger
 
-```mermaid
-flowchart LR
-  A["Scientist request"] --> B["BioSymphony orchestrator"]
-  B --> C["Scientific contract DAG"]
-  C --> D["Bounded workers"]
+Ledgers are the scientific record. They retain stable identifiers, source versions, queries, parameters, hashes, and output locations. A tracker may coordinate tasks and dependencies, but it does not replace the evidence ledger.
 
-  D --> E["Source scout"]
-  D --> F["Query and control resolution"]
-  D --> G["Route scout"]
-  D --> H["Candidate search"]
-  D --> I["Evidence normalizers"]
-  D --> J["Claim check"]
+### Execution lanes
 
-  E --> K["Atlas evidence package"]
-  F --> K
-  G --> K
-  H --> K
-  I --> K
-  J --> K
-```
+Local lanes handle planning, normalization, checks, and compact review outputs. External lanes handle large searches, model inference, and other compute-heavy steps. Raw data, credentials, provider responses, and private state stay outside the repository.
 
-## Why The Tracker Is The Scientific Ledger
+### Review packet
 
-Each issue should preserve:
+The review packet contains compact tables, figures, provenance, unresolved conflicts, and route-specific claim limits. It should be understandable without access to private infrastructure.
 
-- scientific goal
-- exact inputs
-- expected artifacts
-- acceptance criteria
-- validation commands
-- touched areas
-- dependencies
-- final `symphony-outcome` comment
+## Campaign flow
 
-<img src="diagrams/genecluster-issue-contract.png" alt="GeneCluster issue contract" width="420">
+1. Define the biological question and review decision.
+2. Scout sources, queries, controls, and data readiness.
+3. Select a route and record its claim ceiling.
+4. Execute bounded searches or analyses.
+5. Normalize results into versioned, traceable artifacts.
+6. Compare evidence channels and surface disagreements.
+7. Publish a compact review packet and next-wave contract.
 
-This makes the campaign reviewable after the fact. A researcher can ask why a candidate exists, which public source supported it, which query/control produced it, which route was rejected, and which validation accepted or caveated the claim.
+## Bounded work units
 
-## Why Workers Are The Lab Crew
+Each unit of work should declare inputs, expected outputs, acceptance checks, dependencies, failure behavior, and data-handling limits. This keeps local runs, external workers, and tracker issues interchangeable at the contract level.
 
-BioSymphony turns a large research objective into isolated, bounded workers:
+## Trust boundary
 
-- source worker produces source/query ledgers
-- route worker records the allowed claim level and rejected routes
-- annotation worker runs candidate search and controls
-- comparative worker scores conservation, synteny, and lineage context
-- report worker builds summary-only review surfaces
-- QA worker checks provenance, caveats, licenses, hashes, and absence of raw/heavy data
-
-The orchestrator reviews each wave, integrates useful output, records learnings, and only then unlocks the next wave.
-
-## Artifact Contract
-
-Every serious campaign should produce a bundle like:
-
-```text
-genecluster-evidence-package/
-  campaign-manifest.json
-  source-ledger.tsv
-  query-resolution-ledger.tsv
-  route-decision.json
-  cluster-calls.tsv
-  protein-function-jury.tsv
-  comparative-atlas/
-  review/
-  claim-ledger.tsv
-  provenance.md
-```
-
-<img src="diagrams/genecluster-provenance-traceback.png" alt="GeneCluster provenance traceback" width="900">
-
-## High-Value Differentiator
-
-GeneCluster turns "find this gene cluster" or "assemble this pathway" into a reproducible discovery workflow with route cards, ledgers, review gates, and provider handoffs. The same workflow scales from a solo agent on a laptop to a multi-agent Linear DAG fanning out across cloud GPUs.
+Only public documentation, synthetic fixtures, compact public summaries, and reusable contracts belong in this repository. Credentials, raw or heavy data, unpublished sequences, provider payloads, and private tracker content do not.

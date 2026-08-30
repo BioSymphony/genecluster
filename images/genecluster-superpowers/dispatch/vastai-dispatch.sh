@@ -4,9 +4,9 @@
 # Vast.ai dispatcher (cheapest GPU; parallel to runpod-dispatch.sh).
 #
 # Architecture:
-#   1. Auto-install vastai-cli if missing.
-#   2. Stage boot.sh + helper.sh to a public-readable URL (S3 with public-read,
-#      GCS public-object, or catbox.moe). Vast.ai instances are bare Docker
+#   1. Require a locally installed, reviewed vastai CLI.
+#   2. Stage boot.sh + helper.sh behind time-limited, authenticated object URLs.
+#      Vast.ai instances are bare Docker
 #      containers without volume parity to RunPod's networkVolume: pre-staging
 #      to a remote URL is the canonical pattern (instances are ephemeral).
 #   3. `vastai search offers` to find a host matching constraints.
@@ -14,8 +14,7 @@
 #      the staging URL and execs it.
 #   5. Boot script self-uploads sentinels back to the same staging URL OR to
 #      a separate user-controlled S3 prefix (recommended for production).
-#   6. Self-destroy via vast.ai REST API (token from `vastai set api-key`)
-#     : call `DELETE /api/v0/instances/<id>/`.
+#   6. The operator verifies outputs and destroys the instance.
 #
 # Tradeoffs vs RunPod / AWS / GCP:
 #   + Cheapest GPU on the market (RTX 3090/4090 hosts often $0.20-0.40/h spot).
@@ -27,17 +26,15 @@
 # Args (parallel to runpod-dispatch.sh):
 #   $1 TOOL_NAME
 #   $2 IMAGE              container image; vast.ai requires a Docker image
-#                         (no bare-OS path). Default: condaforge/mambaforge:latest
+#                         (no bare-OS path). Must be pinned by digest.
 #                         For the superpowers image: ghcr.io/<owner>/genecluster-superpowers:v0.1
 #   $3 BOOT_SCRIPT_PATH
 #   $4 MOUNT_PATH         default /workspace
 #
 # Env (required):
-#   VASTAI_API_KEY                    (or run `vastai set api-key <key>`)
-#   BIOSYMPHONY_STAGING_URL_BASE      e.g. https://files.catbox.moe or
-#                                     https://your-s3.s3.amazonaws.com/...
-#                                     OR set BIOSYMPHONY_STAGING_S3_PREFIX
-#                                     for AWS S3 staging
+#   VASTAI_API_KEY                    supplied by the operator secret store
+#   BIOSYMPHONY_STAGING_S3_PREFIX     private S3 prefix used to create
+#                                     time-limited presigned download URLs
 #
 # Env (optional):
 #   VAST_GPU                  default 'RTX_4090' : vast.ai gpu name
@@ -76,17 +73,17 @@ set -euo pipefail
 # ----- args + env -------------------------------------------------------------
 
 TOOL_NAME="${1:-}"
-IMAGE="${2:-condaforge/mambaforge:latest}"
+IMAGE="${2:-}"
 BOOT_SCRIPT_PATH="${3:-}"
 MOUNT_PATH="${4:-/workspace}"
 
-if [[ -z "$TOOL_NAME" || -z "$BOOT_SCRIPT_PATH" ]]; then
+if [[ -z "$TOOL_NAME" || -z "$IMAGE" || -z "$BOOT_SCRIPT_PATH" ]]; then
   cat >&2 <<USAGE
 usage: $0 <tool_name> [image] <boot_script_path> [mount_path]
 
 required env:
-  VASTAI_API_KEY                    (or run `vastai set api-key <key>` once)
-  BIOSYMPHONY_STAGING_URL_BASE      OR  BIOSYMPHONY_STAGING_S3_PREFIX
+  VASTAI_API_KEY                    supplied from the operator secret store
+  BIOSYMPHONY_STAGING_S3_PREFIX     private S3 staging prefix
 
 example (cheap RTX 4090 spot):
   VAST_GPU=RTX_4090 USE_INTERRUPTIBLE=1 VAST_MAX_HOURLY_USD=0.35 \\
@@ -98,23 +95,23 @@ USAGE
   exit 64
 fi
 
+if [[ "$IMAGE" != *@sha256:* ]]; then
+  echo "FATAL: IMAGE must be pinned by digest" >&2
+  exit 64
+fi
+
 if [[ ! -f "$BOOT_SCRIPT_PATH" ]]; then
   echo "FATAL: boot script not found: $BOOT_SCRIPT_PATH" >&2
   exit 66
 fi
 
-# Auto-install vastai-cli if missing
-if ! command -v vastai >/dev/null 2>&1; then
-  echo "[vastai-dispatch] installing vastai-cli (one-time)" >&2
-  pip install --user vastai-cli >&2 \
-    || { echo "FATAL: pip install vastai-cli failed; install manually" >&2; exit 67; }
-  hash -r
-fi
+command -v vastai >/dev/null 2>&1 || {
+  echo "FATAL: install and review the vastai CLI before dispatch" >&2
+  exit 67
+}
 
-# Persist API key if env-passed
-if [[ -n "${VASTAI_API_KEY:-}" ]]; then
-  vastai set api-key "$VASTAI_API_KEY" >/dev/null 2>&1 || true
-fi
+# The CLI may read a key from the operator environment. This dispatcher never
+# persists that key or forwards it to the worker container.
 
 RUN_ID="${RUN_ID:-$(date -u +%Y%m%d-%H%M%S)}"
 VAST_GPU="${VAST_GPU:-RTX_4090}"
@@ -167,12 +164,7 @@ with urllib.request.urlopen(req, timeout=300) as r, open(sys.argv[2], 'wb') as f
 HELPER
 
 # ----- Stage boot script to public-readable URL -------------------------------
-# Two staging modes:
-#   1. BIOSYMPHONY_STAGING_S3_PREFIX (preferred for production; AWS bucket)
-#   2. BIOSYMPHONY_STAGING_URL_BASE  (manual upload mode; e.g. catbox)
-#
-# Mode 1 supports auto-staging here; mode 2 expects boot.sh already at
-# ${BIOSYMPHONY_STAGING_URL_BASE}/<tool>/<run-id>/boot.sh.
+# Stage through a private S3 prefix and create time-limited presigned URLs.
 
 HELPER_FILE="$DISPATCH_OUT_DIR/${TOOL_NAME}-${RUN_ID}-helper.sh"
 printf '%s\n' "$DOWNLOAD_HELPER" > "$HELPER_FILE"
@@ -187,17 +179,8 @@ if [[ -n "${BIOSYMPHONY_STAGING_S3_PREFIX:-}" ]]; then
   HELPER_URL="$(aws s3 presign "$S3_PREFIX/helper.sh" --expires-in 43200)"
   STATUS_PUSH_PREFIX="$S3_PREFIX/status"
   STATUS_PUSH_MODE="s3"
-elif [[ -n "${BIOSYMPHONY_STAGING_URL_BASE:-}" ]]; then
-  BOOT_URL="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/boot.sh"
-  HELPER_URL="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/helper.sh"
-  STATUS_PUSH_PREFIX="${BIOSYMPHONY_STAGING_URL_BASE%/}/${TOOL_NAME}/${RUN_ID}/status"
-  STATUS_PUSH_MODE="manual"
-  echo "WARN: BIOSYMPHONY_STAGING_URL_BASE mode, upload boot.sh + helper.sh to:"
-  echo "  $BOOT_URL"
-  echo "  $HELPER_URL"
-  echo "before the instance boots."
 else
-  echo "FATAL: set BIOSYMPHONY_STAGING_S3_PREFIX (auto) or BIOSYMPHONY_STAGING_URL_BASE (manual)" >&2
+  echo "FATAL: set BIOSYMPHONY_STAGING_S3_PREFIX" >&2
   exit 64
 fi
 
@@ -250,8 +233,8 @@ echo "[vastai-dispatch] selected offer_id=$OFFER_ID"
 # vast.ai instances start with the chosen Docker image's CMD; we override with
 # --onstart-cmd which is appended to the entrypoint as a shell command.
 #
-# The instance does NOT have a generic "self-terminate" credential. To self-destroy,
-# we pass VASTAI_API_KEY as an env var; boot script's last step is curl DELETE.
+# Cleanup is operator-side. Do not forward a marketplace API key to a
+# third-party worker container.
 
 ONSTART_FILE="$DISPATCH_OUT_DIR/${TOOL_NAME}-${RUN_ID}-onstart.sh"
 
@@ -266,7 +249,7 @@ mkdir -p "\$WORKDIR/logs"
 cd "\$WORKDIR"
 rm -f SUCCESS FAILURE STATUS *.summary.tsv 2>/dev/null || true
 
-# Fetch boot script + helper (Mozilla UA in case staging is catbox)
+# Fetch boot script + helper from the time-limited staging URLs.
 python3 -c "
 import urllib.request, sys
 for url, dest in [(sys.argv[1], 'boot.sh'), (sys.argv[2], 'biosymphony_helper.sh')]:
@@ -285,26 +268,18 @@ bash boot.sh > logs/boot.log 2>&1
 RC=\$?
 echo "{\"stage\":\"complete\",\"boot_rc\":\$RC,\"ts\":\"\$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .self_stop_status
 
-# Idle for operator pull, then self-destroy via vast.ai API.
-sleep \$((${POD_TIMEOUT_HOURS} * 3600))
-INSTANCE_ID=\$(cat /vast.ai-instance-id 2>/dev/null || echo "\$VAST_CONTAINERLABEL")
-if [[ -n "\${VASTAI_API_KEY:-}" && -n "\$INSTANCE_ID" ]]; then
-  curl -sS -X DELETE -H "Authorization: Bearer \$VASTAI_API_KEY" \\
-    "https://console.vast.ai/api/v0/instances/\$INSTANCE_ID/" || true
-fi
+# Leave the completion status for the operator-side monitor and exit.
+exit "\$RC"
 ONSTART
 
 # ----- vastai create instance -------------------------------------------------
 
 CREATE_RESP="$DISPATCH_OUT_DIR/${TOOL_NAME}-${RUN_ID}-create-response.json"
-VASTAI_API_KEY_ENV="VASTAI_API_KEY"
-
 # vastai create instance flags: --image, --disk, --label, --onstart, --env
 ENV_FLAGS=(
   -e BIOSYMPHONY_TOOL_NAME="$TOOL_NAME"
   -e BIOSYMPHONY_RUN_ID="$RUN_ID"
   -e BIOSYMPHONY_MOUNT_PATH="$MOUNT_PATH"
-  -e "$VASTAI_API_KEY_ENV=${VASTAI_API_KEY:-}"
 )
 
 set +e

@@ -3,19 +3,19 @@
 Status: draft v0
 Last reviewed: 2026-04-29
 
-BioSymphony GeneCluster turns a pathway, metabolite, enzyme family, or query set into a provider-neutral evidence dossier for candidate genes and genome neighborhoods. A campaign may be local-lite, local-full, RunPod, SSH/HPC, or cloud-VM backed. Heavy data stays outside the repo unless a user explicitly opts into a configured heavy workdir.
+BioSymphony GeneCluster turns a pathway, metabolite, enzyme family, or query set into a provider-neutral evidence dossier for candidate genes and genome neighborhoods. A campaign may be local-lite, local-full, SSH/HPC, or cloud-VM backed. Heavy data always stays outside this public repository in an approved external work directory.
 
-## Power Goal
+## Power goal
 
-Use this campaign when the user has only a few useful clues and wants a scientific lab crew to expand them into a defensible candidate map. Valid clue types include:
+Use this campaign when the user has a few public or synthetic clues and wants an agent workflow to expand them into a defensible candidate map. Valid clue types include:
 
-- one or more enzyme names, EC numbers, pathway steps, metabolites, domains, motifs, accessions, papers, raw pasted sequences, primer-derived fragments, or BLAST hits
+- one or more enzyme names, EC numbers, pathway steps, metabolites, domains, motifs, public accessions, papers, public sequence records, or public BLAST hits
 - tidy public resources such as NCBI Gene/Protein/Nucleotide, SRA, TSA, WGS, RefSeq, GenBank, BLAST result pages, UniProt, InterPro/Pfam, or published supplemental FASTA/GFF tables
-- messy resources such as mixed DNA/protein snippets, wrapped FASTA copied from papers, ambiguous base calls, partial ORFs, translated fragments, local lab notes, and unlabelled sequence files
+- public or synthetic mixed DNA/protein snippets, wrapped FASTA from public supplements, ambiguous bases, partial ORFs, translated fragments, and unlabeled public example files
 
 The output is a candidate and context dossier that distinguishes homolog discovery, paralog/isoform cleanup, domain-function labeling, neighboring-gene evidence, and unvalidated pathway hypotheses.
 
-## Campaign Template
+## Campaign template
 
 Use a campaign-specific id:
 
@@ -31,12 +31,12 @@ Scientific target examples:
 
 Primary inputs should be recorded in `data-ledger.tsv` and `query-ledger.tsv`:
 
-- target organism transcriptome/proteome/genome/GFF resources, accessions, or local heavy-workdir pointers
+- public target-organism transcriptome, proteome, genome, or GFF accessions and external heavy-workdir pointers
 - source-species canonical protein accessions, public query FASTA, domains, motifs, or literature seeds
 - optional outgroups or negative-control species for subtractive review
 - approved databases/tools and their license/use modes
 
-## Hard Execution Rules
+## Hard execution rules
 
 - No raw FASTQ, SRA, BAM/CRAM/SAM, genome assemblies, BLAST databases, or large intermediate files are downloaded into this repo.
 - Heavy sequence work runs in the selected provider or configured heavy workdir.
@@ -51,9 +51,9 @@ For other GeneCluster public-mining campaigns, record the selected search mode i
 - `ncbi_remote_blast`: NCBI web/API BLAST for small public queries when rate limits, privacy, and terms are acceptable
 - `manual_tidy_import`: curated import of NCBI/BLAST/UniProt/InterPro tables where full re-search is unnecessary
 
-Never send private sequences or unpublished constructs to public web tools. When a query is messy or possibly private, normalize it locally or in the remote worker first and mark the privacy status before any remote public search.
+Never place private sequences, unpublished constructs, or local lab notes in this public repository, public issues, or public tools. Private campaigns require a separate approved deployment and storage boundary.
 
-## Execution Contract
+## Execution contract
 
 Provider-neutral fields:
 
@@ -104,7 +104,7 @@ The dry-run issue generator supports all of these planning scopes:
 python3 skills/biosymphony/scripts/genecluster_issue_dry_run.py \
   --campaign <campaign-dir>/campaign-manifest.json \
   --run-scope full_public_mining \
-  --out dry-run/genecluster-full-public-mining
+  --out .runtime/dry-run/genecluster-full-public-mining
 ```
 
 Provider-neutral scope rules:
@@ -114,13 +114,13 @@ Provider-neutral scope rules:
 - Scope-specific issues must still include Agent Role, Artifact Contract, Review Gate, Handoff Notes, Claim Boundary, and exact Validation Commands.
 - A provider class can be `local_lite`, `local_full`, `runpod_pod`, `ssh_hpc`, `cloud_vm`, or `managed_workflow`; generated issues should preserve provider-specific gaps as review notes rather than hard-coding secrets or account details.
 
-## Clue Intake and Normalization
+## Clue intake and normalization
 
 Every campaign starts with a `clue-ledger` section in the manifest or notes. For each clue, record source, privacy status, molecule type, organism, expected enzyme/pathway role, and whether it is raw, curated, or inferred.
 
 Normalize inputs before search:
 
-- split mixed pasted content into individual records with stable `query_id` values
+- split mixed public or synthetic content into individual records with stable `query_id` values
 - detect nucleotide versus protein sequence and keep the original raw text as an external artifact pointer when needed
 - translate nucleotide fragments in all plausible frames when ORFs are partial or strand is unknown
 - trim adapters/vector/low-complexity regions only when the command and thresholds are recorded
@@ -129,7 +129,7 @@ Normalize inputs before search:
 
 When only a few clues are available, expand seeds in this order: known characterized enzymes, close orthologs from related taxa, HMM/domain models, curated pathway-family proteins, then broad family searches with stricter review flags.
 
-## Evidence Classes
+## Evidence classes
 
 Every candidate hit should be assigned one or more evidence classes:
 
@@ -143,7 +143,7 @@ Every candidate hit should be assigned one or more evidence classes:
 
 Physical gene-cluster claims require genome coordinates. Transcriptome-only evidence can nominate candidate genes, but cannot prove clustering.
 
-## Homolog Search and Cleanup
+## Homolog search and cleanup
 
 Required search lanes should be selected by the data available:
 
@@ -163,7 +163,7 @@ Deduplicate before ranking:
 
 Candidate rows should include `dedupe_group`, `representative_id`, `isoform_status`, `splice_variant_status`, `paralog_status`, `partial_status`, and a short `dedupe_rationale`.
 
-## Genome Neighborhoods and Domain Labels
+## Genome neighborhoods and domain labels
 
 When genome or GFF resources exist, capture neighboring genes around each anchor candidate rather than only the hit gene:
 
@@ -175,7 +175,7 @@ When genome or GFF resources exist, capture neighboring genes around each anchor
 
 Neighbor labels are proposed functions until supported by curated annotation or experiment. The dossier must separate `proposed_domain_function`, `annotation_source`, and `validated_function`.
 
-## Required Ledgers
+## Required ledgers
 
 `data-ledger.tsv` must include:
 
@@ -212,7 +212,7 @@ Neighbor labels are proposed functions until supported by curated annotation or 
 - `use_mode`
 - `citation`
 
-## Query Seed Strategy
+## Query seed strategy
 
 Build seed sets from the pathway and question, not from a hard-coded organism.
 Good public seeds usually come from:
@@ -233,7 +233,7 @@ default. If a native enzyme for a specific step is unresolved in the target
 organism, record that caveat in `pathway-steps.tsv` and keep product-completion
 claims review-gated.
 
-## Candidate Search Milestone
+## Candidate search milestone
 
 The first readiness milestone is complete when:
 
@@ -250,7 +250,7 @@ The first readiness milestone is complete when:
 - available genome neighborhoods are captured with neighboring genes, proposed labels, and exact coordinate/window rules
 - `claim-ledger.md` separates hypotheses, evidence-supported claims, rejected candidates, and experimentally validated claims
 
-## Review Flags
+## Review flags
 
 Flag candidates for review when:
 
@@ -265,7 +265,7 @@ Flag candidates for review when:
 - a high-scoring hit is probably an annotation-propagation artifact, pseudogene, contaminant, or assembly duplicate
 - a public result was imported from a BLAST/NCBI table without rerunning against a versioned database
 
-## Claim Ledger Rules
+## Claim ledger rules
 
 Use four claim levels:
 

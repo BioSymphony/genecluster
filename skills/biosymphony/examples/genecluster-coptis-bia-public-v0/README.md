@@ -2,14 +2,14 @@
 
 A worked GeneCluster campaign that targets benzylisoquinoline alkaloid (BIA) gene cluster discovery in *Coptis chinensis* using only public reference data. The campaign exists for the local demo harness, contract validation, and as a starting template for real bioprospecting and pathway-assembly work. All fixtures are tiny synthetic stand-ins; the demo harness validates the contract flow without launching any compute or downloading any data.
 
-## What This Example Demonstrates
+## What this example demonstrates
 
 - A full GeneCluster campaign packet: manifest, project goals, pathway steps, four ledgers (data, query, resource, database, cache), and fixtures.
 - The annotation-direct route landing at claim ceiling `L3_annotation_neighborhood_ready` from a tiny synthetic fixture proteome plus required positive and negative controls.
 - A public BIA bioprospecting target (Coptis chinensis as the canonical BIA reference, with Berberis vulgaris and Eschscholzia californica as the typical sister-species comparators) using public NCBI accessions.
 - The candidate-search issue dry run that the local demo harness exercises (`make demo-campaign-dry-run`).
 
-## Target Context
+## Target context
 
 - **Organism.** *Coptis chinensis* (Chinese goldthread), chromosome-scale public assembly `GCA_015680905.1` (9 chromosomes, 40,011 annotated proteins).
 - **Outgroups / comparators.** *Berberis vulgaris*, *Eschscholzia californica*, *Argemone mexicana*.
@@ -35,7 +35,7 @@ A worked GeneCluster campaign that targets benzylisoquinoline alkaloid (BIA) gen
 
 The query set includes positive controls (ACT2, GAPDH housekeeping proteins) and a negative control (random shuffle). The route scout verifies all three are present before recording any route. Missing controls block the route card.
 
-## What A Successful Dry Run Looks Like
+## What a successful dry run looks like
 
 After `make demo-campaign-dry-run`, the generated route decision should report:
 
@@ -46,15 +46,15 @@ After `make demo-campaign-dry-run`, the generated route decision should report:
 
 The demo harness then emits candidate-search issue drafts, builds a summary-only dossier with claim ledger and candidate hits, and renders a static review surface.
 
-## What This Example Does Not Do
+## What this example does not do
 
 The bundled fixtures are too small to support any biological claim. Treat the candidate-hits table as illustration of dossier rendering, not as validated discoveries. The demo harness does not download data, contact NCBI, or launch any provider compute. Real campaigns materialize their own data through the provider data-materialization lane and accept candidate hits only after evidence scoring and claim audit have run.
 
-## Tier And Scope
+## Tier and scope
 
 This example runs on the local-only Tier A control plane. The default run scope for live execution would be `full_campaign_24h` (one-day complete campaign profile), but the demo harness exercises `candidate_search` only.
 
-## See Also
+## See also
 
 - `skills/biosymphony/SKILL.md` for the full campaign-orchestration skill, including Stage 0 preflight, route scouting, and the maturity ladder.
 - `skills/biosymphony/references/campaigns/genecluster-public-mining.md` for the public-mining campaign reference this campaign follows.

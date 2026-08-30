@@ -21,8 +21,13 @@ RUN mamba install -y -n base \
     && mamba clean -afy \
     && rm -rf /opt/conda/pkgs/*
 
-RUN curl -s https://get.nextflow.io | bash \
-    && mv nextflow /usr/local/bin/nextflow \
+ARG NEXTFLOW_VERSION
+ARG NEXTFLOW_SHA256
+RUN test -n "$NEXTFLOW_VERSION" \
+    && test -n "$NEXTFLOW_SHA256" \
+    && curl -fsSL -o /tmp/nextflow "https://raw.githubusercontent.com/nextflow-io/nextflow/v${NEXTFLOW_VERSION}/nextflow" \
+    && echo "${NEXTFLOW_SHA256}  /tmp/nextflow" | sha256sum -c - \
+    && mv /tmp/nextflow /usr/local/bin/nextflow \
     && chmod +x /usr/local/bin/nextflow
 
 RUN blastp -version \

@@ -12,13 +12,13 @@ Tiny synthetic fixtures for the local dry run. None of these files are large eno
 | `route-source-ledger.tsv` | One-row source ledger pointing at the fixture proteome and GFF, with `source_id=example_fixture`. | Route-scout source input. |
 | `candidate_hits.tsv` | Three-row synthetic candidate-hits table representing one BBE-like hit, one 6OMT-like hit, and one CYP719-like domain hit. | `genecluster_dossier_skeleton.py` (dossier rendering). |
 
-## Use Only For
+## Use only for
 
 - Local control-plane validation.
 - Demo harness output.
 - Schema and contract regression.
 
-## Do Not Use For
+## Do not use for
 
 - Any scientific claim about *Coptis chinensis*, the BIA pathway, or any candidate enzyme.
 - Production candidate search. Real campaigns materialize their own data through the provider data-materialization lane.

@@ -12,27 +12,11 @@
 #   3. Tag instance: tool=<tool>, biosymphony-run-id=<run_id>, project=biosymphony.
 #   4. Boot script self-uploads STATUS sentinels back to S3 every 30s so
 #      monitors poll s3:// URLs (parallel to RunPod's pod-proxy http server).
-#   5. Self-terminate via `aws ec2 terminate-instances` from the boot script
-#      using the instance's IAM role (see required policy below).
+#   5. Operator verifies outputs and terminates the instance.
 #
-# Required IAM role attached to the instance profile (<DispatchRole>):
-#   {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#       { "Effect": "Allow",
-#         "Action": ["s3:GetObject","s3:PutObject","s3:ListBucket"],
-#         "Resource": [
-#           "arn:aws:s3:::<your-dispatch-bucket>",
-#           "arn:aws:s3:::<your-dispatch-bucket>/*"
-#         ]},
-#       { "Effect": "Allow",
-#         "Action": ["ec2:TerminateInstances","ec2:DescribeInstances"],
-#         "Resource": "*",
-#         "Condition": { "StringEquals": { "ec2:ResourceTag/project": "biosymphony" }}}
-#     ]
-#   }
-#   The Condition restricts self-terminate to instances we tagged ourselves , 
-#   protects sibling EC2 workloads in the same account.
+# Attach a dedicated instance profile with read access to the exact input
+# prefix and write access to the exact output prefix. It does not need EC2
+# termination permissions because cleanup is operator-side.
 #
 # Suggested S3 layout (bucket: <your-dispatch-bucket>):
 #   <tool>/<run-id>/boot.sh                          (uploaded by this script)
@@ -44,8 +28,7 @@
 #   <tool>/<run-id>/logs/boot.log                    (boot script -> here)
 #   <tool>/<run-id>/artifacts/<tool>.summary.tsv     (final deliverables)
 #
-# Cost model (us-east-1, 2026-05 indicative on-demand):
-#   m6a.large   (2 vCPU /  8 GB):  ~$0.086/h
+# Verify current pricing, regional capacity, and quotas before launch.
 #   m6a.xlarge  (4 vCPU / 16 GB):  ~$0.172/h
 #   m6a.2xlarge (8 vCPU / 32 GB):  ~$0.346/h
 #   g5.xlarge   (4 vCPU / 16 GB / 1xA10G): ~$1.006/h
@@ -175,19 +158,8 @@ with urllib.request.urlopen(req, timeout=300) as r, open(sys.argv[2], 'wb') as f
 }
 HELPER
 
-# ----- AMI default ------------------------------------------------------------
-# Resolve latest Amazon Linux 2023 if AMI_ID not provided.
-if [[ -z "${AMI_ID:-}" ]]; then
-  AMI_ID="$(aws ssm get-parameter \
-    --region "$AWS_REGION" \
-    --name /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
-    --query 'Parameter.Value' --output text 2>/dev/null || true)"
-  if [[ -z "$AMI_ID" || "$AMI_ID" == "None" ]]; then
-    echo "WARN: could not resolve default AL2023 AMI; set AMI_ID explicitly." >&2
-    # Fallback to a hardcoded recent us-east-1 AL2023; user should override.
-    AMI_ID="ami-0c1ac8a41498c1a9c"  # TODO: refresh hardcoded fallback periodically
-  fi
-fi
+# ----- AMI --------------------------------------------------------------------
+: "${AMI_ID:?Set AMI_ID to a reviewed image identifier for the selected region}"
 
 # ----- Subnet + SG defaults ---------------------------------------------------
 if [[ -z "${SUBNET_ID:-}" ]]; then
@@ -236,7 +208,7 @@ aws s3 cp "$HELPER_FILE"      "$S3_PREFIX/helper.sh"    --region "$AWS_REGION" >
 #   - if IMAGE given: docker run <IMAGE> bash boot.sh
 #   - else:           bash boot.sh on bare AMI
 #   - posts STATUS sentinels to S3 every 30s in a sidecar loop
-#   - self-terminates after boot.sh exits + 30 min idle for operator pull
+#   - leaves completion state for operator-side verification and cleanup
 #
 # user-data has a 16 KB limit on EC2 (gzipped 10 KB).
 
@@ -314,11 +286,8 @@ aws s3 sync . "\$S3_PREFIX/artifacts/" --region '${AWS_REGION}' --exclude "logs/
 echo "{\"stage\":\"complete\",\"boot_rc\":\$RC,\"ts\":\"\$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > .self_stop_status
 aws s3 cp .self_stop_status "\$S3_PREFIX/status/.self_stop_status" --region '${AWS_REGION}' --quiet 2>/dev/null || true
 
-# Idle window for operator inspection, then self-terminate.
-sleep \$((${POD_TIMEOUT_HOURS} * 3600))
-TOKEN=\$(curl -sS -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-IID=\$(curl -sS -H "X-aws-ec2-metadata-token: \$TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
-aws ec2 terminate-instances --region '${AWS_REGION}' --instance-ids "\$IID"
+# Leave completion state for operator-side verification and cleanup.
+exit "\$RC"
 USERDATA
 
 USERDATA_BYTES="$(wc -c < "$USER_DATA_FILE")"

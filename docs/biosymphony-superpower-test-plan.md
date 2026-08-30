@@ -1,16 +1,12 @@
-# BioSymphony GeneCluster Superpower Test Plan
+# Tool evaluation plan
 
-This is the public-safe version of the historical tool validation protocol. Private run logs, provider IDs, issue IDs, local paths, and cost ledger details are intentionally omitted.
+Use this plan to evaluate candidate tools with public or synthetic summary data. Keep credentials, provider identifiers, local paths, raw biological data, and private records outside the repository.
 
-## Goal
+The current tool states are in [Tooling status and version watch](biosymphony-tooling-status.md).
 
-Exercise candidate open tools against summary atlas data, decide whether each tool is adopted, parked, gated, or shelved, and feed the result into the public tooling inventory.
+## Scope
 
-The current canonical state lives in [biosymphony-tooling-status.md](biosymphony-tooling-status.md).
-
-## Test Scope
-
-Candidate lanes include:
+Candidate tool groups include:
 
 - cblaster and clinker for cluster homology
 - JCVI MCScan for synteny
@@ -18,37 +14,43 @@ Candidate lanes include:
 - plantiSMASH and antiSMASH for BGC calls
 - Foldseek and ProstT5 for structure-sensitive search
 - CLEAN, HIT-EC, DeepEC, and ECPred for function annotation
-- P450Rdb and related domain databases for enzyme family context
+- P450Rdb and related databases for enzyme-family context
 - Quarto and Cytoscape.js for review surfaces
 
-## Public Execution Model
+## Execution boundary
 
-- Keep the laptop/repo as the control plane.
-- Run heavy tools in an external provider workspace or a local scratch area outside git.
-- Pull back only derived summaries: TSV, JSON, SVG/PNG/PDF figures, short HTML, version files, hashes, and caveat notes.
-- Keep raw reads, full genomes, indexes, model weights, and provider responses out of the repo.
+- Use the repository as the control plane.
+- Run heavy tools in external compute or local scratch storage outside Git.
+- Return only derived summaries, figures, version records, hashes, and caveat notes.
+- Keep raw reads, full genomes, indexes, model weights, and provider responses outside the repository.
 
-## Per-Tool Protocol
+## Evaluate a tool
 
 For each tool:
 
-1. Create a scientific contract with inputs, expected outputs, validation commands, accepted file types, and caveats.
-2. Run a command-presence smoke test.
-3. Run a tiny fixture or public summary-data test.
-4. Check output sizes and file extensions before copying anything into the repo.
-5. Record version, license posture, command, runtime class, and failure mode.
-6. Promote the tool only when output is interpretable and reproducible.
+1. Define the inputs, expected outputs, checks, accepted file types, and limits.
+2. Confirm that the command is available.
+3. Run a small public or synthetic fixture.
+4. Check every output type and size before copying it into the repository.
+5. Record the version, license, command, resource class, and failure mode.
+6. Promote the tool only when its output is interpretable and reproducible.
 
 ## Verdicts
 
 | Verdict | Meaning |
 | --- | --- |
-| Adopted | Output landed in an atlas or review surface and has a reproducible command shape. |
-| Validated | Tool ran cleanly and produced useful output, but is not in the default path. |
-| Parked | Install or wrapper works partly, but a known blocker remains. |
-| Gated | License, account, data-use, or heavy-model constraint blocks public reuse. |
-| Shelved | Tool is lower priority or redundant until a campaign needs it. |
+| Adopted | A repository contract or wrapper consumes a checked output shape. |
+| Validated | The tool produced useful output but is not in the default path. |
+| Parked | A known blocker prevents reliable use. |
+| Gated | A license, account, data-use, or resource constraint prevents public reuse. |
+| Shelved | The tool is redundant or outside the current roadmap. |
 
-## Safety Gates
+## Stop conditions
 
-Stop and review if a test tries to write credentials, provider IDs, raw/heavy biological files, unbounded logs, or private tracker details into the repo.
+Stop the evaluation if a process would write any of these items into the repository:
+
+- credentials or signed URLs
+- provider or account identifiers
+- raw or heavy biological files
+- unbounded logs or provider responses
+- private tracker records

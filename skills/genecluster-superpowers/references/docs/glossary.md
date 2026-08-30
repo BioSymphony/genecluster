@@ -1,14 +1,14 @@
 # Glossary
 
-Terms-of-art used across the BioSymphony GeneCluster skill. Read this before reading any of the campaign runbooks or the SKILL.md files.
+This glossary defines terms used across BioSymphony GeneCluster. Read it before the campaign runbooks or skill files.
 
-## Mission, Campaign, Wave
+## Mission, campaign, and wave
 
 - **Mission.** The user's request in plain language. *"Find the BIA gene cluster in Berberis vulgaris using Coptis chinensis as the canonical reference,"* *"Assemble pathway evidence for a target molecule starting from Coptis chinensis and three Coptis relatives,"* or *"Fill the missing step in this terpene pathway using Solanaceae candidates."*
 - **Campaign.** The structured, contract-backed plan derived from a mission. A campaign has a manifest, ledgers, a route, a claim ceiling, and a target maturity level.
-- **Wave.** A bounded batch of work inside a campaign. Waves group issues such as source scout, candidate search, BGC calling, synteny, function jury, and review surface; each wave runs in parallel and ends at a review gate.
+- **Wave.** A bounded batch of work inside a campaign. Waves group issues such as source scout, candidate search, BGC calling, synteny, function jury, and review surface; work may run in parallel when the orchestrator supports it, and each wave ends at a review gate.
 
-## Campaign Inputs
+## Campaign inputs
 
 - **Campaign manifest** (`campaign-manifest.json`). The top-level contract for a campaign. Names the target species, pathway, comparators, run scope, and expected artifacts.
 - **Source ledger** (`source-ledger.tsv`). Records every public source the campaign will draw from: genome assemblies, RNA-Seq projects, annotation files, with provider, accession, record type, and acquisition policy.
@@ -18,7 +18,7 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
 - **Database ledger** (`database-ledger.tsv`). Reference databases (Pfam, SwissProt, KEGG, MIBiG, P450Rdb, and so on) with version pins.
 - **Cache ledger** (`cache-ledger.tsv`). What can be reused from previous campaigns.
 
-## Stage 0 And The Maturity Ladder
+## Stage 0 and the maturity ladder
 
 - **Stage 0 preflight.** Mandatory data-and-readiness check before any compute spend. Answers five questions: data availability, input completeness, pathway relevance, novelty window, and importance ranking. Output: `campaign-launch-readiness.json` with `preflight_status: "ready"` or a blocker.
 - **Maturity ladder.** Stages a campaign progresses through. No stage may declare success before the prior stage is verified.
@@ -33,7 +33,7 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
 
 <img src="diagrams/genecluster-maturity-ladder.png" alt="Maturity ladder L0 to L5: each arrow is a verify gate, no stage succeeds before the prior is verified" width="240">
 
-## Routes And Claim Ceilings
+## Routes and claim ceilings
 
 - **Route.** The defensible evidence path the campaign is allowed to follow. Routes have explicit claim ceilings; choosing a weaker route is fine, choosing one your data cannot support is the failure mode this vocabulary is designed to prevent.
   - `annotation-direct`: target species has chromosome-level genome with annotation. Strongest claim ceiling.
@@ -48,7 +48,7 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
 
 <img src="diagrams/genecluster-route-claim-ceiling.png" alt="Route decision tree: data state selects the route, and each route sets a hard claim ceiling" width="620">
 
-## Evidence And Review
+## Evidence and review
 
 - **Candidate hit.** A protein or gene that scored well on the campaign's search lanes. Rows live in `candidate_hits.tsv`.
 - **Evidence normalizer.** A script that turns raw tool output (BLAST tables, BGC caller results, function-prediction votes) into the campaign's canonical TSV shape so downstream lanes do not need tool-specific parsers. See `genecluster_atlas_normalizers.py`.
@@ -63,26 +63,26 @@ Terms-of-art used across the BioSymphony GeneCluster skill. Read this before rea
 - **Atlas.** The multi-species comparative view: cluster calls, BGC consensus, protein function jury, comparative panels, synteny ribbons.
 - **Review surface.** The human-readable summary HTML, workbooks, and claim tables. The first-tier review surface is summary-only; full JBrowse and clinker browser packages are second-tier deliverables.
 
-## Agent Memory
+## Campaign records
 
-- **Campaign-scoped self-learning ledger.** The per-campaign review trail (route decision, ledgers, claim checks, evidence package, closeout). Lives under `.runtime/<campaign-id>/`. Answers "what happened in this run, and is the claim sound?"
-- **Cross-campaign memory** (`.bioprospector-memory/`). Durable lessons about how to operate the skill itself (CLI gotchas, install fixes, behavioral patterns). Lives on the user's machine, is gitignored so it survives `git pull` from upstream, and is read by the agent at the top of every session. Exists for behavior change. Answers "what should I do differently next time, regardless of campaign?" See `skills/biosymphony/references/memory-note-template.md` for the five-section shape and what must never appear in a note.
+- **Campaign ledger.** The per-campaign review trail: route decision, ledgers, claim checks, evidence package, and closeout. It is the durable scientific record.
 
-## Provider And Execution
+## Provider and execution
 
 - **Provider lane.** Where heavy compute runs. Local, RunPod, AWS, GCP, Vast.ai, Lambda Labs, SSH/HPC are all supported lanes. The campaign is provider-neutral; the launch bundle adapts.
 - **Launch bundle.** A self-contained directory that lets a provider worker run a stage without seeing the rest of the repo. Contains `launch-manifest.json`, the relevant scripts, a stage contract, and an artifact-pull policy.
-- **Stage contract.** A per-stage contract that declares expected outputs, checkpoint markers, timeout budgets, and watcher rules. Used to validate a remote run produced real artifacts (not just `exit_code=0`).
+- **Stage contract.** A per-stage contract that declares expected outputs, checkpoint markers, timeout budgets, and watcher rules. It confirms that a remote run produced the required artifacts, even when the process returned `exit_code=0`.
 - **Artifact pull policy** (`artifact_pull.yaml`). A summary-only pull contract. Limits which returned files may be copied back locally. Heavy raw outputs stay provider-side.
 
-## Tool States
+## Tool states
 
-- **Adopted.** Tool is validated, integrated, and used in production atlas runs.
-- **Parked.** Install is proven on the provider, but a downstream runtime blocker stopped atlas-quality output. Each parked tool has a documented re-entry recipe.
-- **Shelved.** On the roadmap, license-free, not yet dispatched.
-- **Gated.** Blocked on license application or API key access. Alternative validated where available.
+- **Available.** Public installation or access is documented.
+- **Checked baseline.** A public fixture previously produced the expected output shape.
+- **Adopted.** A repository contract or wrapper consumes that checked shape.
+- **Planned.** Relevant to the roadmap, but no public integration claim is made.
+- **Gated.** Licensing, access, redistribution, or resource requirements limit a public integration.
 
-## Capability Tiers
+## Capability tiers
 
 - **Tier A (local now).** Capabilities that run on a laptop with the public skill installed.
 - **Tier B (experimental).** Local capabilities that work but are not yet hardened.

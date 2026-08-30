@@ -19,8 +19,6 @@ skills/biosymphony/
 
 Routes comparative-genomics atlas campaigns through task contracts, source/query ledgers, route scouting, candidate search, function scoring, checks, and provenance. Structural-biology helpers remain sibling capabilities, but this public snapshot leads with GeneCluster.
 
-The repo-local discovery shim at `.codex/skills/biosymphony/SKILL.md` points future Codex/Symphony workers back to this canonical source.
-
 Run these from the repo root:
 
 ```bash
@@ -41,7 +39,7 @@ skills/genecluster-superpowers/
  run-{tool}.sh (canonical invocation against atlas data, 6 wrappers)
 ```
 
-Packages the recommended-tool survey plus upstream freshness notes as ready-to-invoke shortcuts. Current state: **Quarto**, **plantiSMASH 2.0.4 via BioSymphony v7 boot**, **JCVI MCScan**, **MMseqs2**, **Foldseek+ProstT5**, **P450Rdb**, and **Cytoscape.js** are adopted or checked; **cblaster + clinker**, **CLEAN/HIT-EC**, and **HHsuite** are parked with re-entry recipes; **PlantCyc PMN 16** is gated.
+Packages quickstarts and wrappers for a subset of the public tool inventory. See the canonical [tooling status](../docs/biosymphony-tooling-status.md) for upstream versions, checked baselines, and integration limits.
 
 Status check:
 
@@ -60,6 +58,7 @@ bash skills/genecluster-superpowers/scripts/run-foldseek-prostt5.sh coptis
 If the underlying tool is not installed, each runner exits cleanly with the install command.
 
 See:
-- Recommended-tool roadmap: `docs/biosymphony-genecluster-superpower-roadmap.md`
-- Per-tool integration plans: `docs/tooling/<tool>.md`
-- Atlas authoring best practices: `docs/README.md`
+
+- [Recommended-tool roadmap](../docs/biosymphony-genecluster-superpower-roadmap.md)
+- [Per-tool guides](../docs/tooling/README.md)
+- [Documentation map](../docs/README.md)

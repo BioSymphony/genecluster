@@ -1,13 +1,12 @@
-# Cytoscape.js: copy-paste snippet for atlas reports
+# Cytoscape.js interaction pattern
 
-**Status:** ✅ **ADOPTED**, pathway-completion viewer live at `.runtime/<atlas>-quarto-preview/cross-species/pathway-completion.html`., every embedded interactive graph viewer needs Fit/Reset/+/−/Center buttons + keyboard shortcuts (f/0/+/−/c) + ⌘/Ctrl-gated wheel-zoom. Canonical viewer below ships those defaults. See [`docs/biosymphony-tooling-status.md`](../../../docs/biosymphony-tooling-status.md) for the full inventory.
-**Install:** Pure-frontend; no install. Pull from CDN: `<script src="https://unpkg.com/cytoscape@3.33.3/dist/cytoscape.min.js"></script>`.
+**Status:** Adopted interaction pattern.
 
-## Working impl reference
+Provide Fit, Reset, Zoom in, Zoom out, and Center controls. Support the `f`, `0`, `+`, `-`, and `c` keys. Require Command or Control for wheel zoom so the graph does not capture normal page scrolling.
 
-The canonical working impl is `.runtime/<atlas>-quarto-preview/sample-rendered/pathway-completion.html` (lines 90-360). Read it before customizing, it's been pressure-tested for the per-species pathway-completion figure.
+Use a pinned Cytoscape.js release. Vendor the reviewed file or use a trusted package manager. If you use a CDN, add an integrity hash and a restrictive content security policy.
 
-## Init values (proven defaults)
+## Initial values
 
 ```javascript
 var cy = cytoscape({
@@ -20,7 +19,7 @@ var cy = cytoscape({
 });
 ```
 
-## Toolbar HTML+CSS
+## Toolbar HTML and CSS
 
 ```html
 <div class="cy-controls" role="toolbar" aria-label="Pathway diagram controls">
@@ -34,10 +33,10 @@ var cy = cytoscape({
 <div id="cy" style="width:100%;height:600px;border:1px solid #d8d2c4;border-radius:6px;background:#f6f4ef;"></div>
 ```
 
-## Cmd/Ctrl-gated wheel zoom (the load-bearing UX detail)
+## Command- or Control-gated wheel zoom
 
 ```javascript
-// Default OFF: page-scrolling shouldn't accidentally lose the diagram.
+// Keep wheel zoom off during normal page scrolling.
 cy.userZoomingEnabled(false);
 function setZoomMode(e) { cy.userZoomingEnabled(!!(e.ctrlKey || e.metaKey)); }
 document.addEventListener('keydown', setZoomMode, { capture: true });
@@ -46,7 +45,7 @@ document.getElementById('cy').addEventListener('wheel', setZoomMode,
  { capture: true, passive: true });
 ```
 
-## Toolbar wiring + keyboard shortcuts
+## Toolbar and keyboard shortcuts
 
 ```javascript
 function fitAll() { cy.animate({ fit: { padding: 30 }, duration: 200 }); }
@@ -81,14 +80,13 @@ document.addEventListener('keydown', function(e) {
 });
 ```
 
-## Open questions
+## Design choices
 
-- SBGN node styling vs custom, SBGN is the standard but visually busy for ≤13-node pathways
-- PNG fallback for PDF Quarto output (Cytoscape.js renders to canvas)
-- Layout: `preset` with hand-tuned positions (most readable for fixed pathway) vs `breadthfirst` (auto-rebalances when pathway updates)
+- Choose SBGN or custom node styles based on the pathway size and review needs.
+- Provide a PNG fallback for PDF output because Cytoscape.js renders to a canvas.
+- Use `preset` for a fixed, hand-tuned pathway. Use `breadthfirst` when the pathway changes often.
 
 ## See also
 
-- `docs/tooling/cytoscape-js.md`, full integration plan
-- `.runtime/<atlas>-quarto-preview/sample-rendered/pathway-completion.html`, canonical working impl
-- `docs/biosymphony-genecluster-superpower-roadmap.md`, reporting agent solo
+- [`docs/tooling/cytoscape-js.md`](../../../docs/tooling/cytoscape-js.md)
+- [`docs/biosymphony-genecluster-superpower-roadmap.md`](../../../docs/biosymphony-genecluster-superpower-roadmap.md)

@@ -1,57 +1,30 @@
-# BioSymphony Public Skill Export Policy
+# Publication boundary
 
-Status: draft guardrail v1
-Last reviewed: 2026-04-30
+The public skill contains reusable contracts, validators, public or synthetic examples, and provider-neutral guidance.
 
-BioSymphony can use non-public campaigns to harden the skill, but the public
-skill must stay reusable and provider-neutral.
+## Allowed
 
-## Public Defaults
+- public and synthetic fixtures;
+- schemas, templates, validators, and compact example outputs;
+- stable public accessions and citations;
+- placeholder paths and credential variable names;
+- summary-only provenance with no provider or account identifiers.
 
-- Use generic GeneCluster scopes: `smoke`, `candidate_search`,
-  `genome_context`, `coexpression`, `synteny`, `full_public_mining`, and
-  `next_experiment_design`.
-- Treat `runpod_pod` as the most mature heavy adapter, not as the only valid
-  execution mode.
-- Keep the campaign shape cross-species and goal-driven:
-  source-species canonical proteins -> target-species datasets -> reciprocal
-  support -> anchoring -> neighborhoods -> reviewable pathway packet.
-- Ask only unanswered intake questions. If ledgers already include accessions,
-  source URLs, query seeds, or provider choices, summarize them before asking
-  the operator for anything.
-- Use public/open data examples only when bundled in the public skill.
-  Non-public demo work stays outside public examples.
+## Excluded
 
-## Public Export Exclusions
+- credentials, signed URLs, account or provider identifiers;
+- local workstation paths and private tracker content;
+- raw or heavy biological data, databases, indexes, models, and run logs;
+- unpublished sequences, structures, or collaborator-restricted data;
+- generated runtime state and provider response payloads.
 
-Exclude these from a public skill release:
+## Check
 
-- `references/internal/`
-- `.runtime/`, `dry-run/`, repo snapshots, and provider pullback summaries
-- raw FASTQ/SRA/BAM/CRAM/SAM files, genome assemblies, BLAST/MMseqs/HMMER
-  databases, indexes, and workflow workdirs
-- operator-specific absolute paths, email addresses, secrets, API keys, volume
-  ids, datacenter ids, and non-public GitHub repo defaults
-- unpublished biological sequences and collaborator-restricted data
-- campaign aliases or runbooks that only make sense for an internal run
-
-## Compatibility Allowances
-
-Development workspaces may keep example fixtures and backward-compatible aliases
-while the skill is under development. Those are acceptable only when
-public-facing docs do not present them as defaults and checks prevent them
-from becoming silent execution claims.
-
-## Required Check
-
-Before packaging or reviewing the public skill, run:
+Run the public skill audit before publication:
 
 ```bash
 python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py \
   --skill-root skills/biosymphony
 ```
 
-The check fails on hard private tokens in public skill paths and warns on
-example-specific biological terms outside examples/tests/internal notes.
-Use `--include-code-warnings` for a deeper compatibility-code scan before a
-public release branch cleanup.
+The audit is a targeted guardrail. It does not replace review or a dedicated secret scan.

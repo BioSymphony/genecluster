@@ -1,175 +1,102 @@
 ---
 name: genecluster-superpowers
-description: Use when extending BioSymphony GeneCluster with public-safe sequence or structure search tooling, BGC detection, synteny views, EC prediction, reference databases, interactive viewers, or report rendering.
+description: Use when extending BioSymphony GeneCluster with public-safe sequence or structure search, BGC detection, synteny, function prediction, reference databases, visualization, or report rendering.
 ---
 
 # GeneCluster Superpowers
 
-This skill collects recommended GeneCluster extension tools from the public survey and test sweep into one invocable kit. Use it as the shortcut for "I want to extend the atlas with X, what's already wired up?"
+This skill provides quickstarts and wrappers for a subset of the public GeneCluster tool inventory. Use the [tooling status](references/docs/biosymphony-tooling-status.md) as the canonical source for upstream versions, checked baselines, and integration limits.
 
-**Single source of truth for tool status:** [`references/docs/biosymphony-tooling-status.md`](references/docs/biosymphony-tooling-status.md). The status tables in this skill mirror that doc for the originally surveyed subset; the canonical inventory covers the full 25-tool checked set + parked + shelved.
+## When to use it
 
-## When to use this skill
+Use this skill when a campaign needs one of these bounded capabilities:
 
-- Adding a new species to the atlas and you want better-than-BLAST sequence homology (MMseqs2, Foldseek)
-- Detecting BGCs that anchor-windowing missed (plantiSMASH 2.0.4 via the checked v7 boot recipe)
-- Drawing cross-species cluster synteny ribbons (cblaster + clinker, JCVI MCScan)
-- Predicting EC numbers / function for non-Pfam-annotatable candidates (CLEAN-Contact, HIT-EC)
-- Layering plant-aware pathway/database context on existing hits (PlantCyc PMN 16, P450Rdb)
-- Embedding interactive viewers in atlas reports (Cytoscape.js, copy-paste pattern)
-- Rendering the atlas to a publishable HTML book or journal-ready PDF (Quarto, already adopted)
+- sequence or profile search;
+- structure search or representation;
+- BGC calling and cluster comparison;
+- synteny and genome-context visualization;
+- enzyme-function evidence;
+- pathway or reference-database context;
+- interactive review views;
+- report rendering.
 
-## When To Use Something Else
+Use the main `biosymphony` skill for campaign planning, ledgers, routes, claim checks, and provider-neutral handoffs.
 
-- Running the upstream pipeline itself: use the separate `biosymphony` repo skill and the pipeline checkout.
-- Routine xlsx postprocess: use the downstream postprocess script from the active project.
-- Dispatching provider pipeline jobs: use the active project's runtime checkout. This public skill does not ship runtime launch outputs.
+## Status terms
 
-## Operating model
+- **Available**: public installation or access is documented.
+- **Checked baseline**: a public fixture previously produced the expected output shape.
+- **Adopted**: a repository contract or wrapper consumes that checked shape.
+- **Planned**: relevant, but no public integration claim is made.
+- **Gated**: licensing, access, redistribution, or resource requirements limit a public integration.
 
-Four states per tool: **adopted**, **parked**, **shelved**, or **gated**.
+A newer upstream release does not replace a checked baseline until a public fixture confirms compatibility.
 
-- **Adopted (✅)** = checked on RunPod, output integrated into the atlas, canonical path. Just call it.
-- **Parked (⛔)** = install proven on RunPod but a downstream runtime blocker stopped atlas-quality output. **Each parked tool has a documented re-entry recipe in [`references/docs/biosymphony-tooling-status.md`](references/docs/biosymphony-tooling-status.md). pick up at the recipe, not at "what's the install path?"**
-- **Shelved (❓)** = on the roadmap, license-free, with no dispatch recorded. Listed in the canonical inventory with effort estimate + re-entry recipe; lower priority for current work.
-- **Gated (⏸️)** = blocked on license application or API key access. Alternative checked where available.
+## Packaged subset
 
-Current status (after the extended testing sweep and upstream freshness check, for the full 25-tool inventory see [`references/docs/biosymphony-tooling-status.md`](references/docs/biosymphony-tooling-status.md)):
+| Tool | Public status | Guide |
+|---|---|---|
+| Quarto | Checked baseline 1.9.37; upstream 1.10.18 | [Quickstart](references/quarto-quickstart.md) |
+| plantiSMASH | Checked baseline 2.0.4 | [Quickstart](references/plantismash-quickstart.md) |
+| antiSMASH | Checked baseline 8.0.4 | [Guide](references/docs/biosymphony-antismash-cookbook.md) |
+| JCVI MCScan | Available; minimum 1.6.5, upstream 1.6.6 | [Quickstart](references/jcvi-mcscan-quickstart.md) |
+| MMseqs2 | Checked baseline 18 | [Quickstart](references/mmseqs2-quickstart.md) |
+| Foldseek + ProstT5 | Checked baseline | [Quickstart](references/foldseek-prostt5-quickstart.md) |
+| cblaster + clinker | Available; wrapper fixture planned | [Quickstart](references/cblaster-quickstart.md) |
+| CLEAN + HIT-EC | Planned | [Quickstart](references/clean-hit-ec-quickstart.md) |
+| Cytoscape.js | Checked baseline 3.33.3; upstream 3.34.2 | [Snippet](references/cytoscape-js-snippet.md) |
+| Plant Metabolic Network | Gated by provider terms | [Quickstart](references/plantcyc-p450rdb-quickstart.md) |
+| ESM-C 6B | Gated by model access and compute requirements | [Status](references/docs/biosymphony-tooling-status.md) |
 
-| Tool | Status | Tier | Check task | Notes |
-|---|---|---|---|---|
-| **Quarto 1.9.37** | ✅ ADOPTED | blessed | (adopted) | Quarto atlas book live |
-| **plantiSMASH 2.0.4 (v7 boot recipe)** | ✅ ADOPTED | medium-add | checked | Upstream latest is 2.0.4; "v7" names BioSymphony's checked boot iteration. Raw editable installs had `straight.plugin` discovery blockers; use the non-editable source install + recipe. Detects multiple clusters per chromosome on public plant genomes. AGPL-3.0+. Review license terms before public service use. |
-| **antiSMASH 8.0.4** (bacterial / fungal) | ✅ ADOPTED | (added P12) | checked | Cookbook at `references/docs/biosymphony-antismash-cookbook.md`. Mambaforge + cpu5g. No `--taxon plants`. |
-| **DeepBGC** (plant BGC default) | ✅ ADOPTED | (added during testing) | checked | Tens of BGCs detected across multiple chromosomes on a public plant genome |
-| **JCVI MCScan** | ✅ ADOPTED | cheap-add | checked | Thousands of pairwise anchors between two public plant species |
-| **MMseqs2 iterative** | ✅ ADOPTED | cheap-add | checked | +8, 21 % homologs vs blastp |
-| **Foldseek + ProstT5** | ✅ ADOPTED | cross-species support layer | checked | Thousands of PDB structural hits returned on a public plant query set |
-| **cblaster + clinker** | ⛔ PARKED | cheap-add | checked | Re-entry: stage GenBanks via NCBI Datasets CLI -> local cblaster DB -> query. |
-| **CLEAN + HIT-EC** | ⛔ PARKED | cheap-add | checked | Wrapper brittle; re-entry: bypass `CLEAN_infer_fasta.py`, call `CLEAN.infer.infer_maxsep` directly. **DeepEC / ECPred is the checked EC alternative.** |
-| **HHblits / HHsuite3** | ⛔ PARKED | optional | checked | cpu3g OOM on PDB70; re-entry: cpu5g + pre-stage PDB70 in separate pod. MMseqs2 + Foldseek cover divergent-homolog space. |
-| **PlantCyc PMN 16** | ⏸️ GATED | DB-only |. | Academic license required. KEGG / KAAS covers pathway-completion in the interim. |
-| **P450Rdb** | ✅ ADOPTED | DB-only | checked | 3 BIA queries at 100 % identity |
-| **Cytoscape.js 3.33.3** | ✅ ADOPTED | frontend |. | Pathway-completion viewer with Fit/Reset/zoom controls |
+The canonical inventory includes additional tools and explains the evidence behind each status.
 
-**Also checked in the extended test campaigns:** MIBiG 4.0, ESM-C 300M Synthyra, ESM-2 650M, HMMER, InterProScan, TM-align / mTM-align, MAFFT, IQ-TREE, ColabFold, KEGG mapper / KAAS, EnzymeMap, DiffPaSS, DeepEC / ECPred, igv-reports, pyGenomeTracks, and Quarto Dashboards.
-
-The canonical roadmap with original verdict matrices and citations: `references/docs/biosymphony-genecluster-superpower-roadmap.md` (pre-test predictions, current state lives in `references/docs/biosymphony-tooling-status.md`).
-The per-tool integration plans with install + sample CLI: `references/docs/tooling/<tool>.md`.
-The per-tool quickstarts (terse + actionable): `references/<tool>-quickstart.md` (in this skill).
-
-## Quick start: what's installed?
-
-Before you do anything, check what's available:
+## Check local availability
 
 ```bash
 bash scripts/superpowers-status.sh
 ```
 
-Output shows which tools are installed, their version, and the install command for the missing ones.
+This reports local commands only. It does not change tool status or prove that a campaign integration is complete.
 
-## Install tiers
+## Optional installers
 
-Three idempotent install scripts at `tools/recommended/`:
+The mirrored helpers under `tools/recommended/` are opt-in references:
 
 ```bash
-# Cheap tier: pip + bioconda + brew installables
-bash tools/recommended/install-cheap.sh # cblaster, clinker, JCVI, MMseqs2, igv-reports, Quarto
-
-# Medium tier: Docker + heavier conda
-bash tools/recommended/install-medium.sh # plantiSMASH 2.0.4 source install, MIBiG download
-
-# Heavy tier: GPU / large model downloads
-bash tools/recommended/install-heavy.sh # Foldseek + ProstT5, CLEAN-Contact
+bash tools/recommended/install-cheap.sh
+bash tools/recommended/install-medium.sh
+bash tools/recommended/install-heavy.sh
 ```
 
-You usually want cheap-tier first; medium and heavy land when you need the specific capability.
+Inspect each script before use. Supply reviewed immutable revisions and published checksums where requested. Heavy databases and model caches belong in ignored runtime storage or an external work directory.
 
-## Per-tool quickstarts
-
-Each `references/<tool>-quickstart.md` has the same shape: status, install one-liner, sample run on atlas data, integration in our pipeline, open questions, see-also links. The runner scripts in `scripts/run-<tool>.sh` mirror the sample-run command with sane defaults pointing at `.runtime/campaign-<species>-summary/`.
-
-**Adopted (just use):**
-- [`quarto-quickstart.md`](references/quarto-quickstart.md), render the atlas
-- [`jcvi-mcscan-quickstart.md`](references/jcvi-mcscan-quickstart.md), whole-genome synteny ribbons
-- [`mmseqs2-quickstart.md`](references/mmseqs2-quickstart.md), iterative-profile ortholog recovery
-- [`plantismash-quickstart.md`](references/plantismash-quickstart.md), motif-driven plant BGC detection (use upstream 2.0.4 through the checked v7 boot recipe)
-- [`foldseek-prostt5-quickstart.md`](references/foldseek-prostt5-quickstart.md), structure-similarity for convergent enzymes (cross-species support layer)
-- [`plantcyc-p450rdb-quickstart.md`](references/plantcyc-p450rdb-quickstart.md), P450Rdb checked; PlantCyc still gated on academic license
-- [`cytoscape-js-snippet.md`](references/cytoscape-js-snippet.md), copy-paste viewer pattern
-
-**Parked. re-entry recipe required before retry (read `references/docs/biosymphony-tooling-status.md` first):**
-- [`cblaster-quickstart.md`](references/cblaster-quickstart.md), needs GFF -> GenBank step OR NCBI Datasets fetch
-- [`clean-hit-ec-quickstart.md`](references/clean-hit-ec-quickstart.md), bypass `CLEAN_infer_fasta.py`; DeepEC / ECPred is the checked alternative
-
-## Sample invocation pattern
-
-Every runner takes a species shorthand as `$1`:
+## Wrapper examples
 
 ```bash
-# Run cblaster on a species' cluster against the canonical query set
 bash scripts/run-cblaster.sh <species>
-
-# Pairwise synteny: species A vs species B
 bash scripts/run-jcvi-mcscan.sh <species-a> <species-b>
-
-# MMseqs2 iterative profile on a species
 bash scripts/run-mmseqs2.sh <species>
-
-# Foldseek + ProstT5: find structurally similar candidates to a query enzyme
 bash scripts/run-foldseek-prostt5.sh <species>
 ```
 
-If the underlying tool is not installed, each runner exits cleanly with the exact install command.
+Wrappers expect campaign-derived inputs under ignored runtime storage. They must fail clearly when a tool or required input is missing.
 
-## Required checks before using this skill
+## Adding a tool
 
-```bash
-# 1. Status check: what's installed
-bash scripts/superpowers-status.sh
+1. Link the official release and license source.
+2. Add a public or synthetic fixture.
+3. Record exact code, model, and database versions.
+4. Define compact inputs, outputs, failure states, and hashes.
+5. Keep raw and heavy artifacts outside the repository.
+6. Add or update the per-tool guide and wrapper.
+7. Promote the status only after the public fixture passes.
+8. Update the packaged documentation mirror.
 
-# 2. Atlas-data sanity - point at your own derived summary directory.
-# The public snapshot intentionally omits .runtime/ outputs.
-ATLAS_SUMMARY_DIR=/path/to/your/atlas-summary
-test -d "$ATLAS_SUMMARY_DIR"
+Do not include credentials, private paths, provider payloads, unpublished data, private tracker text, or unpublished run history in public documentation.
 
-# 3. Quarto render still works when a local atlas project is available.
-QUARTO_PROJECT=/path/to/your/quarto-atlas
-test -f "$QUARTO_PROJECT/_quarto.yml" && (cd "$QUARTO_PROJECT" && quarto render --to html)
-```
+## References
 
-Run these any time before kicking off a tool integration.
-
-## When to add a new tool to this skill
-
-When a new tool gets recommended (via a focused tooling review or a new paper), the integration follows the foundation-laying pattern:
-
-1. **Survey & decide**, usually via a focused tooling review; end with a verdict in the superpower roadmap doc.
-2. **Doc**, add `references/docs/tooling/<tool>.md` with install + sample CLI + integration point + open questions.
-3. **Install script**, extend `tools/recommended/install-{cheap,medium,heavy}.sh` with the new install (pin version where stable, leave a "or latest" comment otherwise).
-4. **Runner**, add `tools/recommended/<tool>/run-on-species.sh.template` for the canonical CLI shape, then promote to `scripts/run-<tool>.sh` once the runner is concrete.
-5. **Quickstart**, add `references/<tool>-quickstart.md` (300 words or fewer, terse).
-6. **Status table**, update this `SKILL.md`'s status table + the `tools/recommended/README.md` status table + `references/docs/biosymphony-genecluster-superpower-roadmap.md`.
-7. **Lessons**, if the tool's adoption codifies a non-obvious lesson (Cytoscape gradient bug, Quarto stub references, etc.), capture it inline in the quickstart and status table so future readers see it without external context.
-
-When a tool gets ADOPTED (installed, integrated, used in production), promote its row in the status table from "foundation" to "✓ ADOPTED" and update its quickstart's status header. If upstream has cut a newer release, record both the upstream release and the BioSymphony checked pin until a smoke test proves the upgrade.
-
-## Cross-references
-
-- **Tool roadmap with verdict matrices**: `references/docs/biosymphony-genecluster-superpower-roadmap.md`
-- **Per-tool integration docs**: `references/docs/tooling/<tool>.md` (10 files)
-- **Atlas authoring best practices**: `references/docs/README.md`
-- **Quarto rendering runbook**: `references/docs/README.md`
-- **Obsidian view companion**: `references/docs/biosymphony-atlas-obsidian-walkthrough.md`
-- **Pipeline / RunPod dispatch**: the `biosymphony` repo skill plus the pipeline checkout
-## Provenance
-
-**Discovery survey:** parallel tool surveys along five angles (sequence/structure search, BGC detection, enzyme function, reporting, comparative-atlas paper styling). Cross-checking picked five high-confidence adds (Quarto adopted; plantiSMASH + cblaster + JCVI + Foldseek + CLEAN queued for adoption when use case lands).
-
-**Test sweep:** Public-safe provider-side checks covered every tool above plus 17 extended tools. Result: 25 checked, 3 parked (cblaster + clinker, CLEAN + HIT-EC, HHblits), 2 gated (PlantCyc, ESM-C 6B). Raw run logs are omitted from this public snapshot; see [`references/docs/biosymphony-tooling-status.md`](references/docs/biosymphony-tooling-status.md) for the canonical public inventory and re-entry recipes.
-
-**Freshness check:** Verified current release endpoints for the explicitly pinned tools. Corrections applied here: plantiSMASH is upstream 2.0.4 with a BioSymphony v7 boot recipe rather than upstream "v7"; antiSMASH current line is 8.0.4; local-only pins for clinker, JCVI, igv-reports, and Cytoscape.js were refreshed.
-
-**Cloud-runtime forward research: 2026-05-11.** Provider-portability reference docs for AWS / GCP / neocloud live at `references/docs/cloud-runtimes/`. Result: RunPod stays default for both CPU and GPU; clear exceptions documented (NCBI-bandwidth-bound work -> GCP, formal-review work -> AWS, large-scale H100 training -> CoreWeave).
-
-This skill and the linked inventory are durable shortcuts. Future iterations can consult this skill, read the inventory, and pick the right starting point.
+- [Canonical tooling status](references/docs/biosymphony-tooling-status.md)
+- [Per-tool guides](references/docs/tooling/README.md)
+- [Tool roadmap](references/docs/biosymphony-genecluster-superpower-roadmap.md)
+- [Atlas authoring guidance](references/docs/biosymphony-atlas-best-practices.md)

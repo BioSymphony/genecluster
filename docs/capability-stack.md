@@ -1,49 +1,47 @@
-# Capability Stack
+# Capability stack
 
-BioSymphony GeneCluster is the control plane that lets your agent find biosynthetic gene clusters and assemble pathway evidence across genomes and transcriptomes. It decides which evidence route is defensible, prepares run contracts, validates outputs, and turns tool results into a reviewable evidence package. The same artifact contracts work whether a solo agent is running on a laptop or a multi-agent Linear DAG is fanning out across cloud GPUs.
+BioSymphony GeneCluster provides campaign contracts, evidence ledgers, tool adapters, execution handoffs, and review outputs for comparative genome mining.
 
-## Campaign Brain
+## Campaign control
 
-- `genecluster_campaign_preflight.py` ranks data readiness, relevance, novelty, and seed-query maturity.
-- `genecluster_species_scout.py` searches for plausible comparator species across NCBI, SRA, NGDC/GWH, KEGG hints, and local catalog memory.
-- `genecluster_source_scout.py` turns source availability into route-readable ledgers.
-- `genecluster_annotation_scout.py` chooses annotation-direct, transcript-first, genome-context, synteny, transcriptome-only, rescue, or next-experiment-design routes.
-- `genecluster_preflight.py` validates manifests, ledgers, launch bundles, route claims, and generated artifacts.
+- define targets, comparators, controls, exclusions, and review decisions;
+- scout public data and record stable identifiers;
+- choose a route based on genome and transcriptome readiness;
+- set a claim ceiling before analysis;
+- divide work into bounded, checkable units;
+- retain versions, parameters, hashes, and failure states.
 
-## Evidence Lanes
+## Analysis capabilities
 
-- Candidate search: BLAST-style anchors, MMseqs2 iterative search, Foldseek/ProstT5 structural similarity.
-- Genome context: GFF/proteome parsing, neighborhood extraction, Pfam and SwissProt annotation, coordinate-aware cluster windows.
-- BGC callers: plantiSMASH, antiSMASH, DeepBGC, MIBiG cross-reference, and cblaster/clinker re-entry recipes.
-- Comparative genomics: JCVI MCScan, synteny/dotplot outputs, OrthoFinder/GENESPACE-style normalized contracts.
-- Enzyme/function: P450Rdb, KEGG/KAAS, EnzymeMap, DiffPaSS, DeepEC/ECPred, HIT-EC/CLEAN re-entry paths.
-- Reporting: Quarto books, Cytoscape.js pathway viewers, igv-reports, pyGenomeTracks, workbook postprocessing.
+- sequence and profile search;
+- domain and function annotation;
+- BGC calling and cluster comparison;
+- structure search and representation;
+- synteny, neighborhood, and expression support;
+- multi-species comparison;
+- evidence normalization and claim checks.
 
-## Execution Lanes
+A capability is useful only when its inputs are available and its output fits the selected route. Missing genome coordinates, for example, prevent physical cluster-boundary claims.
 
-- Local contracts for cheap validation and dry runs.
-- Docker build contexts for GeneCluster runner images.
-- Cloud-portable dispatch templates for RunPod, AWS, GCP, Vast.ai, and Lambda Labs.
-- Provider handoff manifests that keep heavy compute outside source control while preserving versions, hashes, and expected outputs.
+## Review outputs
 
-## Atlas Outputs
+- ranked candidate tables;
+- route cards and evidence ledgers;
+- cluster and pathway views;
+- source and version provenance;
+- unresolved conflicts;
+- review limits and next actions.
 
-A mature run should produce:
+## Execution lanes
 
-- `source-ledger.tsv`
-- `query-resolution-ledger.tsv`
-- `route-decision.json`
-- `cluster_calls.tsv`
-- `bgc_consensus.tsv`
-- `protein_function_votes.tsv`
-- `protein_function_jury.tsv`
-- `comparative_atlas/`
-- `review_surface_manifest.json`
-- `claim-ledger.tsv`
-- Quarto HTML/PDF review surfaces
+Local execution covers planning, small transformations, checks, and compact reports. External workers may handle large databases, searches, models, or assemblies. Provider templates are examples, not proof that a provider is configured or suitable for a specific workload.
 
-## Tooling Inventory
+## Tool inventory
 
-The current inventory is in [biosymphony-tooling-status.md](biosymphony-tooling-status.md): 25 validated tools, 3 parked tools with re-entry recipes, 8 shelved-but-testable tools, and 2 gated tools with alternatives.
+The [tooling status](biosymphony-tooling-status.md) separates current upstream releases from repository baselines and distinguishes available, checked, adopted, planned, and gated integrations.
 
-Use [skills/genecluster-superpowers/SKILL.md](../skills/genecluster-superpowers/SKILL.md) when extending the atlas with a new tool so the work starts from the existing validation record instead of re-running discovery.
+Use the [recommended-tool skill](https://github.com/BioSymphony/genecluster/blob/main/skills/genecluster-superpowers/SKILL.md) when adding a tool covered by the packaged subset.
+
+## Public boundary
+
+Public and synthetic fixtures, reusable contracts, and compact public summaries belong in the repository. Raw or heavy data, credentials, private paths, provider payloads, unpublished sequences, and private tracker content do not.

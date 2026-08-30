@@ -11,19 +11,19 @@ Every Symphony-dispatched issue should use this shape.
 
 - `<input id>` - <source, local path, secure store reference, or database accession>
 
-## Acceptance Criteria
+## Acceptance criteria
 
 - [ ] <Specific, testable assertion.>
 - [ ] <Specific artifact assertion, e.g. final PNG exists, dimensions match, and file is nonblank.>
 - [ ] <Specific provenance assertion, e.g. source, contour level, software version, or score field recorded.>
 
-## Validation Commands
+## Validation commands
 
 ```bash
 <exact command from repo root>
 ```
 
-## Touched Areas
+## Touched areas
 
 - `<path>` - <why this area is in scope>
 
@@ -31,7 +31,7 @@ Every Symphony-dispatched issue should use this shape.
 
 Blocked by: <issue-id>
 
-## Risk Notes
+## Risk notes
 
 - Do not store secrets, private structures, unpublished sequences, or raw private data in Linear.
 - Record caveats for predicted structures, affinity estimates, generated designs, and rendering assumptions.
@@ -48,7 +48,7 @@ complexity: medium
 -->
 ````
 
-## Contract Rules
+## Contract rules
 
 - `Acceptance Criteria` must be testable.
 - `Validation Commands` must contain exact shell commands.

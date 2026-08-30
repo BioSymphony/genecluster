@@ -15,7 +15,7 @@ The campaign passes every filter in `docs/superpowers.md`:
 | Filter | How this campaign exercises it |
 | --- | --- |
 | Content-dependent branching | Wave 5 routes each variant to a different Wave 6 subworker based on its computed metrics. The DAG shape depends on the data, not the template. |
-| Cross-issue meta-reasoning | Wave 7 holds all variant outcomes simultaneously to detect dominant mechanism classes and rank therapeutic implications. |
+| Cross-issue synthesis | Wave 7 combines variant outcomes to identify mechanism classes and summarize therapeutic implications. |
 | Multi-claim ledger | 8-15 variants with 5-7 evidence types each = 50-100 distinct verifiable claims. |
 | Provenance | Every panel traces back to PDB ID, render command, contour or palette, and the issue that produced it. |
 | Replay-ready | When a new EGFR structure deposits or a new variant is added, only the affected branch reruns. |

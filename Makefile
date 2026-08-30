@@ -1,4 +1,4 @@
-.PHONY: public-release-check public-audit public-audit-strict skill-audit capability artifact-scan example-preflight demo-campaign-dry-run demo-campaign-smoke demo-campaign-public-mining demo-explore demo-explore-clean path-scan unit py-compile clean-generated forbidden-file-scan heavy-file-scan ignored-artifact-check
+.PHONY: public-release-check public-audit public-audit-strict skill-audit capability artifact-scan example-preflight demo-campaign-dry-run demo-campaign-smoke demo-campaign-public-mining demo-explore demo-explore-clean path-scan mirror-drift-check markdown-link-check unit py-compile clean-generated forbidden-file-scan heavy-file-scan ignored-artifact-check
 
 public-release-check:
 	$(MAKE) clean-generated
@@ -17,6 +17,8 @@ public-audit-strict:
 	$(MAKE) forbidden-file-scan
 	$(MAKE) heavy-file-scan
 	$(MAKE) ignored-artifact-check
+	$(MAKE) mirror-drift-check
+	$(MAKE) markdown-link-check
 
 skill-audit:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B skills/biosymphony/scripts/biosymphony_public_skill_audit.py --skill-root skills/biosymphony
@@ -65,7 +67,14 @@ demo-explore-clean:
 	@rm -rf .demo-output
 
 path-scan:
-	! rg -uu --hidden -n '/Users/[A-Za-z0-9._-]+|rp_[A-Za-z0-9_]{10,}|ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|x-access-token|[A-Za-z0-9._%+-]+@(gmail|icloud|me|hotmail|outlook|yahoo)\\.com' . --glob '!.git/**' --glob '!Makefile' --glob '!.gitignore' --glob '!docs/diagrams/*.svg' --glob '!docs/diagrams/**/*.svg'
+	! rg -uu --hidden -n '/Users/[A-Za-z0-9._-]+|rp_[A-Za-z0-9_]{10,}|ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|x-access-token|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY-----|[A-Za-z0-9._%+-]+@(gmail|icloud|me|hotmail|outlook|yahoo)\\.com' . --glob '!.git/**' --glob '!Makefile' --glob '!.gitignore' --glob '!docs/diagrams/*.svg' --glob '!docs/diagrams/**/*.svg'
+
+mirror-drift-check:
+	diff -qr docs skills/genecluster-superpowers/references/docs
+	diff -q tools/recommended/README.md skills/genecluster-superpowers/tools/recommended/README.md
+
+markdown-link-check:
+	PYTHONDONTWRITEBYTECODE=1 python3 -B tools/check_relative_markdown_links.py --repo-root .
 
 unit:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest skills/biosymphony/tests/test_genecluster.py

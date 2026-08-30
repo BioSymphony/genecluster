@@ -10,7 +10,7 @@ search, and claim gates are proven. Private/example campaigns may define
 campaign-specific one-day aliases, but public skill instructions should not
 depend on them.
 
-## Hard Blockers
+## Hard blockers
 
 Clear these before `--execution-ready` should pass.
 
@@ -140,7 +140,7 @@ Clear these before `--execution-ready` should pass.
      once for Pfam/CDD/domain calls and join those calls into windows instead
      of scanning each window independently against the full DB.
 
-## Preflight Sequence
+## Preflight sequence
 
 For provider-side raw genome/SRA acquisition, also follow
 `genecluster-provider-data-materialization.md`. In short: resolve accessions,
@@ -169,7 +169,7 @@ python3 skills/biosymphony/scripts/genecluster_route_audit.py \
   --launch-manifest .runtime/genecluster-launch-full-public-mining/launch-manifest.json
 
 python3 skills/biosymphony/scripts/symphony_orchestration_preflight.py \
-  --git-ref <private-run-branch> \
+  --git-ref <reviewed-git-ref> \
   --required-path .runtime/genecluster-launch-full-public-mining/launch-manifest.json
 
 python3 skills/biosymphony/scripts/genecluster_stage_contract.py \
@@ -255,7 +255,7 @@ required DBs on the provider volume, add `--allow-large-downloads` to the DB
 bootstrap/full runner command. Do not use that flag for a first full-context
 campaign unless the volume/cache has already been prepared.
 
-## Review Gates Before Full Context
+## Review gates before full context
 
 Do not run full-context lanes until these are reviewed:
 
@@ -359,7 +359,7 @@ single-end rescue/degraded branch. For HISAT2, use `-U` for single-end and
 `-1/-2` for paired-end. Equivalent branching is required for STAR, minimap2
 short-read modes, Trinity/rnaSPAdes, and quantification tools.
 
-## Summary Retrieval And Cleanup
+## Summary retrieval and cleanup
 
 Prefer RunPod S3 / network-volume object access for summary pullback:
 
@@ -379,7 +379,7 @@ up. Stop the main pod until summaries validate; delete pods only after
 boundaries, and cleanup decisions are reviewed. The network volume persists
 independently of pod deletion.
 
-## Optional Escalations
+## Optional escalations
 
 Escalate only after candidate review:
 

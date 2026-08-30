@@ -299,7 +299,7 @@ def main() -> int:
         raise SystemExit(
             "ERROR: bundle path is not present in the requested Git ref. "
             f"Missing `{args.git_ref}:{args.bundle_path.strip('/')}/launch-manifest.json`. "
-            "Commit/force-add the bundle to a private run branch or pass --skip-git-ref-check only if another delivery path guarantees it."
+            "Commit the bundle to a reviewed git ref or pass --skip-git-ref-check only if another verified delivery path guarantees it."
         )
 
     run_id = str(manifest.get("run_id", provider.get("run_id", "genecluster-run")))

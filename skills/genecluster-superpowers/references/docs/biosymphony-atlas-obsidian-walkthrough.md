@@ -1,31 +1,21 @@
-# BioSymphony GeneCluster Atlas In Obsidian
+# Review an atlas in Obsidian
 
-Obsidian is optional. It is useful for reading and editing Markdown narrative, backlinks, and graph relationships; Quarto remains the publishable HTML/PDF route.
+Obsidian is an optional Markdown review surface. It does not replace the campaign artifacts or the Quarto report.
 
-## Setup
+## Open the repository
 
-1. Install Obsidian from `obsidian.md`.
-2. Open the public repo root as a vault.
-3. Enable `Settings -> Files & Links -> Detect all file extensions` so `.qmd` files appear.
-4. Optionally install the community Quarto plugin for better `.qmd` highlighting.
-
-Use `<repo-root>` as the vault path. The public snapshot intentionally omits `.runtime/`, private run logs, provider artifacts, and generated atlas outputs.
-
-## Suggested Reading Order
+Open `<REPO_ROOT>` as an Obsidian vault. Start with:
 
 1. `README.md`
 2. `docs/README.md`
-3. `docs/architecture.md`
-4. `docs/biosymphony-tooling-status.md`
-5. `docs/data/pathway-species-catalog.tsv`
-6. `docs/data/pathway-species-catalog.tsv`
+3. `docs/workflow-campaigns.md`
+4. `docs/architecture.md`
+5. `docs/biosymphony-tooling-status.md`
 
-When you have a local derived atlas, point Obsidian at that summary directory separately or link it from an ignored working note. Do not copy raw/heavy biological data into this repo.
+Use a separate ignored workspace for generated campaign summaries. Do not copy raw or heavy data into the repository.
 
-## Quarto Differences
+## Rendering limits
 
-Obsidian renders normal Markdown, tables, Mermaid blocks, and math. It does not execute Quarto shortcodes, embedded JavaScript, or Cytoscape.js panels. Use `quarto render` from a local Quarto project for the interactive or publication view.
+Obsidian renders Markdown, tables, Mermaid blocks, and math. It does not run Quarto shortcodes or embedded JavaScript.
 
-## Public Snapshot Rule
-
-Obsidian workspaces can create local metadata. Keep those files ignored or outside the repo unless they are intentionally public-safe docs.
+Use `quarto render` when you need the publication or interactive report.
