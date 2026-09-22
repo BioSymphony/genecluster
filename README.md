@@ -5,7 +5,7 @@
 [![Cite](https://img.shields.io/badge/cite-CITATION.cff-blue.svg)](CITATION.cff)
 [![Agents](https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex%20%7C%20Symphony-ff69b4.svg)](docs/agent-orchestrator-guide.md)
 
-BioSymphony GeneCluster is a toolkit for AI agents to find and compare candidate biosynthetic genes and gene clusters across plant genomes.
+BioSymphony GeneCluster is a toolkit for AI agents to find and compare candidate biosynthetic genes and gene clusters across genomes.
 
 Give your agent a pathway, species, and any known data sources. The toolkit supplies instructions, scripts, and templates for searches and comparisons. Results include candidate-gene tables, genomic neighborhoods, and comparative reports with sources and stated limits.
 
