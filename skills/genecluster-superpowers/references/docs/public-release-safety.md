@@ -30,13 +30,17 @@ Before publication, run:
 make public-release-check
 ```
 
-For a static-only review, run:
+For an audit without demo execution, run:
 
 ```bash
 make public-audit-strict
 ```
 
-The checks find common problems. They do not replace manual review or a dedicated secret scanner.
+The audit removes generated Python caches and `.demo-output` before scanning. The content scan includes SVGs, examples, tests, and embedded binary text. It rejects local paths, common credential formats, restricted folders, and unreviewed artifacts. Findings report file locations and rule names without printing matched values.
+
+The public tree has a 12 MiB total size limit and a 5 MiB per-file limit. Raw-data exceptions name exact small public fixtures. Keep unused media, model files, and downloaded catalogs outside the release tree.
+
+Review the complete diff and visible media before publication. Pattern checks cannot detect every secret, private discussion, or sensitive image. Check the exact commit that will be published; these commands do not inspect older Git history.
 
 ## Dispatch rules
 

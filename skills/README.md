@@ -1,64 +1,30 @@
 # Skills
 
-Two canonical skills live here:
+Use `biosymphony` to coordinate a campaign and `genecluster-superpowers` to add a supported tool.
 
-## 1. `biosymphony/`: campaign orchestration
+| Skill | Purpose | Entry point |
+|---|---|---|
+| `biosymphony` | Plan the analysis, track inputs, select a route, validate outputs, and assemble reports | [Campaign instructions](biosymphony/SKILL.md) |
+| `genecluster-superpowers` | Find tool quickstarts and wrappers for searches, annotation, comparisons, and reporting | [Tool instructions](genecluster-superpowers/SKILL.md) |
 
-```text
-skills/biosymphony/
- SKILL.md
- references/
- capability-matrix.md
- contract-template.md
- figure-manifest.schema.json
- scripts/
- capability_probe.py
- preflight_check.py
- figure_manifest_check.py
-```
+## Check Local Availability
 
-Routes comparative-genomics atlas campaigns through task contracts, source/query ledgers, route scouting, candidate search, function scoring, checks, and provenance. Structural-biology helpers remain sibling capabilities, but this public snapshot leads with GeneCluster.
-
-Run these from the repo root:
+From the repository root, inspect campaign capabilities:
 
 ```bash
 python3 skills/biosymphony/scripts/capability_probe.py --json
-python3 skills/biosymphony/scripts/preflight_check.py path/to/issue.md
-python3 skills/biosymphony/scripts/figure_manifest_check.py figure-dossier/figure_manifest.json
 ```
 
-## 2. `genecluster-superpowers/`: recommended-tool kit
-
-```text
-skills/genecluster-superpowers/
- SKILL.md
- references/
- {tool}-quickstart.md (9 docs, terse install + sample-run + integration)
- scripts/
- superpowers-status.sh (which recommended tools are installed)
- run-{tool}.sh (canonical invocation against atlas data, 6 wrappers)
-```
-
-Packages quickstarts and wrappers for a subset of the public tool inventory. See the canonical [tooling status](../docs/biosymphony-tooling-status.md) for upstream versions, checked baselines, and integration limits.
-
-Status check:
+Check commands used by the tool wrappers:
 
 ```bash
 bash skills/genecluster-superpowers/scripts/superpowers-status.sh
 ```
 
-Sample invocation (each runner takes a species shorthand as `$1`):
+These checks report local availability. Use [tooling status](../docs/biosymphony-tooling-status.md) to check versions, tested baselines, and integration limits.
 
-```bash
-bash skills/genecluster-superpowers/scripts/run-cblaster.sh phellodendron
-bash skills/genecluster-superpowers/scripts/run-jcvi-mcscan.sh coptis phellodendron
-bash skills/genecluster-superpowers/scripts/run-foldseek-prostt5.sh coptis
-```
+## Select a Tool
 
-If the underlying tool is not installed, each runner exits cleanly with the install command.
+Read the relevant [tool guide](../docs/tooling/README.md) before running a wrapper. Each guide describes required inputs and setup; installing a command does not validate its campaign output.
 
-See:
-
-- [Recommended-tool roadmap](../docs/biosymphony-genecluster-superpower-roadmap.md)
-- [Per-tool guides](../docs/tooling/README.md)
-- [Documentation map](../docs/README.md)
+For a proposed addition, use the [tool evaluation contract](../docs/tooling/tool-evaluation.md). For a new campaign, use the [goal prompt](../templates/goal-prompt.md).

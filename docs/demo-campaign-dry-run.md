@@ -4,6 +4,8 @@ The demo builds a campaign packet from bundled public or synthetic fixtures. It 
 
 ## Run the demo
 
+Requirements: Python 3 with `openpyxl`, `make`, and Bash.
+
 From the repository root, run:
 
 ```bash
@@ -24,7 +26,7 @@ make demo-campaign-public-mining
 
 ## Inspect the output
 
-The demo writes generated files to an ignored output directory. Review these items first:
+By default, the demo writes files to a temporary directory and prints its path. Set `BIOSYMPHONY_DEMO_OUT` to choose another output directory. Review these items first:
 
 1. `README.md` for packet orientation.
 2. `route-scout/route_decision.json` for the selected route and claim limit.

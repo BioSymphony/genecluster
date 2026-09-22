@@ -8,12 +8,12 @@ public-release-check:
 	$(MAKE) py-compile
 	$(MAKE) public-audit-strict
 
-public-audit: skill-audit capability example-preflight path-scan
+public-audit: path-scan skill-audit capability example-preflight
 
 public-audit-strict:
 	$(MAKE) clean-generated
-	$(MAKE) artifact-scan
 	$(MAKE) path-scan
+	$(MAKE) artifact-scan
 	$(MAKE) forbidden-file-scan
 	$(MAKE) heavy-file-scan
 	$(MAKE) ignored-artifact-check
@@ -67,17 +67,18 @@ demo-explore-clean:
 	@rm -rf .demo-output
 
 path-scan:
-	! rg -uu --hidden -n '/Users/[A-Za-z0-9._-]+|rp_[A-Za-z0-9_]{10,}|ghp_[A-Za-z0-9]{20,}|gho_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|x-access-token|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY-----|[A-Za-z0-9._%+-]+@(gmail|icloud|me|hotmail|outlook|yahoo)\\.com' . --glob '!.git/**' --glob '!Makefile' --glob '!.gitignore' --glob '!docs/diagrams/*.svg' --glob '!docs/diagrams/**/*.svg'
+	PYTHONDONTWRITEBYTECODE=1 python3 -B tools/check_public_surface.py --root .
 
 mirror-drift-check:
 	diff -qr docs skills/genecluster-superpowers/references/docs
+	diff -q docs/biosymphony-campaign-preflight-runbook.md skills/biosymphony/references/docs/biosymphony-campaign-preflight-runbook.md
 	diff -q tools/recommended/README.md skills/genecluster-superpowers/tools/recommended/README.md
 
 markdown-link-check:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B tools/check_relative_markdown_links.py --repo-root .
 
 unit:
-	PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest skills/biosymphony/tests/test_genecluster.py
+	PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest skills/biosymphony/tests/test_genecluster.py tools/test_public_surface.py
 
 py-compile:
 	find skills/biosymphony/scripts skills/biosymphony/remote pipeline tools -name '*.py' -print0 | PYTHONPYCACHEPREFIX="$${TMPDIR:-/tmp}/biosymphony-genecluster-pycache" xargs -0 python3 -m py_compile

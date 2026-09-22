@@ -18,4 +18,6 @@ These guides describe the public integration contract for selected tools. They d
 
 Use [tooling status and version watch](../biosymphony-tooling-status.md) as the canonical version table.
 
+Use the [tool evaluation contract](tool-evaluation.md) to assess candidates in the [tooling radar](../biosymphony-next-tooling-radar.md).
+
 A guide is not a promise that every tool is installed locally. Installation scripts are opt-in and may download large files or require external terms. Review versions, hashes, licenses, and resource needs before use.

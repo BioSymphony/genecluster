@@ -1,12 +1,12 @@
 # Glossary
 
-This glossary defines terms used across BioSymphony GeneCluster. Read it before the campaign runbooks or skill files.
+Use this glossary to look up terms and filenames in the campaign guides and skills.
 
 ## Mission, campaign, and wave
 
 - **Mission.** The user's request in plain language. *"Find the BIA gene cluster in Berberis vulgaris using Coptis chinensis as the canonical reference,"* *"Assemble pathway evidence for a target molecule starting from Coptis chinensis and three Coptis relatives,"* or *"Fill the missing step in this terpene pathway using Solanaceae candidates."*
 - **Campaign.** The structured, contract-backed plan derived from a mission. A campaign has a manifest, ledgers, a route, a claim ceiling, and a target maturity level.
-- **Wave.** A bounded batch of work inside a campaign. Waves group issues such as source scout, candidate search, BGC calling, synteny, function jury, and review surface; work may run in parallel when the orchestrator supports it, and each wave ends at a review gate.
+- **Wave.** A batch of campaign work, such as source scouting, candidate search, or function annotation. Independent work units can run in parallel. Review their outputs before starting dependent work.
 
 ## Campaign inputs
 
@@ -52,15 +52,15 @@ This glossary defines terms used across BioSymphony GeneCluster. Read it before 
 
 - **Candidate hit.** A protein or gene that scored well on the campaign's search lanes. Rows live in `candidate_hits.tsv`.
 - **Evidence normalizer.** A script that turns raw tool output (BLAST tables, BGC caller results, function-prediction votes) into the campaign's canonical TSV shape so downstream lanes do not need tool-specific parsers. See `genecluster_atlas_normalizers.py`.
-- **Function jury.** The aggregated vote across multiple function-prediction tools (HMMER + InterProScan + DeepEC + KEGG mapping + CLEAN, where validated) for each candidate. Stored as `protein_function_jury.tsv`.
+- **Function evidence.** Annotations and predictions for each candidate, combined from the tools checked for the campaign. The existing output filename is `protein_function_jury.tsv`; agreement between tools does not establish experimental validation or calibrated confidence.
 - **Claim check.** The final check that every claim in the evidence package is supported by candidate hits, route ceiling, validators, and provenance. Implemented by `genecluster_claim_audit.py`. Failures are hard blockers.
 
-<img src="diagrams/genecluster-function-jury.png" alt="Function jury: multiple function-prediction tools vote per candidate; the consensus and confidence land in protein_function_jury.tsv" width="620">
+<img src="diagrams/genecluster-function-jury.png" alt="Function-prediction results are combined in protein_function_jury.tsv for candidate review." width="620">
 
 ## Outputs
 
 - **Evidence package.** The campaign's deliverable bundle. Contains `campaign-manifest.json`, ledgers, `route-decision.json`, `cluster_calls.tsv`, `protein_function_jury.tsv`, the comparative atlas, the review surface, the claim ledger, and provenance. Some script and directory names still use `dossier` for compatibility.
-- **Atlas.** The multi-species comparative view: cluster calls, BGC consensus, protein function jury, comparative panels, synteny ribbons.
+- **Atlas.** A comparative report with species-level results, cluster calls, function evidence, and plots of conserved gene order.
 - **Review surface.** The human-readable summary HTML, workbooks, and claim tables. The first-tier review surface is summary-only; full JBrowse and clinker browser packages are second-tier deliverables.
 
 ## Campaign records

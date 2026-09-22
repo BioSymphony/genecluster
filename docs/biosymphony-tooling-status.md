@@ -1,6 +1,6 @@
 # Tooling status and version watch
 
-Last reviewed: 2026-08-30
+Last reviewed: 2026-09-22. This focused update checks the release changes listed below; other entries retain the 2026-08-30 review.
 
 This page records public upstream versions, the baselines represented by this repository, and the level of public integration evidence. It is a knowledge base, not a live service-status page.
 
@@ -21,22 +21,25 @@ A newer upstream release does not automatically replace a checked baseline. Prom
 | antiSMASH | 8.0.4 | 8.0.4 | Checked baseline | Bacterial and fungal BGC calling |
 | plantiSMASH | 2.0.4 | 2.0.4 | Checked baseline | Plant BGC calling; non-editable source installation |
 | DeepBGC | 0.1.31 | 0.1.31 | Checked baseline | ML-based BGC scoring |
-| cblaster | 1.4.2 | >=1.4.0 | Available | Recheck the packaged minimum against 1.4.2 before promoting |
+| cblaster | GitHub/Bioconda 1.4.2; PyPI 1.4.0 | >=1.4.0 | Available | Record the distribution channel; a PyPI install does not select the GitHub release |
 | clinker | 0.0.32 | >=0.0.32 | Available | HTML plot output uses `--plot <path>` |
-| JCVI | 1.6.6 | >=1.6.5 | Available | MCScan synteny workflow |
+| JCVI | 1.6.7 | >=1.6.5 | Available | Released 2026-09-03; recheck the synteny fixture before promotion |
 | MMseqs2 | 18-8cc5c | 18 | Checked baseline | Large protein search |
 | Foldseek | 10-941cd33 | 10 | Checked baseline | Structure search |
 | MIBiG | 4.0 | 4.0 | Available | Curated BGC reference data |
 | igv-reports | 1.16.3 | >=1.16.2 | Available | Static genome review reports |
-| Cytoscape.js | 3.34.2 | 3.33.3 | Checked baseline | Recheck before updating the vendored/CDN baseline |
-| Quarto | 1.10.18 | 1.9.37 | Checked baseline | 1.11 is prerelease; recheck manuscript output before promoting |
-| InterProScan | 5.78-109.0 | 5.x | Available | Current release bundles Pfam 38.2 |
+| Cytoscape.js | 3.34.3 | 3.33.3 | Checked baseline | Released 2026-09-07; recheck interaction/export before promotion |
+| Quarto | 1.10.18 | 1.9.37 | Checked baseline | 1.11.5 is prerelease; recheck manuscript output before promoting |
+| InterProScan 5 | 5.78-109.0 | 5.x | Available | Final v5 release; retain the existing workflow until migration is checked |
+| InterProScan 6 | 6.0.2.2 | none | Planned | Released 2026-09-09; evaluate runtime, database, and output compatibility separately |
 | Pfam | 38.2 | 37.x | Available | Update dependent database manifests together |
 | Plant Metabolic Network | 17.0 | access by provider terms | Gated | Do not redistribute provider data |
 | HIT-EC | public repository | none | Planned | Public source exists; no public fixture is committed here |
 | ESM-C 6B | provider/model terms | none | Gated | Large-model access and compute requirements |
 
-Sources: [antiSMASH releases](https://github.com/antismash/antismash/releases), [plantiSMASH releases](https://github.com/plantismash/plantismash/releases), [cblaster on PyPI](https://pypi.org/project/cblaster/), [clinker](https://github.com/gamcil/clinker), [JCVI on PyPI](https://pypi.org/project/jcvi/), [MMseqs2 releases](https://github.com/soedinglab/MMseqs2/releases), [Foldseek releases](https://github.com/steineggerlab/foldseek/releases), [igv-reports on PyPI](https://pypi.org/project/igv-reports/), [Cytoscape.js](https://www.npmjs.com/package/cytoscape), [Quarto releases](https://github.com/quarto-dev/quarto-cli/releases), [InterProScan release notes](https://interproscan-docs.readthedocs.io/en/v5/ReleaseNotes.html), and [PMN 17](https://plantcyc.org/pmn-17-released/).
+Sources: [antiSMASH releases](https://github.com/antismash/antismash/releases), [plantiSMASH releases](https://github.com/plantismash/plantismash/releases), [cblaster releases](https://github.com/gamcil/cblaster/releases) and [PyPI](https://pypi.org/project/cblaster/), [clinker](https://github.com/gamcil/clinker), [JCVI on PyPI](https://pypi.org/project/jcvi/), [MMseqs2 releases](https://github.com/soedinglab/MMseqs2/releases), [Foldseek releases](https://github.com/steineggerlab/foldseek/releases), [igv-reports on PyPI](https://pypi.org/project/igv-reports/), [Cytoscape.js 3.34.3](https://github.com/cytoscape/cytoscape.js/releases/tag/v3.34.3), [Quarto releases](https://github.com/quarto-dev/quarto-cli/releases), [InterProScan 5 notes](https://interproscan-docs.readthedocs.io/en/v5/ReleaseNotes.html), [InterProScan 6.0.2.2](https://github.com/ebi-pf-team/interproscan6/releases/tag/6.0.2.2), and [PMN 17](https://plantcyc.org/pmn-17-released/).
+
+The [September tooling radar](biosymphony-next-tooling-radar.md) covers AI annotation, plant genome models, source adapters, and agent evaluation. Its candidates remain planned until the [evaluation contract](tooling/tool-evaluation.md) passes.
 
 ## Adopted capability groups
 

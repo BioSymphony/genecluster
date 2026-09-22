@@ -5,112 +5,88 @@
 [![Cite](https://img.shields.io/badge/cite-CITATION.cff-blue.svg)](CITATION.cff)
 [![Agents](https://img.shields.io/badge/agents-Claude%20Code%20%7C%20Codex%20%7C%20Symphony-ff69b4.svg)](docs/agent-orchestrator-guide.md)
 
+BioSymphony GeneCluster is a toolkit for AI agents to find and compare candidate biosynthetic genes and gene clusters across plant genomes.
+
+Give your agent a pathway, species, and any known data sources. The toolkit supplies instructions, scripts, and templates for searches and comparisons. Results include candidate-gene tables, genomic neighborhoods, and comparative reports with sources and stated limits.
+
 ![BioSymphony GeneCluster banner](docs/diagrams/genecluster-retro-synth-banner.jpg)
 
-BioSymphony GeneCluster is a public skill kit for comparative genome mining. It helps an agent turn a biological question into a traceable campaign.
+## Start Here
 
-You provide a pathway, target molecule, or missing biosynthetic step. The kit provides ledgers, route cards, runners, checks, and review templates.
+Open this repository in your agent and ask it to read the [campaign skill](skills/biosymphony/SKILL.md). Then use the [goal prompt](templates/goal-prompt.md) to specify your question, inputs, and compute limits.
 
-## What the kit does
+Replace the bracketed fields:
 
-A GeneCluster campaign can:
+> Compare [pathway] across [species] using public data. Return candidate-gene tables, conserved genomic neighborhoods, and unresolved questions. Cite the sources for each finding. Prepare a compute plan before any external run.
 
-- find candidate biosynthetic gene clusters in a new species;
-- search for a missing enzyme in a published pathway;
-- compare a pathway across related species;
-- combine homology, structure, domains, expression, synteny, and genome context;
-- record tool versions, source identifiers, parameters, hashes, and limits;
-- prepare the next experiment when public evidence cannot resolve a question.
-
-Each route sets a claim limit. For example, transcript evidence can support a candidate-gene claim. It cannot support a physical cluster-boundary claim without genome coordinates.
-
-<p align="center"><img src="docs/diagrams/genecluster-route-claim-ceiling.png" alt="The available data selects a route, and the route sets the claim limit." width="700"></p>
-
-## How a campaign works
-
-Give your agent a clear request. For example:
-
-> Compare the target pathway across four related species. Identify conserved enzymes, species-specific candidates, and possible cluster boundaries. Use public data only.
-
-The agent then:
-
-1. records the question, scope, controls, and review decision;
-2. checks the available genome and transcriptome data;
-3. builds source, query, database, and cache ledgers;
-4. selects a route and records its claim limit;
-5. runs bounded searches or prepares an external launch contract;
-6. normalizes results into compact evidence tables;
-7. returns conclusions, sources, conflicts, limits, and next actions.
-
-The artifacts form the scientific record. You can use a tracker to coordinate work, but the tracker is optional.
-
-<p align="center"><img src="docs/diagrams/genecluster-session-flow.png" alt="You define the campaign and approve external work. The agent prepares and reviews each stage." width="320"></p>
-
-## Execution options
-
-- **Local:** Plan the campaign, validate contracts, transform small files, and build review outputs.
-- **External worker:** Run large searches, models, assemblies, or database operations on approved infrastructure.
-- **HPC or scheduler:** Use the same launch and artifact contracts with an existing cluster.
-- **Solo agent:** Complete the workflow without a tracker.
-- **Multiple workers:** Split bounded stages across a tracker or orchestrator.
-
-Keep raw data, heavy files, credentials, provider responses, and unpublished sequences outside this repository.
-
-<p align="center"><img src="docs/diagrams/genecluster-local-cloud-boundary.png" alt="The local control plane sends bounded work to an external worker. Only compact summaries return." width="760"></p>
-
-## Repository layout
-
-- `skills/biosymphony/` contains campaign instructions, ledgers, checks, and runners.
-- `skills/genecluster-superpowers/` contains quickstarts and wrappers for selected tools.
-- `pipeline/` contains pipeline scaffolds and enrichment helpers.
-- `images/` contains container and dispatch reference files.
-- `docs/` contains public workflow, tool, architecture, and review guidance.
-- `data/` contains public pathway and species examples.
-- `templates/` contains tracker-neutral work-unit and solo-agent prompts.
-- `tools/` contains optional installers, wrappers, and static checks.
-
-## Start here
-
-- [Campaign workflow](docs/workflow-campaigns.md)
-- [Capability stack](docs/capability-stack.md)
-- [Glossary](docs/glossary.md)
-- [Agent guide](docs/agent-orchestrator-guide.md)
-- [Tooling status](docs/biosymphony-tooling-status.md)
-- [Atlas runbook](docs/genecluster-atlas-superpower-runbook.md)
-- [Documentation index](docs/README.md)
-
-For a solo campaign, start with [the goal prompt](templates/goal-prompt.md).
-
-## Verify the public snapshot
-
-These commands are for maintainers. You do not need them to read or adopt the contracts.
-
-Requirements:
-
-- Python 3
-- `make`
-- ripgrep (`rg`)
-
-Run the full release check:
-
-```bash
-make public-release-check
-```
-
-Run only the static public-safety checks:
-
-```bash
-make public-audit-strict
-```
-
-Run the optional local demo:
+To inspect the bundled example, run:
 
 ```bash
 make demo-campaign-dry-run
 ```
 
-The demo uses bundled public or synthetic fixtures. It does not require paid provider access.
+The demo uses public or synthetic fixtures without external compute and prints its output directory. See the [demo guide](docs/demo-campaign-dry-run.md) for requirements and outputs.
+
+## What the Kit Does
+
+Each campaign investigates one question. Available evidence determines its outputs:
+
+| Output | What you can inspect |
+|---|---|
+| Candidate-gene tables | Search hits, source identifiers, and supporting sequence, domain, structure, or expression evidence |
+| Genome-context comparisons | Gene coordinates, nearby genes, and conserved gene order across species |
+| Comparative reports | Findings, conflicting evidence, missing data, and follow-up questions |
+| Run records | Input sources, tool and database versions, parameters, checksums, and validation results |
+
+Genome coordinates are required to assess physical cluster boundaries. Transcript evidence can identify candidate genes; it cannot establish their positions in a genome.
+
+<p align="center"><img src="docs/diagrams/genecluster-route-claim-ceiling.png" alt="Available genome and transcriptome data determine which analyses and conclusions are supported." width="700"></p>
+
+## How a Campaign Works
+
+The agent:
+
+1. records the question, species, inputs, and controls;
+2. checks available data and selects a supported analysis route;
+3. runs bounded searches locally or prepares an external launch plan;
+4. combines results into evidence tables and checks their identifiers and provenance;
+5. returns findings, limitations, and the next proposed action.
+
+<p align="center"><img src="docs/diagrams/genecluster-session-flow.png" alt="You define the question and approve external work; the agent prepares and checks each analysis stage." width="320"></p>
+
+## Execution Options
+
+Use local compute for planning, small file transformations, validation, and reports. Large searches, models, assemblies, and database operations can run on approved cloud or HPC infrastructure.
+
+Coordinate with one agent or independent workers. A tracker such as Linear is optional; campaign files record the evidence and results.
+
+Keep raw data, large outputs, credentials, provider responses, and unpublished sequences outside this repository.
+
+<p align="center"><img src="docs/diagrams/genecluster-local-cloud-boundary.png" alt="The agent dispatches bounded work to external compute and retrieves approved summary files." width="760"></p>
+
+## Repository Layout
+
+| Directory | Contents |
+|---|---|
+| `skills/biosymphony/` | Campaign instructions, input records, checks, and runners |
+| `skills/genecluster-superpowers/` | Tool quickstarts and wrappers |
+| `pipeline/` and `images/` | Pipeline scaffolds, container definitions, and dispatch references |
+| `docs/` | Workflow, tool, and review guidance |
+| `data/` and `templates/` | Public examples, work-unit templates, and campaign prompts |
+| `tools/` | Optional installers, wrappers, and repository checks |
+
+See the [documentation index](docs/README.md) for campaign guides, the [tooling status](docs/biosymphony-tooling-status.md) for checked integrations, and the [tooling radar](docs/biosymphony-next-tooling-radar.md) for proposed additions.
+
+## Verify the Public Snapshot
+
+Maintainers need Python 3 with `openpyxl`, `make`, and ripgrep (`rg`). Run:
+
+```bash
+make public-release-check
+```
+
+For the publication audit without demo execution, use `make public-audit-strict`. Both commands remove generated caches. See [public release safety](docs/public-release-safety.md) for the checks and their limits.
 
 ## Contribute
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before you open a change. Report security problems through the private process in [SECURITY.md](SECURITY.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security problems through [SECURITY.md](SECURITY.md).

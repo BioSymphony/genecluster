@@ -39,12 +39,12 @@ A newer upstream release does not replace a checked baseline until a public fixt
 | Quarto | Checked baseline 1.9.37; upstream 1.10.18 | [Quickstart](references/quarto-quickstart.md) |
 | plantiSMASH | Checked baseline 2.0.4 | [Quickstart](references/plantismash-quickstart.md) |
 | antiSMASH | Checked baseline 8.0.4 | [Guide](references/docs/biosymphony-antismash-cookbook.md) |
-| JCVI MCScan | Available; minimum 1.6.5, upstream 1.6.6 | [Quickstart](references/jcvi-mcscan-quickstart.md) |
+| JCVI MCScan | Available; minimum 1.6.5, upstream 1.6.7 | [Quickstart](references/jcvi-mcscan-quickstart.md) |
 | MMseqs2 | Checked baseline 18 | [Quickstart](references/mmseqs2-quickstart.md) |
 | Foldseek + ProstT5 | Checked baseline | [Quickstart](references/foldseek-prostt5-quickstart.md) |
 | cblaster + clinker | Available; wrapper fixture planned | [Quickstart](references/cblaster-quickstart.md) |
 | CLEAN + HIT-EC | Planned | [Quickstart](references/clean-hit-ec-quickstart.md) |
-| Cytoscape.js | Checked baseline 3.33.3; upstream 3.34.2 | [Snippet](references/cytoscape-js-snippet.md) |
+| Cytoscape.js | Checked baseline 3.33.3; upstream 3.34.3 | [Snippet](references/cytoscape-js-snippet.md) |
 | Plant Metabolic Network | Gated by provider terms | [Quickstart](references/plantcyc-p450rdb-quickstart.md) |
 | ESM-C 6B | Gated by model access and compute requirements | [Status](references/docs/biosymphony-tooling-status.md) |
 

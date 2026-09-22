@@ -1,6 +1,6 @@
 # Cytoscape.js
 
-**Status:** checked baseline 3.33.3; current upstream 3.34.2 as of 2026-08-30.
+**Status:** checked baseline 3.33.3; current upstream 3.34.3 as of 2026-09-22.
 
 Cytoscape.js renders interactive pathway and evidence graphs in a browser. A GeneCluster report can use a shared graph model and overlay per-species coverage or candidate evidence.
 

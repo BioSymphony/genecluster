@@ -84,3 +84,6 @@ sra-cache/
 
 /.quarto/
 **/*.quarto_ipynb
+
+.codex/
+.playwright-mcp/

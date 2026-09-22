@@ -4,7 +4,7 @@
 
 cblaster searches for co-located homologs by remote NCBI search or local DIAMOND search. clinker compares GenBank cluster records and produces an interactive HTML plot.
 
-Current public releases reviewed on 2026-08-30 are cblaster 1.4.2 and clinker 0.0.32.
+Reviewed 2026-09-22: cblaster is 1.4.2 on GitHub/Bioconda and 1.4.0 on PyPI; clinker is 0.0.32. Record the installation channel with the version.
 
 ## Install
 

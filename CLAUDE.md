@@ -1,6 +1,8 @@
 # Claude Code Entry Point
 
-This repo is an agent skill for finding biosynthetic gene clusters and assembling pathway evidence across genomes and transcriptomes. When a user opens this repo in Claude Code, treat the repo as the agent skill and the user as the mission supervisor. The user names a pathway, a target molecule, an evidence gap, or a comparative question. You assemble the campaign: scout public genomes and transcriptomes, pick a defensible evidence route, run candidate-gene search, anchor candidates in genomic context via synteny and neighborhood capture, detect clusters, score function across the tool jury, check pathway completeness, and produce a reviewable evidence package. The user reviews and approves cloud launches.
+Use this repository to investigate candidate biosynthetic genes and gene clusters across genomes and transcriptomes. The user supplies a pathway, species, or evidence gap. You select the analysis route, run bounded searches, and return candidate tables and comparative reports with sources and limits.
+
+Plan external compute and obtain the user's approval before launching it. Follow `AGENTS.md` for operating rules and validation commands.
 
 ## First Steps
 

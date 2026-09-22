@@ -4,9 +4,9 @@
 # Idempotent installer for the cheap-tier tools recommended by the
 # superpower roadmap:
 #
-# - cblaster >=1.4.0 (cluster homology search) pip; upstream 1.4.2 reviewed
+# - cblaster >=1.4.0 (cluster homology search) pip; channel-specific versions: see the canonical tooling status
 # - clinker 0.0.32 (cluster comparison SVG) pip
-# - JCVI >=1.6.5 + MCScan (macro-synteny ribbons) pip; upstream 1.6.6 reviewed
+# - JCVI >=1.6.5 + MCScan (macro-synteny ribbons) pip; upstream versions: see the canonical tooling status
 # - MMseqs2 18-8cc5c (iterative-profile BLAST replace) bioconda
 # - igv-reports >=1.16.2 (analyst-friendly track HTML) pip; upstream 1.16.3 reviewed
 # - Quarto 1.9.37 (report spine) .pkg / .deb

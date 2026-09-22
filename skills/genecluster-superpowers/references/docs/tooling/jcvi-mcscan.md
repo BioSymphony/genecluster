@@ -1,6 +1,6 @@
 # JCVI MCScan
 
-**Status:** available; repository minimum 1.6.5; current upstream 1.6.6 as of 2026-08-30.
+**Status:** available; repository minimum 1.6.5; current upstream 1.6.7 as of 2026-09-22.
 
 JCVI provides Python MCScan workflows for pairwise and multi-species synteny. It can connect cluster-level findings to chromosome-scale conservation when suitable assemblies and annotations are available.
 
