@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="391" viewBox="0 0 960 391" role="img" aria-labelledby="title desc">
+  <title id="title">Local and optional external compute</title>
+  <desc id="desc">Local work covers planning, small analyses, validation, and reports. Optional cloud or HPC workers handle larger workloads using CPU or GPU as required. A run plan goes to the worker, and compact summaries return.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <rect width="960" height="391" rx="20" fill="#0a1222"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="32" y="49" font-size="30" fill="#edf4ff" font-weight="700">Use compute that fits the analysis</text>
+    <rect x="32" y="87" width="354" height="272" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="554" y="87" width="374" height="272" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="56" y="128" font-size="26" fill="#70dfd2" font-weight="700">Local work</text>
+    <text x="578" y="128" font-size="26" fill="#eaa4d9" font-weight="700">Optional external work</text>
+    <text x="56" y="175" font-size="22" fill="#c7d4e6" font-weight="400">Plan the campaign</text>
+    <text x="56" y="213" font-size="22" fill="#c7d4e6" font-weight="400">Run small analyses</text>
+    <text x="56" y="251" font-size="22" fill="#c7d4e6" font-weight="400">Check inputs and results</text>
+    <text x="56" y="289" font-size="22" fill="#c7d4e6" font-weight="400">Build tables and reports</text>
+    <text x="578" y="175" font-size="21" fill="#c7d4e6" font-weight="400">Large searches and databases</text>
+    <text x="578" y="213" font-size="21" fill="#c7d4e6" font-weight="400">Models or assemblies</text>
+    <text x="578" y="251" font-size="21" fill="#c7d4e6" font-weight="400">CPU or GPU as required</text>
+    <text x="578" y="326" font-size="18" fill="#91a9c7" font-weight="400">Cloud or HPC</text>
+    <text x="423" y="160" font-size="18" fill="#c7d4e6" font-weight="400">Run plan</text>
+    <path d="M399 183 H540" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="426" y="238" font-size="18" fill="#c7d4e6" font-weight="400">Compact</text>
+    <text x="420" y="261" font-size="18" fill="#c7d4e6" font-weight="400">summaries</text>
+    <path d="M540 281 H399" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+  </g>
+</svg>

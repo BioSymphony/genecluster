@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="682" viewBox="0 0 420 682" role="img" aria-labelledby="title desc">
+  <title id="title">Local and optional external compute</title>
+  <desc id="desc">Local and optional external work match the wide version. A run plan goes to the external worker and compact summaries return.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <rect width="420" height="682" rx="20" fill="#0a1222"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="24" y="46" font-size="28" fill="#edf4ff" font-weight="700">Where the work runs</text>
+    <rect x="24" y="76" width="372" height="238" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="24" y="416" width="372" height="242" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="44" y="119" font-size="26" fill="#70dfd2" font-weight="700">Local work</text>
+    <text x="44" y="459" font-size="25" fill="#eaa4d9" font-weight="700">Optional external work</text>
+    <text x="44" y="162" font-size="21" fill="#c7d4e6" font-weight="400">Plan the campaign</text>
+    <text x="44" y="197" font-size="21" fill="#c7d4e6" font-weight="400">Run small analyses</text>
+    <text x="44" y="232" font-size="21" fill="#c7d4e6" font-weight="400">Check inputs and results</text>
+    <text x="44" y="267" font-size="21" fill="#c7d4e6" font-weight="400">Build tables and reports</text>
+    <text x="44" y="502" font-size="21" fill="#c7d4e6" font-weight="400">Large searches and databases</text>
+    <text x="44" y="537" font-size="21" fill="#c7d4e6" font-weight="400">Models or assemblies</text>
+    <text x="44" y="572" font-size="21" fill="#c7d4e6" font-weight="400">CPU or GPU as required</text>
+    <text x="44" y="627" font-size="18" fill="#91a9c7" font-weight="400">Cloud or HPC</text>
+    <text x="31" y="370" font-size="18" fill="#c7d4e6" font-weight="400">Run plan</text>
+    <text x="285" y="370" font-size="18" fill="#c7d4e6" font-weight="400">Summaries</text>
+    <path d="M158 330 V400" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <path d="M263 400 V330" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+  </g>
+</svg>

@@ -46,7 +46,7 @@ Use this glossary to look up terms and filenames in the campaign guides and skil
 - **Route card.** The artifact that records the chosen route, the rejected routes, the rationale, and the claim ceiling. Produced by `genecluster_annotation_scout.py` and read by every downstream worker.
 - **Claim ceiling.** The strongest scientific claim the chosen route is allowed to support. A campaign that detects a cluster on `transcript-first` evidence cannot claim physical genomic cluster boundaries; the claim ceiling forbids that.
 
-<img src="diagrams/genecluster-route-claim-ceiling.png" alt="Route decision tree: data state selects the route, and each route sets a hard claim ceiling" width="620">
+[![Available sequences support candidate genes; genome coordinates support neighborhoods; comparable genomes with aligned loci support conserved gene order.](diagrams/genecluster-route-claim-ceiling.svg)](diagrams/genecluster-route-claim-ceiling.svg)
 
 ## Evidence and review
 

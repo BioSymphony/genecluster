@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="986" viewBox="0 0 420 986" role="img" aria-labelledby="title desc">
+  <title id="title">Data and supported results</title>
+  <desc id="desc">Available data and supported results match the wide version, arranged as four stacked comparisons.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <rect width="420" height="986" rx="20" fill="#0a1222"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="24" y="46" font-size="27" fill="#edf4ff" font-weight="700">What your data supports</text>
+    <rect x="24" y="76" width="372" height="208" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="24" y="90" width="4" height="180" rx="2" fill="#f5ce79"/>
+    <text x="44" y="107" font-size="20" fill="#c7d4e6" font-weight="400">Protein or transcript sequences</text>
+    <text x="44" y="175" font-size="25" fill="#f5ce79" font-weight="700">Candidate genes and</text>
+    <text x="44" y="204" font-size="25" fill="#f5ce79" font-weight="700">function evidence</text>
+    <text x="44" y="242" font-size="18" fill="#c7d4e6" font-weight="400">Genome positions require</text>
+    <text x="44" y="265" font-size="18" fill="#c7d4e6" font-weight="400">coordinate mapping.</text>
+    <rect x="24" y="302" width="372" height="208" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="24" y="316" width="4" height="180" rx="2" fill="#70dfd2"/>
+    <text x="44" y="333" font-size="20" fill="#c7d4e6" font-weight="400">Genome sequence and</text>
+    <text x="44" y="357" font-size="20" fill="#c7d4e6" font-weight="400">gene coordinates</text>
+    <text x="44" y="401" font-size="25" fill="#70dfd2" font-weight="700">Candidate genomic</text>
+    <text x="44" y="430" font-size="25" fill="#70dfd2" font-weight="700">neighborhoods</text>
+    <text x="44" y="468" font-size="18" fill="#c7d4e6" font-weight="400">Nearby genes may have</text>
+    <text x="44" y="491" font-size="18" fill="#c7d4e6" font-weight="400">unrelated functions.</text>
+    <rect x="24" y="528" width="372" height="208" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="24" y="542" width="4" height="180" rx="2" fill="#eaa4d9"/>
+    <text x="44" y="559" font-size="20" fill="#c7d4e6" font-weight="400">Comparable genomes</text>
+    <text x="44" y="583" font-size="20" fill="#c7d4e6" font-weight="400">and aligned loci</text>
+    <text x="44" y="627" font-size="25" fill="#eaa4d9" font-weight="700">Conserved gene order</text>
+    <text x="44" y="656" font-size="25" fill="#eaa4d9" font-weight="700">(synteny)</text>
+    <text x="44" y="694" font-size="18" fill="#c7d4e6" font-weight="400">Requires reliable matches</text>
+    <text x="44" y="717" font-size="18" fill="#c7d4e6" font-weight="400">and coordinates.</text>
+    <rect x="24" y="754" width="372" height="208" rx="16" fill="#101e33" stroke="#30445f"/>
+    <rect x="24" y="768" width="4" height="180" rx="2" fill="#a9bcd3"/>
+    <text x="44" y="785" font-size="20" fill="#c7d4e6" font-weight="400">Insufficient sequence data</text>
+    <text x="44" y="853" font-size="25" fill="#a9bcd3" font-weight="700">Source gaps and a</text>
+    <text x="44" y="882" font-size="25" fill="#a9bcd3" font-weight="700">data-collection plan</text>
+    <text x="44" y="920" font-size="18" fill="#c7d4e6" font-weight="400">Record the inputs needed</text>
+    <text x="44" y="943" font-size="18" fill="#c7d4e6" font-weight="400">for an analysis.</text>
+  </g>
+</svg>

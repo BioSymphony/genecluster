@@ -1,39 +1,38 @@
-# Rendering the GeneCluster diagrams
+# Render the GeneCluster Diagrams
 
-The diagrams are authored as Mermaid sources (`*.mmd`) and rendered to PNG in a
-"synth-lab" style (neon nodes on a dark background, soft per-node glow) that
-echoes the project banner. Each `*.mmd` carries its own `%%{init}%%` theme
-(palette, `lineColor`, `edgeLabelBackground`) and `classDef` colours, so the
-palette lives with the source.
+## README Figures
 
-## Regenerate a PNG
+The three README figures use editable SVG sources:
 
-Requires [`@mermaid-js/mermaid-cli`](https://github.com/mermaid-js/mermaid-cli)
-(`mmdc`). No global install needed:
+| Source | Purpose |
+|---|---|
+| `genecluster-session-flow.svg` | Campaign stages and responsibilities |
+| `genecluster-route-claim-ceiling.svg` | Available data and supported results |
+| `genecluster-local-cloud-boundary.svg` | Local and optional external compute |
+
+Each figure also has a `-mobile.svg` layout with the same content in stacked panels. The READMEs select that layout below 600 pixels with the [picture element](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#the-picture-element). Both layouts use SVG for sharp text. Open an image to inspect it at full size. Each SVG includes a text title and description. Matching PNGs remain available for viewers that need raster images.
+
+Keep labels consistent in the wide and mobile SVGs. After editing a wide SVG, regenerate its PNG with [CairoSVG](https://cairosvg.org/). The checked rendering version is 2.8.2; it is an optional documentation dependency.
+
+```bash
+python3 -m cairosvg docs/diagrams/genecluster-session-flow.svg \
+  -o docs/diagrams/genecluster-session-flow.png -s 2
+```
+
+Repeat for the other changed SVGs. Check the complete figure for clipped labels and arrows before updating the packaged documentation.
+
+## Other Diagrams
+
+The remaining diagrams use Mermaid sources (`*.mmd`). Each source defines its colors and layout. The shared `synth-theme.css` adds the existing glow treatment.
+
+Requires [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli). To render one source:
 
 ```bash
 npx -y @mermaid-js/mermaid-cli \
   -i docs/diagrams/<name>.mmd \
   -o docs/diagrams/<name>.png \
-  -b "#0a1024" \
-  -s 2 \
+  -b "#0a1024" -s 2 \
   --cssFile docs/diagrams/synth-theme.css
 ```
 
-- `-b "#0a1024"` sets the dark canvas background.
-- `-s 2` renders at 2x for crisp text.
-- `--cssFile synth-theme.css` injects the neon glow and edge-label colour
-  (geometry-free, so it never shifts the layout).
-
-## Regenerate all
-
-```bash
-for f in docs/diagrams/*.mmd; do
-  n="${f%.mmd}"
-  npx -y @mermaid-js/mermaid-cli -i "$f" -o "$n.png" -b "#0a1024" -s 2 \
-    --cssFile docs/diagrams/synth-theme.css
-done
-```
-
-The hero banner (`genecluster-retro-synth-banner.jpg`) and social preview are
-standalone art, not generated from Mermaid.
+The hero banner (`genecluster-retro-synth-banner.jpg`) and social preview are standalone artwork.
