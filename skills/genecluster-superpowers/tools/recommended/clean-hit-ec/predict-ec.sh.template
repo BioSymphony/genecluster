@@ -1,45 +1,39 @@
 #!/usr/bin/env bash
 # tools/recommended/clean-hit-ec/predict-ec.sh.template
 #
-# STATUS: foundation only, not-yet-tested.
+# STATUS: adaptation required; foundation only; not-yet-tested. A CLEAN tool
+# baseline does not certify this wrapper.
 #
-# What this would do for the BIA atlas:
+# ADAPTATION REQUIRED:
+#   Verify the CLEAN checkout, dependencies, FASTA identifiers, split argument,
+#   and output names against the pinned CLEAN release before use.
+#
+# What this template describes:
 #   Run CLEAN (contrastive-learning EC predictor, Yu Science 2023) on the
-#   cluster-candidate proteins for one species. Output is per-protein EC
-#   labels (e.g. "EC 1.14.14.110", S-stylopine synthase) that convert our
-#   "uncharacterized P450 73E2-like" rows into actionable enzymatic
-#   assignments.
-#
-#   HIT-EC (Liu et al. Nat Commun 2026) would run alongside as the
-#   abstention-aware companion; this template stubs CLEAN since HIT-EC's
-#   public release timing is still pending.
+#   candidate proteins for one species. The output contains per-protein EC
+#   label predictions for review with sequence, domain, and coordinate evidence.
 #
 # Inputs:
 #   {QUERY_FASTA}        cluster-candidate FASTA
-#                        e.g. .runtime/<species>-summary/cluster-candidates.faa
+#                        e.g. .runtime/campaign-<species>-summary/cluster-candidates.faa
 #   {OUTPUT_DIR}         where CLEAN writes results
 #   {CLEAN_REPO}         path to local CLEAN clone (set by install-heavy.sh)
-#   {SPLIT}              "70" or "100" identity-clustering split; 70 generalizes,
-#                        100 is more accurate when SwissProt has close homologs
+#   {SPLIT}              CLEAN split identifier; verify accepted values and
+#                        interpretation for the pinned release
 #
 # Outputs:
-#   ${OUTPUT_DIR}/{queryname}_maxsep.csv    , per-protein EC predictions with
-#                                              maxsep-algorithm confidence
+#   ${OUTPUT_DIR}/{queryname}_maxsep.csv    , per-protein CLEAN result rows
 #
-# Where output feeds in:
-#   - pipeline/genecluster_annotation_direct/ parses the CSV into per-protein
-#     ec_top1 / ec_top1_score columns.
-#   - your downstream postprocess script adds an ec-clean sheet to the per-species
-#     xlsx; later, an ec-consensus sheet joining CLEAN + HIT-EC.
-#   - cross-species/pathway-completion.qmd uses EC labels to cross-reference
-#     PMN 16 pathway-step IDs (see docs/tooling/plantcyc-p450rdb.md).
+# Output use:
+#   A separately reviewed normalizer can convert these rows into function
+#   evidence. This template does not define a downstream integration stage.
 
 set -euo pipefail
 
 QUERY_FASTA="{QUERY_FASTA}"
 OUTPUT_DIR="{OUTPUT_DIR}"
 CLEAN_REPO="{CLEAN_REPO}"          # e.g. tools/recommended/clean-hit-ec/src/CLEAN
-SPLIT="{SPLIT}"                     # "70" or "100"
+SPLIT="{SPLIT}"                     # CLEAN split identifier
 
 mkdir -p "${OUTPUT_DIR}"
 
@@ -55,4 +49,4 @@ mv results/*_maxsep.csv "${OUTPUT_DIR}/"
 
 popd >/dev/null
 
-echo "CLEAN EC prediction → ${OUTPUT_DIR}/"
+echo "ADAPTATION REQUIRED: review CLEAN output before downstream use: ${OUTPUT_DIR}/"

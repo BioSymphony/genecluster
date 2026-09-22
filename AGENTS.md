@@ -25,14 +25,14 @@ This repo is the public BioSymphony GeneCluster skill kit for agents and agent h
 
 ## Product Direction
 
-BioSymphony GeneCluster should help agents run comparative-genomics campaigns that are easier to plan, inspect, and resume:
+BioSymphony GeneCluster gives agents tool knowledge and helpers for comparative genome and transcriptome analysis:
 
-- Linear or another tracker stores task contracts, dependencies, acceptance criteria, check commands, and artifact handoffs.
-- Symphony-style workers execute bounded source scouting, candidate search, comparative analysis, visualization, QA, and review-limit checks.
-- Provider lanes handle heavy search and model work behind finite launch contracts.
-- Review surfaces should keep conclusions tied to ledgers, versions, hashes, and stated limits.
-- A capable Codex/Claude-style agent remains the orchestrator: use the repo's contracts and checks, but make ordinary campaign decisions without waiting for every detail to be encoded as a script.
-- For `/goal` or solo-agent setups, use `templates/goal-prompt.md` and the same artifact contracts instead of forcing a tracker when one is unnecessary.
+- Lead with tool selection, concrete calls, and useful chains across search, annotation, genome context, and visualization.
+- Describe inputs, output formats, identifiers, versions, and integration readiness precisely.
+- Agents prepare conversions between tools and keep conclusions tied to the resulting evidence.
+- Provider lanes handle larger workloads behind finite launch contracts.
+- Campaign helpers add resumable stages and input tracking when needed. Trackers and Symphony-style workers are optional execution choices.
+- Use `templates/goal-prompt.md` for solo-agent work with the same artifact contracts.
 
 ## Public Safety
 

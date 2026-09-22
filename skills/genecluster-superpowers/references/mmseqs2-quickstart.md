@@ -1,6 +1,8 @@
-# MMseqs2 quickstart
+# MMseqs2 Quickstart
 
 **Status:** checked baseline 18-8cc5c.
+
+For the wrapper command and six-column output schema, read the [calling guide](docs/tooling/tool-chaining.md#search-proteins). The native CLI pattern is:
 
 ```bash
 mmseqs createdb <QUERY_FASTA> <QUERY_DB>

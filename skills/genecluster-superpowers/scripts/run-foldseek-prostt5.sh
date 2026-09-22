@@ -2,7 +2,12 @@
 # run-foldseek-prostt5.sh: structure-based homology via Foldseek + ProstT5
 #                          (sequence-only; no AlphaFold step needed)
 #
-# STATUS: foundation, not yet tested in production
+# STATUS: adaptation required; wrapper not tested. A Foldseek/ProstT5 tool
+#         baseline does not certify this wrapper.
+# ADAPTATION REQUIRED:
+#   Verify the target input type, ProstT5 model revision, CLI flags, and output
+#   fields against the pinned Foldseek release before use. Hit scores require
+#   independent functional and coordinate evidence.
 # Required tools: foldseek
 # Required Python deps: torch, transformers, sentencepiece (Rostlab/ProstT5)
 # Install: bash tools/recommended/install-heavy.sh
@@ -11,15 +16,11 @@
 # Usage:
 #   run-foldseek-prostt5.sh <species> [query.faa]
 #
-# <species> = coptis | houttuynia | stephania | phellodendron
-# [query.faa] defaults to .runtime/<species>-summary/cluster-sequences.faa
-#             (the canonical Coptis BIA cluster proteins; the proof-test asks
-#              "what folds in <species> match Coptis BBE/CYP cluster fold-wise
-#              that BLAST missed?")
+# <species> = a species slug used by the campaign directory layout
+# [query.faa] defaults to .runtime/campaign-<species>-summary/cluster-sequences.faa
 #
-# Manuscript-differentiator: catches convergent enzymes invisible to BLAST at
-# <15% sequence identity. Output column `prob` >0.9 = same fold; `alntmscore`
-# >0.5 = structural match.
+# The output is a tabular structure-similarity result. This wrapper does not
+# establish convergence, function, or a score threshold.
 
 set -euo pipefail
 
@@ -39,14 +40,14 @@ fi
 SPECIES="${1:-}"
 if [[ -z "$SPECIES" ]]; then
   echo "Usage: run-foldseek-prostt5.sh <species> [query.faa]" >&2
-  echo "  species: coptis | houttuynia | stephania | phellodendron" >&2
+  echo "  species: a species slug used by the campaign directory layout" >&2
   exit 64
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-SUMMARY_DIR="${REPO_ROOT}/.runtime/-summary"
+SUMMARY_DIR="${REPO_ROOT}/.runtime/campaign-${SPECIES}-summary"
 PROTEOME="${SUMMARY_DIR}/proteome.faa"
-QUERY_FASTA="${2:-${REPO_ROOT}/.runtime/<species>-summary/cluster-sequences.faa}"
+QUERY_FASTA="${2:-${SUMMARY_DIR}/cluster-sequences.faa}"
 OUTPUT_DIR="${SUMMARY_DIR}/superpowers/foldseek"
 
 if [[ ! -f "$PROTEOME" ]]; then
@@ -71,18 +72,14 @@ foldseek easy-search \
   "${OUTPUT_DIR}/tmp" \
   --prostt5-model "Rostlab/ProstT5" \
   --threads "$THREADS" \
-  --format-output "query,target,evalue,bits,prob,alntmscore"
+  --format-output "query,target,evalue,bits,alntmscore"
 
-# --- Headline summary --------------------------------------------------------
+# --- Result count ------------------------------------------------------------
 echo
 hits=$(wc -l < "${OUTPUT_DIR}/foldseek-hits.m8" | tr -d ' ')
 echo "Foldseek hit rows: ${hits}"
-if [[ "$hits" -gt 0 ]]; then
-  high_conf=$(awk '$5 > 0.9 {n++} END {print n+0}' "${OUTPUT_DIR}/foldseek-hits.m8")
-  echo "  high-confidence (prob > 0.9): ${high_conf}"
-fi
 
 echo
-echo "DONE: Foldseek + ProstT5 on ${SPECIES}"
+echo "ADAPTATION REQUIRED: inspect Foldseek output before downstream use."
 echo "  Output: ${OUTPUT_DIR}/foldseek-hits.m8"
-echo "  Cross-tab against blastp_hits.tsv to find fold-only convergence cases."
+echo "  Compare with sequence, domain, and coordinate evidence."

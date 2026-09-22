@@ -1,20 +1,7 @@
-# GeneCluster Annotation-Direct Engine
+# Annotation-Direct Entry Point
 
-Stable entrypoint for annotation-direct GeneCluster campaigns.
+`run.py` delegates to `pipeline/demo3/run.py`. That engine is absent from this package, so this entry point cannot run an analysis by itself.
 
-```bash
-python3 pipeline/genecluster_annotation_direct/run.py \
-  --species coptis_chinensis \
-  --proteome /opt/inputs/proteome.faa \
-  --gff /opt/inputs/genomic.gff \
-  --queries /opt/inputs/queries.faa \
-  --pfam-hmm /opt/dbs/Pfam-A.hmm \
-  --swissprot-dmnd /opt/dbs/swissprot.dmnd \
-  --workdir /workspace/genecluster \
-  --window-kb 50 \
-  --threads 8
-```
+Use the [tool-calling guide](../../docs/tooling/tool-chaining.md) for commands and wrappers included in the public package. Use the [fixture demo](../../docs/demo-campaign-dry-run.md) to inspect example outputs without external tools.
 
-The implementation currently delegates to the delivered campaign engine so the
-Coptis regression stays bit-for-bit close to the shipped workflow while Atlas
-campaigns can depend on a non-demo path.
+`python3 pipeline/genecluster_annotation_direct/run.py --help` reports the missing dependency. An analysis invocation exits with status 2 until the engine is supplied.

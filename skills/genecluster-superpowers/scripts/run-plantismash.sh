@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 # run-plantismash.sh: plantiSMASH 2.0.4 against one atlas species
 #
-# STATUS: checked baseline 2.0.4; requires a reviewed non-editable installation
+# STATUS: adaptation required; wrapper not tested. A plantiSMASH 2.0.4 tool
+#         baseline does not certify this wrapper.
+# ADAPTATION REQUIRED:
+#   Verify the input format, taxon option, CLI flags, and output files against
+#   the pinned plantiSMASH release before use. This draft points at a GFF file;
+#   use a supported input format or add an explicit conversion step. Candidate
+#   regions require independent normalization and review.
 # Required tools: plantiSMASH 2.0.4 command or conda env named plantismash
 # Install: bash tools/recommended/install-medium.sh
 #
 # Usage:
 #   run-plantismash.sh <species>
 #
-# <species> = coptis | houttuynia | stephania | phellodendron
+# <species> = a species slug used by the campaign directory layout
 #
 # What it does:
-#   Runs plantiSMASH 2.0.4 against the species genomic.gff (motif-driven BGC
-#   detection: 12 BGC types incl. BIA / terpene / saccharide). Produces
-#   GenBank region records and an interactive HTML report. Compare against our
-#   anchor-windowed cluster_neighborhoods.tsv to find motif-driven clusters
-#   our anchor pipeline missed.
+#   Runs plantiSMASH 2.0.4 against the species input after the input contract
+#   is adapted. It writes candidate region records and report files.
 #
 # Output: .runtime/campaign-<species>-summary/superpowers/plantismash/
 
@@ -38,17 +41,17 @@ fi
 SPECIES="${1:-}"
 if [[ -z "$SPECIES" ]]; then
   echo "Usage: run-plantismash.sh <species>" >&2
-  echo "  species: coptis | houttuynia | stephania | phellodendron" >&2
+  echo "  species: a species slug used by the campaign directory layout" >&2
   exit 64
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-SUMMARY_DIR="${REPO_ROOT}/.runtime/-summary"
-GENOME_GFF="${SUMMARY_DIR}/genomic.gff"
+SUMMARY_DIR="${REPO_ROOT}/.runtime/campaign-${SPECIES}-summary"
+INPUT_FILE="${SUMMARY_DIR}/genomic.gff"
 OUTPUT_DIR="${SUMMARY_DIR}/superpowers/plantismash"
 
-if [[ ! -f "$GENOME_GFF" ]]; then
-  echo "ERROR: genomic.gff not found: $GENOME_GFF" >&2
+if [[ ! -f "$INPUT_FILE" ]]; then
+  echo "ERROR: plantiSMASH input not found: $INPUT_FILE" >&2
   exit 65
 fi
 
@@ -60,7 +63,7 @@ echo "[1/1] plantiSMASH 2.0.4 on ${SPECIES}..."
   --taxon plants \
   --genefinding-tool none \
   --outputfolder "$OUTPUT_DIR" \
-  "$GENOME_GFF"
+  "$INPUT_FILE"
 
 echo
 if compgen -G "${OUTPUT_DIR}/*.gbk" >/dev/null; then
@@ -70,8 +73,6 @@ else
 fi
 
 echo
-echo "DONE: plantiSMASH 2.0.4 on ${SPECIES}"
+echo "ADAPTATION REQUIRED: review plantiSMASH output before downstream use."
 echo "  Output: ${OUTPUT_DIR}/"
 echo "  Tip: open ${OUTPUT_DIR}/index.html"
-echo "  Coordinate-overlap-join output regions with cluster_neighborhoods.tsv"
-echo "  to find motif-driven clusters anchor-windowing missed."

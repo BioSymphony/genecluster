@@ -1,38 +1,34 @@
 ---
 name: genecluster-superpowers
-description: Use when extending BioSymphony GeneCluster with public-safe sequence or structure search, BGC detection, synteny, function prediction, reference databases, visualization, or report rendering.
+description: Choose and call bioinformatics tools, prepare their inputs, and chain sequence search, annotation, genome-context analysis, visualization, and reports.
 ---
 
 # GeneCluster Superpowers
 
-This skill provides quickstarts and wrappers for a subset of the public GeneCluster tool inventory. Use the [tooling status](references/docs/biosymphony-tooling-status.md) as the canonical source for upstream versions, checked baselines, and integration limits.
+Use this skill to select tools for genome and transcriptome analysis, call them through command-line or Python interfaces, and connect their outputs. Start with the biological question and available data.
 
-## When to use it
+## Select, Call, and Connect
 
-Use this skill when a campaign needs one of these bounded capabilities:
+1. Read the relevant guide in the [tool knowledge base](references/docs/tooling/README.md). Check required data, databases, versions, and compute.
+2. Inspect local availability with `bash scripts/superpowers-status.sh` from this skill directory.
+3. Read the [calling guide](references/docs/tooling/tool-chaining.md) for wrapper readiness. Use an installed tool's native CLI when a wrapper needs adaptation.
+4. Prepare explicit inputs and a separate output directory. Run the approved analysis and inspect errors, output columns, and empty results.
+5. Prepare the next input: extract sequences, convert formats, or join stable gene and protein IDs. Retain the commands and source references with the results.
 
-- sequence or profile search;
-- structure search or representation;
-- BGC calling and cluster comparison;
-- synteny and genome-context visualization;
-- enzyme-function evidence;
-- pathway or reference-database context;
-- interactive review views;
-- report rendering.
+For example, chain MMseqs2 hits, matched protein sequences, HMMER or InterProScan annotations, and a Quarto report. For cluster comparisons, the cblaster wrapper chains a search session, GenBank extraction, and clinker. The agent handles any conversions between independent tools.
 
-Use the main `biosymphony` skill for campaign planning, ledgers, routes, claim checks, and provider-neutral handoffs.
+## Calling Helpers
 
-## Status terms
+These commands show the required flags without invoking the tools:
 
-- **Available**: public installation or access is documented.
-- **Checked baseline**: a public fixture previously produced the expected output shape.
-- **Adopted**: a repository contract or wrapper consumes that checked shape.
-- **Planned**: relevant, but no public integration claim is made.
-- **Gated**: licensing, access, redistribution, or resource requirements limit a public integration.
+```bash
+bash scripts/run-mmseqs2.sh --help
+bash scripts/run-cblaster.sh --help
+```
 
-A newer upstream release does not replace a checked baseline until a public fixture confirms compatibility.
+Both wrappers have fake-CLI regression tests. Foldseek/ProstT5, JCVI, plantiSMASH, and CLEAN wrappers are adaptation templates; review the [readiness table](references/docs/tooling/tool-chaining.md#choose-a-tool) before use.
 
-## Packaged subset
+## Tool Knowledge Base
 
 | Tool | Public status | Guide |
 |---|---|---|
@@ -50,53 +46,18 @@ A newer upstream release does not replace a checked baseline until a public fixt
 
 The canonical inventory includes additional tools and explains the evidence behind each status.
 
-## Check local availability
+## Versions and Installation
 
-```bash
-bash scripts/superpowers-status.sh
-```
+[Tooling status](references/docs/biosymphony-tooling-status.md) records checked baselines, upstream releases, and integration limits. Local command availability does not change those statuses. A tool baseline does not validate every wrapper or a later release.
 
-This reports local commands only. It does not change tool status or prove that a campaign integration is complete.
+The opt-in installers under `tools/recommended/` group smaller tools, medium downloads, and model/database setup. Inspect each script and supply the requested immutable revisions and checksums. Store large data and model caches in ignored runtime storage or an external work directory.
 
-## Optional installers
+## Longer Analyses
 
-The mirrored helpers under `tools/recommended/` are opt-in references:
+The [campaign helpers](https://github.com/BioSymphony/genecluster/blob/main/skills/biosymphony/SKILL.md) add input tracking and resumable stages. Use them when the analysis needs those features; a tracker is optional.
 
-```bash
-bash tools/recommended/install-cheap.sh
-bash tools/recommended/install-medium.sh
-bash tools/recommended/install-heavy.sh
-```
+## Add a Tool
 
-Inspect each script before use. Supply reviewed immutable revisions and published checksums where requested. Heavy databases and model caches belong in ignored runtime storage or an external work directory.
+Link official sources, define inputs and outputs, and add a public or synthetic fixture. Record code, model, and database versions. Promote integration status after the fixture passes, then update the guide and packaged documentation mirror.
 
-## Wrapper examples
-
-```bash
-bash scripts/run-cblaster.sh <species>
-bash scripts/run-jcvi-mcscan.sh <species-a> <species-b>
-bash scripts/run-mmseqs2.sh <species>
-bash scripts/run-foldseek-prostt5.sh <species>
-```
-
-Wrappers expect campaign-derived inputs under ignored runtime storage. They must fail clearly when a tool or required input is missing.
-
-## Adding a tool
-
-1. Link the official release and license source.
-2. Add a public or synthetic fixture.
-3. Record exact code, model, and database versions.
-4. Define compact inputs, outputs, failure states, and hashes.
-5. Keep raw and heavy artifacts outside the repository.
-6. Add or update the per-tool guide and wrapper.
-7. Promote the status only after the public fixture passes.
-8. Update the packaged documentation mirror.
-
-Do not include credentials, private paths, provider payloads, unpublished data, private tracker text, or unpublished run history in public documentation.
-
-## References
-
-- [Canonical tooling status](references/docs/biosymphony-tooling-status.md)
-- [Per-tool guides](references/docs/tooling/README.md)
-- [Tool roadmap](references/docs/biosymphony-genecluster-superpower-roadmap.md)
-- [Atlas authoring guidance](references/docs/biosymphony-atlas-best-practices.md)
+Keep credentials, private paths, unpublished data, and private run history out of public materials.

@@ -1,6 +1,6 @@
-# Tool guides
+# Tool Knowledge Base
 
-These guides describe the public integration contract for selected tools. They distinguish upstream availability from a checked repository baseline.
+Use these guides to choose tools, prepare inputs, inspect outputs, and connect analyses. Start with [calling and chaining tools](tool-chaining.md) for wrapper commands and readiness.
 
 | Guide | Public status |
 |---|---|
@@ -20,4 +20,4 @@ Use [tooling status and version watch](../biosymphony-tooling-status.md) as the 
 
 Use the [tool evaluation contract](tool-evaluation.md) to assess candidates in the [tooling radar](../biosymphony-next-tooling-radar.md).
 
-A guide is not a promise that every tool is installed locally. Installation scripts are opt-in and may download large files or require external terms. Review versions, hashes, licenses, and resource needs before use.
+The [version table](../biosymphony-tooling-status.md) records tool baselines; the [calling guide](tool-chaining.md) records wrapper readiness. Inspect optional installation scripts and their resource requirements before use.

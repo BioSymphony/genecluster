@@ -1,35 +1,36 @@
 #!/usr/bin/env bash
 # tools/recommended/plantismash/run-on-species.sh.template
 #
-# STATUS: checked baseline 2.0.4; requires a reviewed non-editable installation.
+# STATUS: adaptation required; not-yet-tested. A plantiSMASH 2.0.4 tool
+# baseline does not certify this wrapper.
 #
-# What this would do for the BIA atlas:
-#   Run plantiSMASH 2.0.4 against a single species genome FASTA + GFF, producing
-#   plantismash-detected BGC clusters (12 BGC types incl. BIA / terpene /
-#   saccharide). Output is joined to our anchor-driven cluster table by
-#   coordinate overlap so every cluster the existing pipeline missed becomes a
-#   row in the postprocess xlsx.
+# ADAPTATION REQUIRED:
+#   Verify the input format, taxon option, CLI flags, and output files against
+#   the pinned plantiSMASH release before use. Candidate regions require
+#   independent normalization and review.
+#
+# What this template describes:
+#   Run plantiSMASH 2.0.4 against a supported plant annotation input. The
+#   command emits candidate region records and report files for review.
 #
 # Inputs:
-#   {SPECIES_SLUG}     e.g. "stephania-tetrandra"
-#   {GENOME_FASTA}     path to the species genome FASTA (in .runtime/<species>-summary/)
+#   {SPECIES_SLUG}     species slug
+#   {GENOME_INPUT}     path to a supported plantiSMASH input file
 #   {OUTPUT_DIR}       where to drop plantiSMASH outputs; conventionally
-#                      .runtime/plantismash-out/{species}/
+#                      .runtime/campaign-{species}-summary/superpowers/plantismash/
 #
 # Outputs:
 #   ${OUTPUT_DIR}/*.gbk              , parsed plantiSMASH region records
 #   ${OUTPUT_DIR}/index.html         , interactive web view
 #
-# Where output feeds in:
-#   - pipeline/genecluster_annotation_direct/run.py (new stage `plantismash_detect`)
-#   - your downstream postprocess script adds plantismash_cluster_id /
-#     plantismash_type / plantismash_substrate_prediction columns to the
-#     clusters-diamond sheet, plus a new plantismash-only-clusters sheet.
+# Output use:
+#   A separately reviewed normalizer can convert region records into candidate
+#   cluster evidence. This template defines no downstream integration stage.
 
 set -euo pipefail
 
-SPECIES_SLUG="{SPECIES_SLUG}"               # e.g. stephania-tetrandra
-GENOME_INPUT="{GENOME_INPUT}"               # absolute path to genome FASTA/GFF/GBFF
+SPECIES_SLUG="{SPECIES_SLUG}"               # species slug
+GENOME_INPUT="{GENOME_INPUT}"               # path to supported plantiSMASH input
 OUTPUT_DIR="{OUTPUT_DIR}"                   # absolute path
 PLANTISMASH_CMD=(conda run -n plantismash plantismash)
 
@@ -41,4 +42,4 @@ mkdir -p "${OUTPUT_DIR}"
   --outputfolder "${OUTPUT_DIR}" \
   "${GENOME_INPUT}"
 
-echo "plantiSMASH 2.0.4 on ${SPECIES_SLUG} → ${OUTPUT_DIR}"
+echo "ADAPTATION REQUIRED: review plantiSMASH output before downstream use: ${OUTPUT_DIR}"

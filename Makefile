@@ -78,7 +78,7 @@ markdown-link-check:
 	PYTHONDONTWRITEBYTECODE=1 python3 -B tools/check_relative_markdown_links.py --repo-root .
 
 unit:
-	PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest skills/biosymphony/tests/test_genecluster.py tools/test_public_surface.py
+	PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest skills/biosymphony/tests/test_genecluster.py tools/test_public_surface.py tools/test_tool_wrappers.py tools/test_cblaster_wrapper.py
 
 py-compile:
 	find skills/biosymphony/scripts skills/biosymphony/remote pipeline tools -name '*.py' -print0 | PYTHONPYCACHEPREFIX="$${TMPDIR:-/tmp}/biosymphony-genecluster-pycache" xargs -0 python3 -m py_compile

@@ -1,44 +1,27 @@
 # Claude Code Entry Point
 
-Use this repository to investigate candidate biosynthetic genes and gene clusters across genomes and transcriptomes. The user supplies a pathway, species, or evidence gap. You select the analysis route, run bounded searches, and return candidate tables and comparative reports with sources and limits.
+Use GeneCluster’s tool knowledge base and calling helpers to investigate candidate biosynthetic genes and gene clusters. Select tools for the user’s question, run suitable commands, and connect their outputs into the next analysis or report.
 
-Plan external compute and obtain the user's approval before launching it. Follow `AGENTS.md` for operating rules and validation commands.
+## Start With Tools
 
-## First Steps
+1. Read `skills/genecluster-superpowers/SKILL.md`.
+2. Use `docs/tooling/README.md` for tool inputs, commands, and outputs.
+3. Read `docs/tooling/tool-chaining.md` for runnable entry points and required format conversions.
+4. Check versions and integration limits in `docs/biosymphony-tooling-status.md`.
 
-1. Read `skills/biosymphony/SKILL.md` for the canonical campaign-orchestration skill: Stage 0 preflight, route scouting, contracts, validators, claim audit, closeout standard.
-2. Read `skills/genecluster-superpowers/SKILL.md` when extending the atlas with new tools.
-3. Read `docs/agent-orchestrator-guide.md` for orchestrator-side workflow and the default flow for a new goal.
-4. Read `docs/glossary.md` for terms-of-art (claim ceiling, route card, maturity ladder, evidence normalizer, and more).
-5. Operating rules and dev commands live in `AGENTS.md`.
+Follow `AGENTS.md` for repository rules and validation commands. Use `skills/biosymphony/SKILL.md` when a longer analysis needs input tracking, route selection, or restart support.
 
-## Agent Posture
+## Connect Results
 
-- Translate the user's goal into a campaign packet without waiting for every field to be pre-filled.
-- Run validators before dispatch and after artifact pullback.
-- Pick the route, claim ceiling, and next bounded wave from the contracts in `skills/biosymphony/`.
-- Make conservative choices that match the existing repo patterns. Surface uncertainties at closeout rather than blocking on every judgment call.
-- Escalate to cloud only after a launch bundle and stage contract validate locally.
+Resolve identifiers and coordinate conventions before joining tool outputs. Extract matched sequences when the next tool requires FASTA. Convert supported columns before using table helpers. Check exit status, output files, and empty results before starting a dependent call.
 
-## Public Safety
+Keep similarity scores, predicted function, genomic proximity, and experimental evidence distinct. Return the findings and plots that answer the question, with sources and limits.
 
-Never commit API keys, tokens, private tracker text, raw biological data, provider response JSON, unpublished sequences, or local workstation paths. Use placeholders for any secret value. Heavy outputs belong in ignored `.runtime/` directories. Examples must use public, synthetic, or placeholder data.
+Prepare the scope and resource limits before obtaining approval for external compute. Keep credentials, private paths, provider responses, private tracker text, raw data, and unpublished sequences outside public artifacts.
 
-## Validation Commands You Will Invoke
+## Repository Checks
 
-- Full release check: `make public-release-check`
-- Demo harness: `make demo-campaign-dry-run`, `make demo-campaign-smoke`, `make demo-campaign-public-mining`
-- Capability probe: `python3 skills/biosymphony/scripts/capability_probe.py --json`
-- Skill audit: `python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py --skill-root skills/biosymphony`
-- Issue validation: `python3 skills/biosymphony/scripts/preflight_check.py path/to/issue.md`
-- Local-artifact scan: `make artifact-scan`
-
-## Closeout Standard
-
-Every campaign pass should finish with:
-
-- the selected route and claim ceiling
-- artifacts produced (paths and hashes where applicable)
-- validation commands run
-- next bounded worker or issue wave
-- biological uncertainties that need user judgment, separated from orchestration gaps you can close yourself
+- Full release check: `make public-release-check`.
+- Local fixture demo: `make demo-campaign-dry-run`.
+- Tool availability: `bash skills/genecluster-superpowers/scripts/superpowers-status.sh`.
+- Publication checks without the demo: `make public-audit-strict`.

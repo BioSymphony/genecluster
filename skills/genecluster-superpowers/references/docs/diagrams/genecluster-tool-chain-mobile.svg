@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="912" viewBox="0 0 420 912" role="img" aria-labelledby="title desc">
+  <title id="title">Example protein-annotation chain</title>
+  <desc id="desc">The same search, sequence extraction, function-evidence, and report steps as the wide version, arranged vertically.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <rect width="420" height="912" rx="20" fill="#0a1222"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="24" y="46" font-size="27" fill="#edf4ff" font-weight="700">Protein-annotation chain</text>
+    <rect x="24" y="76" width="372" height="182" rx="16" fill="#101e33" stroke="#30445f"/>
+    <circle cx="51" cy="105" r="15" fill="#f5ce79"/>
+    <text x="46" y="111" font-size="18" fill="#0a1222" font-weight="700">1</text>
+    <text x="78" y="112" font-size="25" fill="#edf4ff" font-weight="700">Search proteins</text>
+    <text x="44" y="157" font-size="21" fill="#f5ce79" font-weight="700">MMseqs2</text>
+    <text x="44" y="197" font-size="21" fill="#c7d4e6" font-weight="400">Queries + proteome</text>
+    <text x="44" y="226" font-size="21" fill="#c7d4e6" font-weight="400">Hit IDs and scores</text>
+    <path d="M210 264 L210 278" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="24" y="286" width="372" height="182" rx="16" fill="#101e33" stroke="#30445f"/>
+    <circle cx="51" cy="315" r="15" fill="#70dfd2"/>
+    <text x="46" y="321" font-size="18" fill="#0a1222" font-weight="700">2</text>
+    <text x="78" y="322" font-size="25" fill="#edf4ff" font-weight="700">Prepare matches</text>
+    <text x="44" y="367" font-size="21" fill="#70dfd2" font-weight="700">Agent + helpers</text>
+    <text x="44" y="407" font-size="21" fill="#c7d4e6" font-weight="400">Extract matched</text>
+    <text x="44" y="436" font-size="21" fill="#c7d4e6" font-weight="400">protein sequences</text>
+    <path d="M210 474 L210 488" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="24" y="496" width="372" height="182" rx="16" fill="#101e33" stroke="#30445f"/>
+    <circle cx="51" cy="525" r="15" fill="#9ac2ff"/>
+    <text x="46" y="531" font-size="18" fill="#0a1222" font-weight="700">3</text>
+    <text x="78" y="532" font-size="25" fill="#edf4ff" font-weight="700">Add function evidence</text>
+    <text x="44" y="577" font-size="21" fill="#9ac2ff" font-weight="700">HMMER / InterProScan</text>
+    <text x="44" y="617" font-size="21" fill="#c7d4e6" font-weight="400">Domains and</text>
+    <text x="44" y="646" font-size="21" fill="#c7d4e6" font-weight="400">family evidence</text>
+    <path d="M210 684 L210 698" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="24" y="706" width="372" height="182" rx="16" fill="#101e33" stroke="#30445f"/>
+    <circle cx="51" cy="735" r="15" fill="#eaa4d9"/>
+    <text x="46" y="741" font-size="18" fill="#0a1222" font-weight="700">4</text>
+    <text x="78" y="742" font-size="25" fill="#edf4ff" font-weight="700">Build the report</text>
+    <text x="44" y="787" font-size="21" fill="#eaa4d9" font-weight="700">ID joins + Quarto</text>
+    <text x="44" y="827" font-size="21" fill="#c7d4e6" font-weight="400">Combined tables</text>
+    <text x="44" y="856" font-size="21" fill="#c7d4e6" font-weight="400">and HTML report</text>
+  </g>
+</svg>

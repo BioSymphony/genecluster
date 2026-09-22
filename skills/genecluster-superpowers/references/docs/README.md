@@ -1,46 +1,35 @@
 # Documentation
 
-Start with the [campaign workflow](workflow-campaigns.md) to plan an analysis or the [demo guide](demo-campaign-dry-run.md) to inspect example outputs. Use [tooling status](biosymphony-tooling-status.md) to distinguish checked integrations from proposed tools.
+Start with the [tool knowledge base](tooling/README.md) to choose a tool, then use the [calling and chaining guide](tooling/tool-chaining.md) to prepare inputs and connect results.
 
-## Core workflow
+## Tools and Examples
 
-- [Capability stack](capability-stack.md) — supported campaign capabilities and limits.
-- [Glossary](glossary.md) — shared terms for routes, evidence, maturity, and review.
-- [Campaign workflow](workflow-campaigns.md) — campaign steps, required files, and review decisions.
-- [Architecture](architecture.md) — control plane, execution lanes, and evidence flow.
-- [Agent guide](agent-orchestrator-guide.md) — solo-agent, tracker, and custom-orchestrator use.
-- [Demo campaign](demo-campaign-dry-run.md) — local example packet and review surface.
+- [GeneCluster Superpowers](superpowers.md): what the tool kit adds for agents.
+- [Tool knowledge base](tooling/README.md): input formats, commands, and outputs.
+- [Calling and chaining](tooling/tool-chaining.md): wrapper readiness and file handoffs.
+- [Tooling status](biosymphony-tooling-status.md): versions, checked baselines, and integration limits.
+- [Tooling radar](biosymphony-next-tooling-radar.md): proposed tools and AI models.
+- [Tool evaluation](tooling/tool-evaluation.md): checks before adding an integration.
+- [Demo](demo-campaign-dry-run.md): small fixtures and output checks.
 
-## Campaign and review guidance
+## Agent and Report Guides
 
-- [Campaign preflight](biosymphony-campaign-preflight-runbook.md) — source, query, and readiness checks.
-- [Atlas runbook](genecluster-atlas-superpower-runbook.md) — steps for assembling a comparative report.
-- [Atlas best practices](biosymphony-atlas-best-practices.md) — claims, figures, and report review.
-- [Superpowers](superpowers.md) — work units, dependencies, and parallel execution.
-- [Model routing](model-routing.md) — choosing bounded worker roles.
+- [Agent tool use](agent-orchestrator-guide.md): select, call, inspect, and connect.
+- [Capability stack](capability-stack.md): analysis capabilities and requirements.
+- [Atlas runbook](genecluster-atlas-superpower-runbook.md) and [report practices](biosymphony-atlas-best-practices.md): comparative tables, figures, and interpretation.
+- [Cloud runtimes](cloud-runtimes/README.md): external execution options.
+- [Diagrams](diagrams/): tool calls, chains, data requirements, and execution.
 
-## Tools and execution
+## Supporting Campaign Material
 
-- [Tooling status](biosymphony-tooling-status.md) — current upstream versions, public baselines, and integration status.
-- [Per-tool guides](tooling/README.md) — concise setup and output contracts.
-- [Tooling radar](biosymphony-next-tooling-radar.md) — source-backed candidates that are not yet integrated.
-- [Tool evaluation contract](tooling/tool-evaluation.md) — versions, controls, outputs, and acceptance criteria for a proposed integration.
-- [Cloud runtime guidance](cloud-runtimes/README.md) — portable, public-safe execution patterns.
+- [Campaign workflow](workflow-campaigns.md), [input checks](biosymphony-campaign-preflight-runbook.md), and [architecture](architecture.md).
+- [Glossary](glossary.md) and [model routing](model-routing.md).
+- [Capability roadmap](biosymphony-genecluster-superpower-roadmap.md), [tool-check protocol](biosymphony-superpower-test-plan.md), and [implementation plan](implementation-plan.md).
+- [Public release safety](public-release-safety.md).
 
-## Reference and roadmap
+## Bundled Examples
 
-- [Capability roadmap](biosymphony-genecluster-superpower-roadmap.md) — planned public additions.
-- [Tool-check protocol](biosymphony-superpower-test-plan.md) — repeatable validation method.
-- [Implementation plan](implementation-plan.md) — phased public-repo roadmap.
-- [Public release safety](public-release-safety.md) — publication boundaries and checks.
+- [GeneCluster BIA example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/genecluster-coptis-bia-public-v0).
+- [Variant-effect atlas example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/egfr-resistance-v1).
 
-## Diagrams
-
-The [diagrams](diagrams/) directory illustrates campaign steps, work-unit contracts, provenance, analysis routes, readiness stages, function evidence, and local/external execution boundaries.
-
-## Bundled examples
-
-- [GeneCluster BIA example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/genecluster-coptis-bia-public-v0)
-- [Variant-effect atlas example](https://github.com/BioSymphony/genecluster/tree/main/skills/biosymphony/examples/egfr-resistance-v1)
-
-Examples use public or synthetic data only.
+Examples use public or synthetic data.

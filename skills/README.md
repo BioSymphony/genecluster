@@ -1,30 +1,18 @@
 # Skills
 
-Use `biosymphony` to coordinate a campaign and `genecluster-superpowers` to add a supported tool.
+Start with `genecluster-superpowers` to select, call, and chain bioinformatics tools.
 
-| Skill | Purpose | Entry point |
-|---|---|---|
-| `biosymphony` | Plan the analysis, track inputs, select a route, validate outputs, and assemble reports | [Campaign instructions](biosymphony/SKILL.md) |
-| `genecluster-superpowers` | Find tool quickstarts and wrappers for searches, annotation, comparisons, and reporting | [Tool instructions](genecluster-superpowers/SKILL.md) |
+| Skill | Use it for |
+|---|---|
+| [GeneCluster Superpowers](genecluster-superpowers/SKILL.md) | Tool knowledge, command examples, wrappers, and input/output handoffs |
+| [BioSymphony](biosymphony/SKILL.md) | Input tracking, analysis planning, output checks, and longer campaigns |
 
-## Check Local Availability
-
-From the repository root, inspect campaign capabilities:
-
-```bash
-python3 skills/biosymphony/scripts/capability_probe.py --json
-```
-
-Check commands used by the tool wrappers:
+Check local commands:
 
 ```bash
 bash skills/genecluster-superpowers/scripts/superpowers-status.sh
 ```
 
-These checks report local availability. Use [tooling status](../docs/biosymphony-tooling-status.md) to check versions, tested baselines, and integration limits.
+Use the [calling guide](../docs/tooling/tool-chaining.md) for wrapper readiness and example chains. The [tool knowledge base](../docs/tooling/README.md) explains formats and commands; [tooling status](../docs/biosymphony-tooling-status.md) records versions and integration evidence.
 
-## Select a Tool
-
-Read the relevant [tool guide](../docs/tooling/README.md) before running a wrapper. Each guide describes required inputs and setup; installing a command does not validate its campaign output.
-
-For a proposed addition, use the [tool evaluation contract](../docs/tooling/tool-evaluation.md). For a new campaign, use the [goal prompt](../templates/goal-prompt.md).
+For an additional tool, use the [evaluation guide](../docs/tooling/tool-evaluation.md).

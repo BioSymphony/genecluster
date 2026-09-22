@@ -4,7 +4,11 @@
 
 MMseqs2 provides fast sequence and profile search for large public protein sets. It can extend candidate discovery beyond a single BLAST pass while retaining tabular evidence for review.
 
-## Minimal pattern
+## Calling Wrapper
+
+The wrapper accepts explicit query, target, and output paths. See the [calling guide](tool-chaining.md#search-proteins) for a complete example and readiness. It exports `query,target,evalue,bits,qaln,taln` as tab-separated columns, with a schema sidecar. Its fake-CLI tests check command construction and error handling.
+
+## Native CLI Pattern
 
 ```bash
 mmseqs createdb <QUERY_FASTA> <QUERY_DB>

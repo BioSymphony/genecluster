@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
-"""Reusable GeneCluster annotation-direct entrypoint.
-
-This wrapper promotes the delivered campaign engine without copying it. Existing
-demo-specific launch scripts can keep using ``pipeline/genecluster_annotation_direct/run.py`` while new
-Atlas campaigns call this stable entrypoint and receive the same workbook,
-neighborhood, Pfam, SwissProt, controls-QC, summary, and interpretation outputs.
-"""
+"""Compatibility entry point for a separately supplied annotation-direct engine."""
 
 from __future__ import annotations
 
 import runpy
+import sys
 from pathlib import Path
 
 
@@ -17,6 +12,16 @@ DEMO3_ENGINE = Path(__file__).resolve().parents[1] / "demo3" / "run.py"
 
 
 def main() -> None:
+    if not DEMO3_ENGINE.is_file():
+        message = (
+            "The annotation-direct engine (pipeline/demo3/run.py) is not bundled. "
+            "Use the tool-specific entry points in docs/tooling/tool-chaining.md."
+        )
+        if "--help" in sys.argv[1:] or "-h" in sys.argv[1:]:
+            print(message)
+            return
+        print(message, file=sys.stderr)
+        raise SystemExit(2)
     runpy.run_path(str(DEMO3_ENGINE), run_name="__main__")
 
 

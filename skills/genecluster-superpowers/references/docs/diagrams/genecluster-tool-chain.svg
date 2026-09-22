@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="366" viewBox="0 0 960 366" role="img" aria-labelledby="title desc">
+  <title id="title">Example protein-annotation chain</title>
+  <desc id="desc">MMseqs2 returns protein hits. The agent extracts matched sequences. HMMER or InterProScan adds domain and family evidence. The agent joins outputs by protein ID for a Quarto report. Input preparation and output conversion are required.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
+      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
+    </marker>
+  </defs>
+  <rect width="960" height="366" rx="20" fill="#0a1222"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="32" y="49" font-size="30" fill="#edf4ff" font-weight="700">Example: a protein-annotation chain</text>
+    <rect x="32" y="82" width="206" height="252" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="50" y="117" font-size="20" fill="#f5ce79" font-weight="700">1</text>
+    <text x="50" y="156" font-size="25" fill="#edf4ff" font-weight="700">Search</text>
+    <text x="50" y="184" font-size="25" fill="#edf4ff" font-weight="700">proteins</text>
+    <text x="50" y="224" font-size="17" fill="#f5ce79" font-weight="700">MMseqs2</text>
+    <text x="50" y="273" font-size="18" fill="#c7d4e6" font-weight="400">Queries + proteome</text>
+    <text x="50" y="298" font-size="18" fill="#c7d4e6" font-weight="400">Hit IDs and scores</text>
+    <path d="M243 205 L256 205" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="262" y="82" width="206" height="252" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="280" y="117" font-size="20" fill="#70dfd2" font-weight="700">2</text>
+    <text x="280" y="156" font-size="25" fill="#edf4ff" font-weight="700">Prepare</text>
+    <text x="280" y="184" font-size="25" fill="#edf4ff" font-weight="700">matches</text>
+    <text x="280" y="224" font-size="17" fill="#70dfd2" font-weight="700">Agent + helpers</text>
+    <text x="280" y="273" font-size="18" fill="#c7d4e6" font-weight="400">Extract matched</text>
+    <text x="280" y="298" font-size="18" fill="#c7d4e6" font-weight="400">protein sequences</text>
+    <path d="M473 205 L486 205" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="492" y="82" width="206" height="252" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="510" y="117" font-size="20" fill="#9ac2ff" font-weight="700">3</text>
+    <text x="510" y="156" font-size="25" fill="#edf4ff" font-weight="700">Add function</text>
+    <text x="510" y="184" font-size="25" fill="#edf4ff" font-weight="700">evidence</text>
+    <text x="510" y="224" font-size="15" fill="#9ac2ff" font-weight="700">HMMER / InterProScan</text>
+    <text x="510" y="273" font-size="18" fill="#c7d4e6" font-weight="400">Domains and</text>
+    <text x="510" y="298" font-size="18" fill="#c7d4e6" font-weight="400">family evidence</text>
+    <path d="M703 205 L716 205" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="722" y="82" width="206" height="252" rx="16" fill="#101e33" stroke="#30445f"/>
+    <text x="740" y="117" font-size="20" fill="#eaa4d9" font-weight="700">4</text>
+    <text x="740" y="156" font-size="25" fill="#edf4ff" font-weight="700">Build the</text>
+    <text x="740" y="184" font-size="25" fill="#edf4ff" font-weight="700">report</text>
+    <text x="740" y="224" font-size="17" fill="#eaa4d9" font-weight="700">ID joins + Quarto</text>
+    <text x="740" y="273" font-size="18" fill="#c7d4e6" font-weight="400">Combined tables</text>
+    <text x="740" y="298" font-size="18" fill="#c7d4e6" font-weight="400">and HTML report</text>
+  </g>
+</svg>

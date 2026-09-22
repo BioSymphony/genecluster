@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 # tools/recommended/jcvi-mcscan/pairwise-synteny.sh.template
 #
-# STATUS: foundation only, not-yet-tested.
+# STATUS: adaptation required; foundation only; not-yet-tested. A JCVI tool
+# baseline does not certify this wrapper.
 #
-# What this would do for the BIA atlas:
-# Build a pairwise macro-synteny ribbon between two species using JCVI
-# MCScan (Python). Produces the chromosome-level "Stephania chr10 ⇔
-# Houttuynia chr3" backbone that papers like Houttuynia 2024 Hortic Res and
-# Astilbe 2025 Nat Commun use as their cross-species figure spine.
+# ADAPTATION REQUIRED:
+#   Use matching CDS FASTA files, verify GFF identifiers and BED conversion
+#   options, and validate the LAST/MCScan commands against the pinned JCVI
+#   release before use.
+#
+# What this template describes:
+# Build a pairwise macro-synteny ribbon between two species using JCVI MCScan.
+# The resulting anchors and plot provide order context for later review. They
+# do not establish conserved function.
 #
 # Inputs:
-# {SPECIES_A} slug, e.g. coptis-chinensis
-# {SPECIES_B} slug, e.g. stephania-tetrandra
+# {SPECIES_A} species slug
+# {SPECIES_B} species slug
 # {SPECIES_A_GFF} path to A's annotation GFF
 # {SPECIES_B_GFF} path to B's annotation GFF
-# {SPECIES_A_CDS} path to A's CDS FASTA
-# {SPECIES_B_CDS} path to B's CDS FASTA
+# {SPECIES_A_CDS} path to A's matching CDS FASTA
+# {SPECIES_B_CDS} path to B's matching CDS FASTA
 # {OUTPUT_DIR} working dir; conventionally
 # .runtime/jcvi-synteny/{A}-vs-{B}/
 #
@@ -25,12 +30,9 @@
 # ${OUTPUT_DIR}/{A}.{B}.lifted.anchors , synteny anchor pairs
 # ${OUTPUT_DIR}/{A}-vs-{B}-synteny.pdf , ribbon plot
 #
-# Where output feeds in:
-# - pipeline/genecluster_annotation_direct/ orchestrates the 6 pairwise sweeps for the
-# comparative atlas.
-# - your downstream postprocess script adds a synteny-blocks sheet referencing
-# the SVG/PDF and listing macro-synteny anchor counts.
-# - cross-species/synteny-blocks.qmd embeds the SVG.
+# Output use:
+# A separately reviewed normalizer can convert the BED and anchor files into
+# synteny-block evidence. This template defines no downstream stage.
 
 set -euo pipefail
 
@@ -63,4 +65,4 @@ python3 -m jcvi.compara.catalog ortholog \
 python3 -m jcvi.graphics.synteny seqids.txt layout.txt \
  --outfile "${SPECIES_A}-vs-${SPECIES_B}-synteny.pdf"
 
-echo "JCVI MCScan pairwise: ${SPECIES_A} vs ${SPECIES_B} → ${OUTPUT_DIR}"
+echo "ADAPTATION REQUIRED: review JCVI outputs before downstream use: ${OUTPUT_DIR}"

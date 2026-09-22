@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="798" viewBox="0 0 420 798" role="img" aria-labelledby="title desc">
-  <title id="title">Campaign workflow</title>
-  <desc id="desc">Plan, search and compare, then review. Responsibilities and results match the wide version.</desc>
+  <title id="title">How an agent uses tools</title>
+  <desc id="desc">The same knowledge, execution, and chaining steps as the wide version, arranged vertically.</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
       <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
@@ -8,32 +8,26 @@
   </defs>
   <rect width="420" height="798" rx="20" fill="#0a1222"/>
   <g font-family="Arial, Helvetica, sans-serif">
-    <text x="24" y="46" font-size="28" fill="#edf4ff" font-weight="700">Campaign workflow</text>
+    <text x="24" y="46" font-size="28" fill="#edf4ff" font-weight="700">How an agent uses tools</text>
     <rect x="24" y="76" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <circle cx="53" cy="105" r="15" fill="#f5ce79"/>
-    <text x="48" y="111" font-size="18" fill="#0a1222" font-weight="700">1</text>
-    <text x="79" y="111" font-size="15" fill="#f5ce79" font-weight="700">YOU + AGENT</text>
-    <text x="44" y="151" font-size="25" fill="#edf4ff" font-weight="700">Plan the campaign</text>
-    <text x="44" y="192" font-size="21" fill="#c7d4e6" font-weight="400">Pathway and species</text>
-    <text x="44" y="223" font-size="21" fill="#c7d4e6" font-weight="400">Inputs and controls</text>
-    <text x="44" y="254" font-size="21" fill="#c7d4e6" font-weight="400">Data and compute limits</text>
-    <path d="M210 296 V310" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="44" y="109" font-size="16" fill="#f5ce79" font-weight="700">KNOWLEDGE</text>
+    <text x="44" y="150" font-size="25" fill="#edf4ff" font-weight="700">Read the tool guide</text>
+    <text x="44" y="192" font-size="20" fill="#c7d4e6" font-weight="400">Inputs and formats</text>
+    <text x="44" y="223" font-size="20" fill="#c7d4e6" font-weight="400">Commands and outputs</text>
+    <text x="44" y="254" font-size="20" fill="#c7d4e6" font-weight="400">Versions and limits</text>
+    <path d="M210 296 L210 310" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
     <rect x="24" y="318" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <circle cx="53" cy="347" r="15" fill="#70dfd2"/>
-    <text x="48" y="353" font-size="18" fill="#0a1222" font-weight="700">2</text>
-    <text x="79" y="353" font-size="15" fill="#70dfd2" font-weight="700">AGENT + TOOLS</text>
-    <text x="44" y="393" font-size="25" fill="#edf4ff" font-weight="700">Search and compare</text>
-    <text x="44" y="434" font-size="21" fill="#c7d4e6" font-weight="400">Find candidate genes</text>
-    <text x="44" y="465" font-size="21" fill="#c7d4e6" font-weight="400">Check function evidence</text>
-    <text x="44" y="496" font-size="21" fill="#c7d4e6" font-weight="400">Compare gene locations</text>
-    <path d="M210 538 V552" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="44" y="351" font-size="16" fill="#70dfd2" font-weight="700">EXECUTION</text>
+    <text x="44" y="392" font-size="25" fill="#edf4ff" font-weight="700">Call the tool</text>
+    <text x="44" y="434" font-size="20" fill="#c7d4e6" font-weight="400">CLI or Python helper</text>
+    <text x="44" y="465" font-size="20" fill="#c7d4e6" font-weight="400">Local or container runtime</text>
+    <text x="44" y="496" font-size="20" fill="#c7d4e6" font-weight="400">Inspect outputs and errors</text>
+    <path d="M210 538 L210 552" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
     <rect x="24" y="560" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <circle cx="53" cy="589" r="15" fill="#eaa4d9"/>
-    <text x="48" y="595" font-size="18" fill="#0a1222" font-weight="700">3</text>
-    <text x="79" y="595" font-size="15" fill="#eaa4d9" font-weight="700">YOU + AGENT</text>
-    <text x="44" y="635" font-size="25" fill="#edf4ff" font-weight="700">Review the results</text>
-    <text x="44" y="676" font-size="21" fill="#c7d4e6" font-weight="400">Candidate tables and plots</text>
-    <text x="44" y="707" font-size="21" fill="#c7d4e6" font-weight="400">Sources and limitations</text>
-    <text x="44" y="738" font-size="21" fill="#c7d4e6" font-weight="400">Follow-up questions</text>
+    <text x="44" y="593" font-size="16" fill="#eaa4d9" font-weight="700">CHAINING</text>
+    <text x="44" y="634" font-size="25" fill="#edf4ff" font-weight="700">Prepare the next call</text>
+    <text x="44" y="676" font-size="20" fill="#c7d4e6" font-weight="400">Resolve gene/protein IDs</text>
+    <text x="44" y="707" font-size="20" fill="#c7d4e6" font-weight="400">Convert or extract inputs</text>
+    <text x="44" y="738" font-size="20" fill="#c7d4e6" font-weight="400">Pass results to the next tool</text>
   </g>
 </svg>

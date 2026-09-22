@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # run-jcvi-mcscan.sh: pairwise macro-synteny ribbons between two atlas species
 #
-# STATUS: foundation, not yet tested in production
+# STATUS: adaptation required; wrapper not tested. A JCVI tool baseline does
+#         not certify this wrapper.
+# ADAPTATION REQUIRED:
+#   Replace the placeholder sequence paths with matching CDS FASTA files and
+#   verify GFF identifiers, the BED conversion options, and the LAST/MCScan
+#   commands against the pinned JCVI release before use. This script has no
+#   public fixture or successful runtime contract.
 # Required tools: python3 with jcvi installed; lastdb
 # Install: pip install "jcvi>=1.6.5"
 #          conda install -c bioconda last
@@ -10,16 +16,15 @@
 # Usage:
 #   run-jcvi-mcscan.sh <species_a> <species_b>
 #
-# Each species ∈ { coptis, houttuynia, stephania, phellodendron }.
+# Each argument is a species slug used by the campaign directory layout.
 #
 # What it does:
-#   1. GFF → JCVI BED for each species (uses .runtime/campaign-<sp>-summary/genomic.gff)
-#   2. Stages CDS via symlink (uses proteome.faa as the operational stand-in;
-#      JCVI accepts protein FASTA when CDS is absent, with a warning)
+#   1. Reads each species' GFF and sequence inputs from its campaign directory.
+#   2. Converts each GFF to JCVI BED and stages the sequence files.
 #   3. python -m jcvi.compara.catalog ortholog (LAST + MCScan)
 #   4. python -m jcvi.graphics.synteny: ribbon PDF
 #
-# Output: .runtime/<jcvi-synteny>/<species_a>-vs-<species_b>/
+# Output: .runtime/jcvi-synteny/<species_a>-vs-<species_b>/
 
 set -euo pipefail
 
@@ -41,7 +46,7 @@ SPECIES_A="${1:-}"
 SPECIES_B="${2:-}"
 if [[ -z "$SPECIES_A" || -z "$SPECIES_B" ]]; then
   echo "Usage: run-jcvi-mcscan.sh <species_a> <species_b>" >&2
-  echo "  Each ∈ { coptis, houttuynia, stephania, phellodendron }" >&2
+  echo "  Each argument must name a species campaign directory" >&2
   exit 64
 fi
 if [[ "$SPECIES_A" == "$SPECIES_B" ]]; then
@@ -50,12 +55,12 @@ if [[ "$SPECIES_A" == "$SPECIES_B" ]]; then
 fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-SUM_A="${REPO_ROOT}/.runtime/-summary"
-SUM_B="${REPO_ROOT}/.runtime/-summary"
+SUM_A="${REPO_ROOT}/.runtime/campaign-${SPECIES_A}-summary"
+SUM_B="${REPO_ROOT}/.runtime/campaign-${SPECIES_B}-summary"
 GFF_A="${SUM_A}/genomic.gff"
 GFF_B="${SUM_B}/genomic.gff"
-CDS_A="${SUM_A}/proteome.faa"     # stand-in; see header note
-CDS_B="${SUM_B}/proteome.faa"
+CDS_A="${SUM_A}/proteome.faa"     # placeholder; replace with matching CDS FASTA
+CDS_B="${SUM_B}/proteome.faa"     # placeholder; replace with matching CDS FASTA
 
 for f in "$GFF_A" "$GFF_B" "$CDS_A" "$CDS_B"; do
   if [[ ! -f "$f" ]]; then
@@ -64,7 +69,7 @@ for f in "$GFF_A" "$GFF_B" "$CDS_A" "$CDS_B"; do
   fi
 done
 
-OUTPUT_DIR="${REPO_ROOT}/.runtime/<jcvi-synteny>/${SPECIES_A}-vs-${SPECIES_B}"
+OUTPUT_DIR="${REPO_ROOT}/.runtime/jcvi-synteny/${SPECIES_A}-vs-${SPECIES_B}"
 mkdir -p "$OUTPUT_DIR"
 cd "$OUTPUT_DIR"
 
@@ -109,6 +114,6 @@ python3 -m jcvi.graphics.synteny seqids.txt layout.txt \
   --outfile "${SPECIES_A}-vs-${SPECIES_B}-synteny.pdf"
 
 echo
-echo "DONE: jcvi MCScan ${SPECIES_A} vs ${SPECIES_B}"
+echo "ADAPTATION REQUIRED: inspect JCVI outputs before downstream use."
 echo "  Output: $OUTPUT_DIR"
 echo "  Edit seqids.txt / layout.txt to refine the figure."

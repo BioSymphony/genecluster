@@ -1,21 +1,25 @@
 #!/usr/bin/env bash
-# run-clean-hit-ec.sh: predict EC numbers for cluster-neighbor proteins via CLEAN
+# run-clean-hit-ec.sh: generate CLEAN EC-label predictions for candidate proteins
 #
-# STATUS: foundation, not yet tested in production. HIT-EC stub omitted until
-#         the Nat Commun 2026 reference repo is publicly released.
+# STATUS: adaptation required; wrapper not tested. A CLEAN tool baseline does
+#         not certify this wrapper.
+# ADAPTATION REQUIRED:
+#   Verify the CLEAN checkout, dependencies, input FASTA identifiers, split
+#   argument, and output names against the pinned CLEAN release before use.
+#   Treat the CSV files as candidate function evidence. This script does not
+#   validate enzyme function or provide a downstream integration stage.
 # Required tools: python3 with CLEAN deps + ESM
 # Install: bash tools/recommended/install-heavy.sh
-#       (clones tttianhao/CLEAN, installs ESM, caches embedding model)
+#       (installs the local CLEAN dependencies and model assets)
 #
 # Usage:
 #   run-clean-hit-ec.sh <species>
 #
-# <species> = coptis | houttuynia | stephania | phellodendron
+# <species> = a species slug used by the campaign directory layout
 #
 # What it does:
-#   Runs CLEAN inference on the per-species cluster-sequences.faa (~500
-#   neighbor proteins). Output per-protein EC labels are joinable to the
-#   `clusters-diamond` xlsx sheet via protein_id.
+#   Runs CLEAN inference on the species-specific cluster-sequences.faa and
+#   copies the per-protein result CSV files into the campaign output directory.
 #
 # Output: .runtime/campaign-<species>-summary/superpowers/clean-hit-ec/
 
@@ -40,14 +44,14 @@ fi
 SPECIES="${1:-}"
 if [[ -z "$SPECIES" ]]; then
   echo "Usage: run-clean-hit-ec.sh <species>" >&2
-  echo "  species: coptis | houttuynia | stephania | phellodendron" >&2
+  echo "  species: a species slug used by the campaign directory layout" >&2
   exit 64
 fi
 
-SUMMARY_DIR="${REPO_ROOT}/.runtime/-summary"
+SUMMARY_DIR="${REPO_ROOT}/.runtime/campaign-${SPECIES}-summary"
 QUERY_FASTA="${SUMMARY_DIR}/cluster-sequences.faa"
 OUTPUT_DIR="${SUMMARY_DIR}/superpowers/clean-hit-ec"
-SPLIT="${SPLIT:-70}"   # 70%-identity clustering split (better generalization)
+SPLIT="${SPLIT:-70}"   # CLEAN split identifier; verify its meaning for the pinned release
 
 if [[ ! -f "$QUERY_FASTA" ]]; then
   echo "ERROR: cluster sequences not found: $QUERY_FASTA" >&2
@@ -85,6 +89,5 @@ else
 fi
 
 echo
-echo "DONE: CLEAN EC prediction on ${SPECIES}"
+echo "ADAPTATION REQUIRED: review CLEAN output before downstream use."
 echo "  Output: ${OUTPUT_DIR}/"
-echo "  HIT-EC stub omitted (pending public release)."

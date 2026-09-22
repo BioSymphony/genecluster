@@ -1,27 +1,24 @@
-# cblaster and clinker quickstart
+# cblaster + clinker quickstart
 
-**Status:** available upstream; public end-to-end wrapper fixture planned.
+**Status:** wrapper contract only; no live search or biological validation is claimed.
 
-Reviewed versions: cblaster 1.4.2 and clinker 0.0.32.
+The local cblaster route needs a protein query FASTA and genomic coordinates. Provide an annotated GenBank/EMBL file, or a GFF/GTF with its matching FASTA, to build the local database. A prepared database is also accepted when both `<prefix>.dmnd` and `<prefix>.sqlite3` exist.
 
 ```bash
 python3 -m pip install "cblaster>=1.4.0" "clinker>=0.0.32"
 
-cblaster search \
-  --query_file <QUERY_FASTA> \
-  --mode remote \
-  --output .runtime/cblaster-out/clusters.csv \
-  --plot .runtime/cblaster-out/clusters.html
-
-cblaster extract \
-  --query .runtime/cblaster-out/clusters.csv \
-  --output .runtime/cblaster-out/clusters \
-  --format genbank
-
-clinker .runtime/cblaster-out/clusters/*.gbk \
-  --plot .runtime/cblaster-out/clinker.html
+bash skills/genecluster-superpowers/scripts/run-cblaster.sh \
+  --organism <ORGANISM_LABEL> \
+  --query <QUERY_FASTA> \
+  --genbank <ANNOTATED_GENBANK_OR_GFF> \
+  --out-dir .runtime/cblaster/<ORGANISM_LABEL>
 ```
 
-The clinker CLI does not document `--output_html` or `--output_svg`. Use a separately documented browser/rendering step for a static export.
+For a prepared database, replace `--genbank <ANNOTATED_GENBANK_OR_GFF>` with `--database <DB_PREFIX_OR_DMND>`. The wrapper uses the current cblaster contract:
 
-The local route requires prepared GenBank or compatible genome inputs. Record query identifiers, database and access date, versions, parameters, outputs, and hashes.
+1. `cblaster makedb <ANNOTATED_GENOME> --name <DB_PREFIX>` when a database must be built;
+2. `cblaster search --session_file search-session.json` to save a JSON search session;
+3. `cblaster extract_clusters search-session.json --output clusters --format genbank`;
+4. `clinker clusters/*.gbk --plot clinker.html`.
+
+The summary TSV is an inspection artifact, not an extraction session. Use a fresh or empty output directory for each run; prepared databases may be reused from outside it. Missing query files, annotated inputs, prepared database pairs, GFF companion FASTA files, unsafe organism labels, or invalid numeric limits fail before a search. See [`docs/tooling/cblaster-clinker.md`](docs/tooling/cblaster-clinker.md) for the full output contract and upstream sources.
