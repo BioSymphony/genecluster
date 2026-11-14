@@ -16,17 +16,10 @@ Share the [GeneCluster repository](https://github.com/BioSymphony/genecluster) w
 and ask it to read [GeneCluster Superpowers](skills/genecluster-superpowers/SKILL.md).
 Give it your question and organisms, plus any data, accessions, or compute limits.
 
-> Read GeneCluster Superpowers and investigate the missing steps in [pathway]
-> across [organisms]. Find suitable public datasets and reference enzymes,
-> incorporate [my data, if any], and run the analysis within
-> [compute and time budget]. Choose and set up the tools. Prepare each tool’s
-> inputs from the previous results.
->
-> Rank candidate genes using sequence, domain, and available genome-context
-> evidence. Return a candidate table
-> grouped by pathway step and species, neighborhood plots for annotated genomes,
-> and a plan to test the leading candidates. Include source accessions, controls,
-> and commands.
+> I’m studying a plant pathway with a few missing steps. Use this repo to look
+> for the genes in related species, compare the candidates, and help me decide
+> what to test next. Find the public data and set up the tools you need, then
+> run the analysis and show me the evidence.
 
 <a href="docs/diagrams/genecluster-session-flow.svg">
   <picture>
@@ -56,26 +49,18 @@ classification.
 
 ## Example Requests For Your Agent
 
-- “Investigate a missing enzyme in [plant pathway]. Use PlantCyc, P450Rdb, or
-  Rhea to select references, search related species with MMseqs2, and annotate
-  hits with HMMER or InterProScan. Rank candidates against characterized enzymes
-  and related proteins with other functions.”
-- “Compare this candidate cluster across [species]. Find homologs with cblaster,
-  draw neighborhoods with clinker, and compare gene order with JCVI MCScan.
-  Report conserved genes, tandem duplicates, and apparent losses, checking
-  assembly and annotation gaps.”
-- “Search these transcriptome assemblies for [pathway] enzymes. Combine
-  translated BLAST searches and domain annotation, distinguish partial ORFs and
-  isoforms, and compare available expression evidence across tissues. Return
-  candidate transcripts and the sequences to use for follow-up.”
-- “Investigate these divergent enzyme candidates. Use Foldseek to search a
-  reference set with structures or ProstT5-derived representations. Compare
-  those hits with sequence alignments and domain architecture. Show which
-  candidates each analysis supports and where the results disagree.”
-- “Plan the next experiments for this candidate list. Compare additional
-  computational analysis, tissue RNA-seq, isoform checks, and enzyme assays.
-  Specify the question, samples, controls, readouts, and decision criteria for
-  each proposed experiment within [budget].”
+- “I have sequences for a few enzymes in this pathway. Find their counterparts
+  in these other plants and show me which matches have the right domains.”
+- “I found this candidate cluster in one species. Can you look for it in its
+  relatives and show me how the genes and their order differ?”
+- “I have transcriptome assemblies and expression counts for leaves and roots.
+  Which transcripts are good candidates for this pathway, and which isoforms
+  should I follow up on?”
+- “These proteins are weak sequence matches to my enzyme. Can you compare their
+  folds and domains to help me choose which ones to test?”
+- “Here are my top candidates. Help me plan the first round of experiments:
+  which genes to test, what controls to include, and what results would change
+  the ranking.”
 
 ## Chain Tools Into A Comparative Study
 
