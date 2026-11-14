@@ -67,7 +67,7 @@ RUN ln -sf /opt/conda/bin/x86_64-conda-linux-gnu-gcc /usr/local/bin/gcc \
 # Cheap layer, pip installs in base env (modern PyTorch, used by HIT-EC + ProstT5)
 # ============================================================
 RUN pip install --no-cache-dir \
- 'cblaster>=1.4' \
+ 'cblaster==1.4.0' \
  'clinker>=0.0.32' \
  'jcvi>=1.6.5' \
  'igv-reports>=1.16.2' \

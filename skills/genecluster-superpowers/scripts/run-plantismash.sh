@@ -1,26 +1,10 @@
 #!/usr/bin/env bash
-# run-plantismash.sh: plantiSMASH 2.0.4 against one atlas species
-#
-# STATUS: adaptation required; wrapper not tested. A plantiSMASH 2.0.4 tool
-#         baseline does not certify this wrapper.
-# ADAPTATION REQUIRED:
-#   Verify the input format, taxon option, CLI flags, and output files against
-#   the pinned plantiSMASH release before use. This draft points at a GFF file;
-#   use a supported input format or add an explicit conversion step. Candidate
-#   regions require independent normalization and review.
-# Required tools: plantiSMASH 2.0.4 command or conda env named plantismash
+# Draft wrapper for plantiSMASH 2.0.4.
+# Usage: run-plantismash.sh <species>
+# Stage matching genomic.fna and genomic.gff in
+# .runtime/campaign-<species>-summary/. Check reference IDs and CDS phase.
+# Reports and candidate regions go under superpowers/plantismash/.
 # Install: bash tools/recommended/install-medium.sh
-#
-# Usage:
-#   run-plantismash.sh <species>
-#
-# <species> = a species slug used by the campaign directory layout
-#
-# What it does:
-#   Runs plantiSMASH 2.0.4 against the species input after the input contract
-#   is adapted. It writes candidate region records and report files.
-#
-# Output: .runtime/campaign-<species>-summary/superpowers/plantismash/
 
 set -euo pipefail
 
@@ -47,11 +31,12 @@ fi
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SUMMARY_DIR="${REPO_ROOT}/.runtime/campaign-${SPECIES}-summary"
-INPUT_FILE="${SUMMARY_DIR}/genomic.gff"
+GENOME_FASTA="${SUMMARY_DIR}/genomic.fna"
+GENOME_GFF="${SUMMARY_DIR}/genomic.gff"
 OUTPUT_DIR="${SUMMARY_DIR}/superpowers/plantismash"
 
-if [[ ! -f "$INPUT_FILE" ]]; then
-  echo "ERROR: plantiSMASH input not found: $INPUT_FILE" >&2
+if [[ ! -f "$GENOME_FASTA" || ! -f "$GENOME_GFF" ]]; then
+  printf 'ERROR: plantiSMASH needs matching input files: %s and %s\n' "$GENOME_FASTA" "$GENOME_GFF" >&2
   exit 65
 fi
 
@@ -61,9 +46,10 @@ mkdir -p "$OUTPUT_DIR"
 echo "[1/1] plantiSMASH 2.0.4 on ${SPECIES}..."
 "${PLANTISMASH_CMD[@]}" \
   --taxon plants \
-  --genefinding-tool none \
+  --genefinding none \
+  --gff3 "$GENOME_GFF" \
   --outputfolder "$OUTPUT_DIR" \
-  "$INPUT_FILE"
+  "$GENOME_FASTA"
 
 echo
 if compgen -G "${OUTPUT_DIR}/*.gbk" >/dev/null; then

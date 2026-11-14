@@ -1,6 +1,6 @@
 # JCVI MCScan quickstart
 
-**Status:** available; repository minimum 1.6.5; upstream 1.6.7 as of 2026-09-22.
+The repository minimum is JCVI 1.6.5. See the [JCVI MCScan guide](docs/tooling/jcvi-mcscan.md) for the upstream release and fixture status.
 
 ```bash
 python3 -m pip install "jcvi>=1.6.5"

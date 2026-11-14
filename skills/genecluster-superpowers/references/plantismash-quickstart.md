@@ -5,12 +5,12 @@
 Use release 2.0.4 or a reviewed immutable commit. Install it normally rather than in editable mode so plugin discovery uses the installed package layout.
 
 ```bash
-plantismash \
-  --output-dir .runtime/plantismash/<RUN_ID> \
+plantismash --taxon plants --genefinding none \
+  --outputfolder .runtime/plantismash/<RUN_ID> \
   <PUBLIC_OR_SYNTHETIC_GENBANK>
 ```
 
-Check current flags through `plantismash --help`. Record the input accession and hash, exact revision, environment and database versions, command, region coordinates, warnings, and output hashes.
+For FASTA input, pass the genome FASTA and add `--gff3` with its matching annotation. Record the input accessions and hashes, exact revision, database versions, command, region coordinates, and output hashes.
 
 Treat predicted regions as hypotheses. Compare them with annotation, domain, expression, synteny, and independent caller evidence.
 

@@ -1,23 +1,24 @@
 # Tool Knowledge Base
 
-Use these guides to choose tools, prepare inputs, inspect outputs, and connect analyses. Start with [calling and chaining tools](tool-chaining.md) for wrapper commands and readiness.
+Use the [calling and chaining guide](tool-chaining.md) to find runnable wrappers,
+templates, and expected file handoffs. The
+[version table](../biosymphony-tooling-status.md) tracks upstream releases and
+checked baselines.
 
-| Guide | Public status |
+| Guide | Use it to |
 |---|---|
-| [antiSMASH](../biosymphony-antismash-cookbook.md) | Checked baseline |
-| [plantiSMASH](plantismash.md) | Checked baseline |
-| [cblaster + clinker](cblaster-clinker.md) | Available; end-to-end wrapper check planned |
-| [JCVI MCScan](jcvi-mcscan.md) | Available |
-| [MMseqs2](mmseqs2.md) | Checked baseline |
-| [Foldseek + ProstT5](foldseek-prostt5.md) | Checked baseline |
-| [CLEAN + HIT-EC](clean-hit-ec.md) | Planned |
-| [PlantCyc + P450 resources](plantcyc-p450rdb.md) | Mixed: public lookup plus provider-gated data |
-| [Cytoscape.js](cytoscape-js.md) | Checked baseline |
-| [Quarto](quarto.md) | Checked baseline; upstream update available |
-| [Proto](proto.md) | Planned |
+| [MMseqs2](mmseqs2.md) | Find protein homologs |
+| [InterProScan + Pfam](interproscan-pfam.md) | Annotate protein families and domains |
+| [Foldseek + ProstT5](foldseek-prostt5.md) | Compare folds |
+| [antiSMASH](../biosymphony-antismash-cookbook.md) | Predict bacterial and fungal clusters |
+| [plantiSMASH](plantismash.md) | Predict plant clusters |
+| [cblaster + clinker](cblaster-clinker.md) | Search and visualize conserved neighborhoods |
+| [JCVI MCScan](jcvi-mcscan.md) | Compare gene order |
+| [PlantCyc + P450 resources](plantcyc-p450rdb.md) | Look up plant pathway and enzyme records |
+| [CLEAN + HIT-EC](clean-hit-ec.md) | Evaluate EC predictions |
+| [Cytoscape.js](cytoscape-js.md) | Display pathway and evidence graphs |
+| [Quarto](quarto.md) | Render reports |
+| [Proto](proto.md) | Review a proposed integration |
 
-Use [tooling status and version watch](../biosymphony-tooling-status.md) as the canonical version table.
-
-Use the [tool evaluation contract](tool-evaluation.md) to assess candidates in the [tooling radar](../biosymphony-next-tooling-radar.md).
-
-The [version table](../biosymphony-tooling-status.md) records tool baselines; the [calling guide](tool-chaining.md) records wrapper readiness. Inspect optional installation scripts and their resource requirements before use.
+For proposed additions, see the [tooling radar](../biosymphony-next-tooling-radar.md)
+and the [evaluation checklist](tool-evaluation.md).

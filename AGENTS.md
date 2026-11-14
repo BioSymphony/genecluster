@@ -8,7 +8,7 @@ This repo is the public BioSymphony GeneCluster skill kit for agents and agent h
 - Keep reusable skill material under `skills/`.
 - Use `templates/linear-issue.md` for tracker-neutral issue drafts.
 - Do not store API keys, tokens, provider IDs, private run logs, raw/heavy biological data, or unpublished biological sequences in this repo.
-- Prefer placeholders such as `<AUTONOMY_HOME>`, `<RUNPOD_ENV_FILE>`, and `<PUBLIC_REPO_URL>` over local workstation paths.
+- Use portable paths and environment variable names in examples.
 
 ## Dev Commands
 
@@ -21,7 +21,7 @@ This repo is the public BioSymphony GeneCluster skill kit for agents and agent h
 - Probe local capabilities: `python3 skills/biosymphony/scripts/capability_probe.py --json`
 - Check the public skill: `python3 skills/biosymphony/scripts/biosymphony_public_skill_audit.py --skill-root skills/biosymphony`
 - Check a drafted issue: `python3 skills/biosymphony/scripts/preflight_check.py templates/linear-issue.md`
-- Check GeneCluster example ledgers: use the command in `README.md`.
+- Check GeneCluster example ledgers: `make example-preflight`.
 
 ## Product Direction
 

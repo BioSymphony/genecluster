@@ -11,12 +11,12 @@ Use release 2.0.4 or an explicitly reviewed immutable commit. Record the source 
 ## Minimal pattern
 
 ```bash
-plantismash \
-  --output-dir <OUTPUT_DIR> \
+plantismash --taxon plants --genefinding none \
+  --outputfolder <OUTPUT_DIR> \
   <PUBLIC_OR_SYNTHETIC_GENBANK>
 ```
 
-Confirm current flags through the upstream help output.
+For FASTA plus GFF3, pass the genome FASTA as the positional input and the matching annotation with `--gff3`. Verify the reference IDs and CDS phase convention before running. [plantiSMASH 2.0.4 CLI source](https://github.com/plantismash/plantismash/blob/plantismash-2.0.4/run_antismash.py)
 
 ## Output contract
 
@@ -24,4 +24,4 @@ Retain input accessions and hashes, exact revision, environment and database ver
 
 plantiSMASH calls are hypotheses. Compare them with gene annotation, domains, expression, synteny, and other callers before making pathway claims.
 
-Source: [plantiSMASH releases](https://github.com/plantismash/plantismash/releases).
+[plantiSMASH 2.0.4 release](https://github.com/plantismash/plantismash/releases/tag/plantismash-2.0.4)

@@ -1,51 +1,62 @@
 # Tooling Radar
 
-Reviewed: 2026-09-22. Dates below identify publications or releases, not local validation.
+Reviewed 2026-11-13. Evaluate a tool when its output resolves a specific gap in
+a campaign. Use the [evaluation checklist](tooling/tool-evaluation.md)
+to record the fixture, versions, output checks, and decision.
 
-Prioritize HIT-EC for enzyme evidence, SyntenyQC for neighborhood review, and one plant gene caller where annotation is missing. Evaluate PlantCAD2 only for a defined prediction task. These candidates remain **planned**; this review adds no installed tools, downloaded models, or checked baselines.
+## Annotation And Gene Order
 
-Choose one primary gene caller and one comparator per fixture. SyntenyQC selects local neighborhoods; ntSynt maps assembly-scale blocks; PGDD supplies precomputed collinearity.
-
-## Evaluate First
-
-| Candidate and source | Recent evidence | Potential input/output | Terms, resources, and adoption requirement |
-|---|---|---|---|
-| [HIT-EC](https://github.com/datax-lab/HIT-EC) | [Nature Communications, 2026-01-30](https://doi.org/10.1038/s41467-026-68727-3); v2.0.0 | Protein FASTA → hierarchical EC predictions and residue relevance maps | MIT code; check model/data terms separately. CPU/GPU demo. Compare held-out plant proteins with homology and CLEAN; measure abstention and rare-class errors. Relevance maps are not calibrated confidence. |
-| [SyntenyQC](https://github.com/Tim-Kirkwood/SyntenyQC) | [Bioinformatics, 2025-11-13](https://doi.org/10.1093/bioinformatics/btaf626); 2.0 released 2025-08-22 | cblaster results/accessions → selected GenBank neighborhoods and similarity tables for clinker | MIT. Retrieval and DIAMOND costs grow with neighborhood count. Check identifier mapping and reproducible selection. Similarity-based pruning does not establish orthology or BGC boundaries. |
-| [Tiberius](https://github.com/Gaius-Augustus/Tiberius) | [Preprint v2, 2026-07-29](https://doi.org/10.64898/2026.04.24.720536); [code v2.0.7](https://github.com/Gaius-Augustus/Tiberius/releases/tag/v2.0.7) | Genome FASTA, optionally expression/protein evidence → GTF/GFF3 gene models | MIT code; confirm checkpoint terms. GPU recommended; CPU supported. Evaluate an angiosperm checkpoint against held-out annotation and evidence-supported gene callers. Structural annotation does not assign biochemical function. |
-| [GeneCAD](https://github.com/plantcad/genecad) | [Preprint v4, 2026-05-12](https://doi.org/10.1101/2025.10.31.685877); [v0.5.0 released 2026-09-20](https://github.com/plantcad/genecad/releases/tag/v0.5.0) | Plant genome FASTA → predicted and filtered GFF3 | Apache-2.0 code; record each dependent model revision and license. NVIDIA GPU; large intermediate arrays. Test coordinate conventions, long introns, and canonical-transcript coverage before downstream use. |
-| [PlantCAD2](https://github.com/plantcad/plantcad) | [Cell Genomics, 2026-09-09](https://doi.org/10.1016/j.xgen.2026.101329) | DNA windows → embeddings or task-specific predictions | Apache-2.0 repository code; verify checkpoint, data, and paper terms separately. Models span 88M–694M parameters and 8,192-bp windows. Use a species-held-out test and a simple baseline. Embeddings do not establish function, causality, or physical clustering. |
-| [PGDD 2.0](https://plantgenome.uga.edu/) | [NAR paper, 2025-11-26](https://doi.org/10.1093/nar/gkaf1287) | Public identifiers → collinearity, duplication, and synteny context | Prefer compact precomputed records. Preserve genome release and accession provenance; source-data terms vary. Verify the retrieval interface and cross-check a known block before adoption. |
-
-## Compare or Watch
-
-| Candidate | Reason to retain | Reason to defer |
+| Tool | Use | Evaluation |
 |---|---|---|
-| [PlantGeneAnn v2](https://github.com/qzzhang0131/PlantGeneAnn), [preprint, 2026-06-26](https://doi.org/10.64898/2026.06.25.733695) | Independent plant FASTA → GFF3 comparator; code labeled MIT; verify checkpoint terms | CUDA-specific stack and large probability caches. Use only after one primary gene caller has a checked fixture. |
-| [Helixer](https://github.com/usadellab/Helixer), [Nature Methods, 2025-11-24](https://doi.org/10.1038/s41592-025-02939-1) | Established genome → primary gene-model GFF3 baseline | GPL-3.0 code; verify checkpoint terms. Retain as a comparator instead of adding another default runtime. |
-| [ntSynt](https://github.com/BirolLab/ntSynt), [BMC Biology, 2025-12-29](https://doi.org/10.1186/s12915-025-02455-w) | Annotation-free macrosynteny blocks from multiple assemblies; GPL-3.0-or-later | Needs a plant/polyploid fixture and memory budget. Macrosynteny does not resolve gene-level neighborhoods. |
-| [RXNRECer](https://github.com/kingstdio/RXNRECer), [preprint, 2026-03-13](https://arxiv.org/abs/2603.12694) | Protein FASTA → Rhea reaction candidates; MIT code | Consider the smaller S1 stage first. Full stages add large downloads, GPU/container dependencies, and an external LLM. Reaction scores need independent evaluation. |
-| [PlantBGC](https://pypi.org/project/plantbgc/), [preprint, 2026-07-29](https://arxiv.org/abs/2607.27258) | Plant-domain sequences → candidate-locus scores | Code-license statements conflict; resolve them before integration. Weak labels do not establish boundaries or chemistry. |
-| [PlantBiMoE](https://github.com/HUST-Keep-Lin/PlantBiMoE), [preprint, 2025-12-08](https://arxiv.org/abs/2512.07113) | Long-context plant sequence representation | Model-card and repository licensing differ in completeness. No direct neighborhood contract; compare only for a defined sequence task. |
-| [ANNEVO](https://github.com/xjtu-omics/ANNEVO), [Nature Methods, 2026-03-12](https://doi.org/10.1038/s41592-026-03036-7) | Additional genome → GFF3 comparator | Noncommercial code terms limit reuse; gene callers already cover the immediate evaluation need. |
-| [Horizyn](https://github.com/dayhofflabs/horizyn), [PNAS, 2026-03-17](https://doi.org/10.1073/pnas.2520070123) | Enzyme/reaction similarity evidence | Noncommercial code and separate hosted access. Similarity scores are not calibrated function probabilities. |
+| [AEGIS 1.0.1](https://github.com/Tomsbiolab/aegis/releases/tag/v1.0.1), 2026-11-10 | Normalize GFF3, extract proteins, and compare annotation releases. | A one-CDS synthetic translation passed. Compare strand, phase, and parent IDs with the existing parser on an Arabidopsis fixture. Orthology requires additional tools. [Paper](https://doi.org/10.1093/bioinformatics/btag363) |
+| [Tiberius 2.0.9](https://github.com/Gaius-Augustus/Tiberius/releases/tag/v2.0.9), 2026-10-05, or [GeneCAD 0.6.1](https://github.com/plantcad/genecad/releases/tag/v0.6.1), 2026-10-19 | Predict plant gene models when the assembly lacks annotation. | Use one caller and an independent comparator. Check exon recovery, long introns, coordinate and transcript IDs, and checkpoint terms. [Tiberius preprint](https://doi.org/10.64898/2026.04.24.720536), [GeneCAD preprint](https://doi.org/10.1101/2025.10.31.685877) |
+| [SyntenyQC](https://github.com/Tim-Kirkwood/SyntenyQC) | Select representative cblaster neighborhoods for clinker. | Check accession mapping and selection stability. Preserve coordinates when pruning similar regions. [Paper](https://doi.org/10.1093/bioinformatics/btaf626) |
+| [OrthoFinder 3.2](https://github.com/OrthoFinder/OrthoFinder/releases/tag/v3.2), 2026-10-23 | Infer orthogroups and duplication history across proteomes. | Preserve co-orthologs and join protein IDs to coordinates before making gene-order claims. Update parsers for renamed `Orthologs/` and compressed per-species TSVs. [Methods paper](https://doi.org/10.1038/s41592-026-03126-6) |
+| [SyMAP 5.9.3](https://github.com/csoderlund/SyMAP/releases/tag/v5.9.3), 2026-11-08, or [ntSynt 1.0.9](https://github.com/BirolLab/ntSynt/releases/tag/v1.0.9), 2026-08-20 | Compare assembly-scale blocks. SyMAP takes genomic sequence and optionally GFF. ntSynt works without annotation. | Compare a known block and resolve the sequence IDs and coordinates used by the annotation. SyMAP needs Java and MySQL. [SyMAP documentation](https://agcol.arizona.edu/SyMAP/), [ntSynt paper](https://doi.org/10.1186/s12915-025-02455-w) |
+| [HIT-EC 2.0.0](https://github.com/datax-lab/HIT-EC/releases/tag/v2.0.0) | Add EC predictions and residue relevance to candidate evidence. | Compare coverage, rare-class error, and abstention with homology and CLEAN on held-out plant proteins. Record model terms separately. [Paper](https://doi.org/10.1038/s41467-026-68727-3) |
 
-## Agent Tools and Evaluation
+Consider [Helixer](https://doi.org/10.1038/s41592-025-02939-1) or
+[PlantGeneAnn v2](https://doi.org/10.64898/2026.06.25.733695) as a gene-caller
+comparator. Evaluate [PlantCAD2](https://doi.org/10.1016/j.xgen.2026.101329)
+only with a defined prediction task, a simple baseline, and a species-held-out
+split.
 
-| Resource | Useful addition | Keep the integration small |
+## Transcriptome Evidence
+
+| Tool | Use | Evaluation |
 |---|---|---|
-| [ToolUniverse v1.5.1](https://github.com/mims-harvard/ToolUniverse/releases/tag/v1.5.1), released 2026-09-22 | Discover and inspect scientific tool interfaces through SDK, CLI, or MCP; Apache-2.0 | Evaluate a few read-only source lookups. Pin an allowed subset and retain source identifiers and retrieval dates. Upstream service terms remain separate; the full server can expose code execution. |
-| [BioContextAI Knowledgebase MCP](https://github.com/biocontext-ai/knowledgebase-mcp), [Nature Biotechnology paper](https://doi.org/10.1038/s41587-025-02900-9) | Literature and knowledgebase retrieval through an Apache-2.0 server | Choose it only where an existing adapter is missing. Public hosting is a test service with fair-use limits; data licenses remain separate. |
-| [BioAgent Bench](https://github.com/bioagent-bench/bioagent-bench), [preprint, 2026-01-29](https://arxiv.org/abs/2601.21800) | Corrupted-input, decoy-file, and prompt-bloat evaluation patterns | CC BY-4.0 benchmark materials; dataset terms vary. Use small synthetic checks; upstream agent/grader scores do not establish correctness here. |
-| [BixBench3](https://github.com/EdisonScientific/BixBench3), [preprint, 2026-08-26](https://arxiv.org/abs/2608.25286) | Artifact-based grading of multi-step analyses | CC BY-SA-4.0 harness/materials; source-data terms vary. Defer full runs: billed cloud/model access, large datasets, and separately licensed software. |
-| [Workflow Run RO-Crate](https://www.researchobject.org/workflow-run-crate/) | Portable provenance profiles for existing output manifests | Start with metadata references and hashes. Keep raw data, credentials, environment captures, and full execution logs outside public packages. The foundational paper is from 2024. |
+| [pyTransRate](https://github.com/macmanes-lab/pytransrate), [October preprint](https://arxiv.org/abs/2610.37031v2) | Check a de novo transcriptome against its source reads, or summarize contigs from FASTA alone. | FASTA-only check passed with two synthetic contigs. Test read-based metrics on paired reads before using them to filter candidates. Compare scores only within the same library and implementation. |
+| [IsoQuant 4.1.0](https://github.com/ablab/IsoQuant/releases/tag/v4.1.0) and [SQANTI3 6.1](https://github.com/ConesaLab/SQANTI3/releases/tag/v6.1), 2026-10-20 | Reconstruct transcripts from genome-aligned long reads, then classify and inspect isoforms. | Check transcript IDs, splice junctions, and support across samples. SQANTI3 6.1 requantifies during rescue by default. Record whether rescue affects the reported counts. |
 
-Choose a source gateway only where a direct adapter is missing; avoid installing both general catalogs. Pin BioContextAI locally for repeatable retrieval.
+Use the transcriptome-only route when the source lacks reliable genome
+coordinates. Report transcript support and retain the source contig IDs.
 
-Defer [Biomni](https://github.com/snap-stanford/Biomni) until a defined missing capability, isolated runtime, component license inventory, and public fixture justify its broader environment.
+## Find Public Inputs
 
-## Promotion Requirements
+| Source | Use | Record |
+|---|---|---|
+| [NCBI Datasets 18.41.1](https://github.com/ncbi/datasets/releases/tag/v18.41.1), 2026-11-13 | Retrieve assembly metadata and selected genome, annotation, or protein files. | Versioned assembly accession, annotation release, requested file types, and checksum. |
+| [Ensembl](https://www.ensembl.org/) | Browse plant assemblies and annotations on the unified site. Its 2026-07 release included genesets from Ensembl Genomes 63. | Browser release and assembly accession. Use the [archive](https://www.ensembl.org/help/articles/archives) to reproduce an older run. [Migration notice](https://www.ebi.ac.uk/about/news/updates-from-data-resources/ensembl-new-website/) |
+| [PGDD 2.0](https://plantgenome.uga.edu/) | Look up plant duplication and collinearity records before computing synteny. | Source assembly and annotation releases. Cross-check a known block. [Paper](https://doi.org/10.1093/nar/gkaf1287) |
+| [nf-core/fetchngs 1.13.0](https://github.com/nf-core/fetchngs/releases/tag/1.13.0), 2026-09-15 | Retrieve public read metadata and stage FASTQs when RNA-seq is in scope. | Sample-to-run mapping, archive accessions, and data volume. Use metadata first. |
 
-Use the [tool evaluation contract](tooling/tool-evaluation.md) before adding a wrapper or changing a baseline. Record immutable code, model, and database versions separately. Keep one evaluation record per candidate, with public sources, resource limits, compact results, and an explicit decision.
+For plant pathways and curated enzyme records, see
+[PlantCyc and P450 resources](tooling/plantcyc-p450rdb.md) and
+[Rhea](https://www.rhea-db.org/). Use [ATTED-II 13](https://atted.jp/) for
+coexpression and [PlantPAN 5.0](https://doi.org/10.1093/nar/gkag1140) for
+regulatory context. For PlantPAN, record the species, assembly and experimental
+condition. Keep motif predictions separate from measured binding.
 
-Existing [Ensembl Plants](https://plants.ensembl.org/), [ATTED-II](https://atted.jp/), [Rhea](https://www.rhea-db.org/), and [RetroRules](https://retrorules.org/) remain source options. Check the release used by each campaign. Design-generation tools remain outside this annotation and comparative-analysis shortlist.
+## Source Adapters And Provenance
+
+Prefer the provider API for accession lookups. The [InterPro API](https://interpro-documentation.readthedocs.io/en/latest/api.html)
+and [InterPro MCP](https://doi.org/10.1093/nar/gkag1114) cover public signature
+and protein records. For a missing lookup, consider
+[ToolUniverse 1.5.9](https://github.com/mims-harvard/ToolUniverse/releases/tag/v1.5.9)
+or [BioContextAI](https://github.com/biocontext-ai/knowledgebase-mcp). Record the
+accession, source release, and retrieval date.
+
+Use [Workflow Run RO-Crate](https://www.researchobject.org/workflow-run-crate/)
+if a downstream tool needs portable run metadata. Start with existing
+provenance fields and artifact hashes. Use small synthetic cases for missing
+records and misleading metadata.

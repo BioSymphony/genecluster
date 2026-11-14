@@ -28,8 +28,13 @@ row "Tool" "Command" "Reported version"
 probe MMseqs2 mmseqs version
 probe BLAST blastp -version
 probe DIAMOND diamond version
-probe HMMER hmmsearch -h
-probe InterProScan interproscan.sh --version
+if command -v hmmsearch >/dev/null 2>&1; then
+  hmmer_version="$(hmmsearch -h | awk '/^# HMMER / { print $2, $3 }' || true)"
+  row HMMER present "${hmmer_version:-version unavailable}"
+else
+  row HMMER missing ""
+fi
+probe "InterProScan v5" interproscan.sh --version
 probe Foldseek foldseek version
 probe cblaster cblaster --version
 probe clinker clinker --version

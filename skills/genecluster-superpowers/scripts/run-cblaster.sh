@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Run a local cblaster search and turn its JSON session into clinker GenBank inputs.
 #
-# STATUS: foundation; wrapper contract tested with fake CLIs, biology unvalidated.
+# Tested with simulated commands and a native two-cluster synthetic fixture.
 # Required tools: cblaster, clinker, diamond
-# Install: pip install "cblaster>=1.4.0" "clinker>=0.0.32"
+# Install: python3 -m pip install "cblaster==1.4.0" "clinker==0.0.32"
 #
 # Preferred interface:
 #   run-cblaster.sh --organism LABEL --query QUERY_FASTA \

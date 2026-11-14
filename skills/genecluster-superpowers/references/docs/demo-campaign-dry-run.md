@@ -4,7 +4,7 @@ The demo builds a campaign packet from bundled public or synthetic fixtures. It 
 
 ## Run the demo
 
-Requirements: Python 3 with `openpyxl`, `make`, and Bash.
+Install Bash, Make, and Python 3 with `openpyxl` and `PyYAML`.
 
 From the repository root, run:
 
@@ -37,5 +37,3 @@ By default, the demo writes files to a temporary directory and prints its path. 
 ## What the demo checks
 
 The demo checks contract shape, control coverage, route selection, ledger joins, output manifests, hashes, and claim limits.
-
-The demo does not prove that an external provider, large database, or biological tool is ready. Use a separate public fixture before you promote a tool or execution path.

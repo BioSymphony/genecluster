@@ -1,33 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="420" height="798" viewBox="0 0 420 798" role="img" aria-labelledby="title desc">
-  <title id="title">How an agent uses tools</title>
-  <desc id="desc">The same knowledge, execution, and chaining steps as the wide version, arranged vertically.</desc>
-  <defs>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto-start-reverse">
-      <path d="M0 0 L7 4 L0 8" fill="none" stroke="#8aa6c5" stroke-width="1.4"/>
-    </marker>
-  </defs>
-  <rect width="420" height="798" rx="20" fill="#0a1222"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="357" viewBox="0 0 420 357" role="img" aria-labelledby="title desc">
+  <title id="title">How your agent uses GeneCluster</title>
+  <desc id="desc">The agent reads the tool guides, sets up and runs the tools, then checks results and prepares the next input.</desc>
+  <rect width="420" height="357" rx="18" fill="#0a1222"/>
   <g font-family="Arial, Helvetica, sans-serif">
-    <text x="24" y="46" font-size="28" fill="#edf4ff" font-weight="700">How an agent uses tools</text>
-    <rect x="24" y="76" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <text x="44" y="109" font-size="16" fill="#f5ce79" font-weight="700">KNOWLEDGE</text>
-    <text x="44" y="150" font-size="25" fill="#edf4ff" font-weight="700">Read the tool guide</text>
-    <text x="44" y="192" font-size="20" fill="#c7d4e6" font-weight="400">Inputs and formats</text>
-    <text x="44" y="223" font-size="20" fill="#c7d4e6" font-weight="400">Commands and outputs</text>
-    <text x="44" y="254" font-size="20" fill="#c7d4e6" font-weight="400">Versions and limits</text>
-    <path d="M210 296 L210 310" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
-    <rect x="24" y="318" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <text x="44" y="351" font-size="16" fill="#70dfd2" font-weight="700">EXECUTION</text>
-    <text x="44" y="392" font-size="25" fill="#edf4ff" font-weight="700">Call the tool</text>
-    <text x="44" y="434" font-size="20" fill="#c7d4e6" font-weight="400">CLI or Python helper</text>
-    <text x="44" y="465" font-size="20" fill="#c7d4e6" font-weight="400">Local or container runtime</text>
-    <text x="44" y="496" font-size="20" fill="#c7d4e6" font-weight="400">Inspect outputs and errors</text>
-    <path d="M210 538 L210 552" fill="none" stroke="#8aa6c5" stroke-width="2" marker-end="url(#arrow)"/>
-    <rect x="24" y="560" width="372" height="214" rx="16" fill="#101e33" stroke="#30445f"/>
-    <text x="44" y="593" font-size="16" fill="#eaa4d9" font-weight="700">CHAINING</text>
-    <text x="44" y="634" font-size="25" fill="#edf4ff" font-weight="700">Prepare the next call</text>
-    <text x="44" y="676" font-size="20" fill="#c7d4e6" font-weight="400">Resolve gene/protein IDs</text>
-    <text x="44" y="707" font-size="20" fill="#c7d4e6" font-weight="400">Convert or extract inputs</text>
-    <text x="44" y="738" font-size="20" fill="#c7d4e6" font-weight="400">Pass results to the next tool</text>
+    <text x="16" y="36" font-size="23" fill="#edf4ff" font-weight="700">How your agent uses GeneCluster</text>
+    <rect x="16" y="57" width="388" height="80" rx="12" fill="#101e33" stroke="#354b67"/>
+    <circle cx="40" cy="85" r="12" fill="#f5ce79"/>
+    <text x="40" y="90" text-anchor="middle" font-size="15" fill="#0a1222" font-weight="700">1</text>
+    <text x="61" y="91" font-size="23" fill="#edf4ff" font-weight="700">Choose tools</text>
+    <text x="32" y="120" font-size="18" fill="#c7d4e6" font-weight="400">Match tools to the question and data.</text>
+    <path d="M210 142v12 M205 149l5 5 5-5" fill="none" stroke="#a3b9d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="16" y="159" width="388" height="80" rx="12" fill="#101e33" stroke="#354b67"/>
+    <circle cx="40" cy="187" r="12" fill="#70dfd2"/>
+    <text x="40" y="192" text-anchor="middle" font-size="15" fill="#0a1222" font-weight="700">2</text>
+    <text x="61" y="193" font-size="23" fill="#edf4ff" font-weight="700">Set up and run</text>
+    <text x="32" y="222" font-size="18" fill="#c7d4e6" font-weight="400">Set up dependencies and call tools.</text>
+    <path d="M210 244v12 M205 251l5 5 5-5" fill="none" stroke="#a3b9d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="16" y="261" width="388" height="80" rx="12" fill="#101e33" stroke="#354b67"/>
+    <circle cx="40" cy="289" r="12" fill="#eaa4d9"/>
+    <text x="40" y="294" text-anchor="middle" font-size="15" fill="#0a1222" font-weight="700">3</text>
+    <text x="61" y="295" font-size="23" fill="#edf4ff" font-weight="700">Connect results</text>
+    <text x="32" y="324" font-size="18" fill="#c7d4e6" font-weight="400">Check outputs and prepare the next input.</text>
   </g>
 </svg>

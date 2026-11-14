@@ -5,17 +5,17 @@
 # baseline does not certify this wrapper.
 #
 # ADAPTATION REQUIRED:
-#   Verify the input format, taxon option, CLI flags, and output files against
-#   the pinned plantiSMASH release before use. Candidate regions require
-#   independent normalization and review.
+#   Check that the GFF3 sequence IDs and CDS phase convention match the
+#   genome FASTA and annotation source. Verify the environment and output
+#   files before use. Normalize and review candidate regions independently.
 #
 # What this template describes:
-#   Run plantiSMASH 2.0.4 against a supported plant annotation input. The
+#   Run plantiSMASH 2.0.4 against a plant genome and its GFF3 annotation. The
 #   command emits candidate region records and report files for review.
 #
 # Inputs:
-#   {SPECIES_SLUG}     species slug
-#   {GENOME_INPUT}     path to a supported plantiSMASH input file
+#   {GENOME_FASTA}     path to the plant genome FASTA
+#   {GENOME_GFF3}      path to the matching GFF3 annotation
 #   {OUTPUT_DIR}       where to drop plantiSMASH outputs; conventionally
 #                      .runtime/campaign-{species}-summary/superpowers/plantismash/
 #
@@ -29,17 +29,18 @@
 
 set -euo pipefail
 
-SPECIES_SLUG="{SPECIES_SLUG}"               # species slug
-GENOME_INPUT="{GENOME_INPUT}"               # path to supported plantiSMASH input
-OUTPUT_DIR="{OUTPUT_DIR}"                   # absolute path
+GENOME_FASTA="{GENOME_FASTA}"
+GENOME_GFF3="{GENOME_GFF3}"
+OUTPUT_DIR="{OUTPUT_DIR}"
 PLANTISMASH_CMD=(conda run -n plantismash plantismash)
 
 mkdir -p "${OUTPUT_DIR}"
 
 "${PLANTISMASH_CMD[@]}" \
   --taxon plants \
-  --genefinding-tool none \
+  --genefinding none \
+  --gff3 "${GENOME_GFF3}" \
   --outputfolder "${OUTPUT_DIR}" \
-  "${GENOME_INPUT}"
+  "${GENOME_FASTA}"
 
 echo "ADAPTATION REQUIRED: review plantiSMASH output before downstream use: ${OUTPUT_DIR}"

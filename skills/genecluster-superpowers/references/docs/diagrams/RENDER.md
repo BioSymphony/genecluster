@@ -9,7 +9,7 @@ The two README figures use editable SVG sources:
 | `genecluster-session-flow.svg` | Tool knowledge, calls, and preparation for the next call |
 | `genecluster-tool-chain.svg` | Protein search, sequence extraction, annotation, and reporting |
 
-Each figure also has a `-mobile.svg` layout with the same content in stacked panels. The READMEs select that layout below 600 pixels with the [picture element](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#the-picture-element). Both layouts use SVG for sharp text. Open an image to inspect it at full size. Each SVG includes a text title and description. The session-flow figure also has a PNG for viewers that need a raster image.
+Each figure also has a `-mobile.svg` layout with the same content in stacked panels. The READMEs select that layout up to 720 pixels with the [picture element](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#the-picture-element). Both layouts use SVG for sharp text. Open an image to inspect it at full size. Each SVG includes a text title and description. The session-flow figure also has a PNG for viewers that need a raster image.
 
 Keep labels consistent in the wide and mobile SVGs. After editing a wide SVG, regenerate its PNG with [CairoSVG](https://cairosvg.org/). The checked rendering version is 2.8.2; it is an optional documentation dependency.
 

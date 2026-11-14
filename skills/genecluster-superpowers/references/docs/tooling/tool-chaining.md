@@ -1,6 +1,6 @@
 # Call and Chain Tools
 
-GeneCluster gives your agent tool guides, shell wrappers, and Python table helpers. The agent invokes installed tools, inspects their outputs, and prepares the next input. You choose the analysis scope and compute resources.
+Use the wrappers to run a tool. Check its output before joining results or preparing the next input.
 
 ## Choose a Tool
 
@@ -8,14 +8,14 @@ Read the [knowledge base](README.md) for inputs and commands, then check the [ve
 
 | Entry point | What it does | Readiness |
 |---|---|---|
-| `run-mmseqs2.sh` | Build protein databases, run an iterative search, and export six named columns | CLI contract tested with a fake tool; biological validation remains separate |
-| `run-cblaster.sh` | Search an annotated genome or prepared database, extract GenBank regions, and call clinker | CLI chain tested with fake tools; end-to-end biological fixture planned |
+| `run-mmseqs2.sh` | Build protein databases, run an iterative search, and export six named columns | Synthetic run passed with MMseqs2 18-8cc5c |
+| `run-cblaster.sh` | Search an annotated genome or prepared database, extract GenBank regions, and call clinker | Two-cluster synthetic run passed with cblaster 1.4.0 |
 | `run-foldseek-prostt5.sh` | Outline sequence-derived structure search | Adapt model, database, flags, and output fields |
 | `run-jcvi-mcscan.sh` | Outline pairwise synteny analysis | Supply matching coordinate and CDS inputs; adapt the template |
-| `run-plantismash.sh` | Outline plant cluster prediction | Adapt annotated genome input; the template's GFF path alone is insufficient |
+| `run-plantismash.sh` | Outline plant cluster prediction | Draft expects matching genomic.fna and genomic.gff |
 | `run-clean-hit-ec.sh` | Outline enzyme-function prediction | Adapt model setup, input splitting, and output parsing |
 
-Wrappers are under `skills/genecluster-superpowers/scripts/`. The four adaptation templates require review before execution. Optional installers are under `tools/recommended/`; inspect their downloads and version requirements before use.
+Find wrappers under `skills/genecluster-superpowers/scripts/` and installers under `tools/recommended/`.
 
 ## Search Proteins
 
@@ -27,13 +27,13 @@ bash skills/genecluster-superpowers/scripts/run-mmseqs2.sh \
   --out-dir /path/to/work/mmseqs-search dataset
 ```
 
-The wrapper writes `queries-vs-target.outfmt6` with tab-separated columns `query,target,evalue,bits,qaln,taln` and a schema sidecar. Despite the filename, this is a six-column custom schema. Use a fresh output directory for each input set.
+The wrapper writes six tab-separated columns (`query,target,evalue,bits,qaln,taln`) to `queries-vs-target.outfmt6` and saves a schema sidecar. Use a fresh output directory for each input set.
 
-To add domain evidence, select hit IDs, extract their sequences from the target FASTA, and call HMMER or InterProScan with the required databases. Join the annotation results to the search table by protein ID. A Quarto report can combine those tables with plots. The agent prepares these conversions; the MMseqs2 wrapper performs the search and export.
+To add domain evidence, extract hit sequences from the target FASTA and annotate them with [HMMER or InterProScan](interproscan-pfam.md). Join annotations to the search table by protein ID.
 
 ## Compare Gene Clusters
 
-With cblaster, DIAMOND, and clinker installed:
+Install cblaster 1.4.0, DIAMOND, and clinker. Set the contact email as shown in the [cblaster guide](cblaster-clinker.md), then run:
 
 ```bash
 bash skills/genecluster-superpowers/scripts/run-cblaster.sh \

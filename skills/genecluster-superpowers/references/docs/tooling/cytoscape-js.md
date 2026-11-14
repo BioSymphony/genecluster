@@ -1,19 +1,17 @@
 # Cytoscape.js
 
-**Status:** checked baseline 3.33.3; current upstream 3.34.3 as of 2026-09-22.
+Use Cytoscape.js to display pathways and compare candidate evidence across
+species. Reuse one graph structure and add species-specific evidence as data
+fields.
 
-Cytoscape.js renders interactive pathway and evidence graphs in a browser. A GeneCluster report can use a shared graph model and overlay per-species coverage or candidate evidence.
-
-## Baseline policy
-
-Keep the exact library version in the page or package lock. Recheck rendering and export behavior before moving the public baseline from 3.33.3.
+Use 3.33.3 to reproduce the checked viewer. The 2026-11-13 upstream review found
+[3.35.0](https://github.com/cytoscape/cytoscape.js/releases/tag/v3.35.0).
+Before updating the pin, check selection, fit and reset controls, and export in
+the target browser.
 
 ```bash
-npm install "cytoscape@3.33.3"
+npm install --save-exact cytoscape@3.33.3
 ```
 
-## Output contract
-
-Retain the graph JSON, style definition, layout settings, exact Cytoscape.js version, a static fallback for non-JavaScript readers, and hashes of released assets.
-
-Sources: [Cytoscape.js documentation](https://js.cytoscape.org/) and [npm package](https://www.npmjs.com/package/cytoscape).
+Retain the graph JSON, styles, layout settings, exact version, and a static
+fallback that readers can open without JavaScript.

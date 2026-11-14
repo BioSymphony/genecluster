@@ -1,19 +1,22 @@
 # cblaster and clinker
 
-**Status:** wrapper contract tested with fake CLIs; no biological validation or live search is claimed.
+The local wrapper passed a two-cluster synthetic fixture with cblaster 1.4.0, clinker 0.0.32, and DIAMOND 2.2.5 on macOS ARM64. The fixture checked file formats and the CLI handoff.
 
 cblaster finds co-located homologs. Its local route needs query protein FASTA plus either an annotated genome input or a prepared cblaster database. clinker compares the GenBank cluster files produced by cblaster.
 
 ## Install
 
 ```bash
-python3 -m pip install "cblaster>=1.4.0" "clinker>=0.0.32"
+python3 -m pip install "cblaster==1.4.0" "clinker==0.0.32"
 cblaster --version
 clinker --version
 diamond version
+cblaster config --email "${ENTREZ_EMAIL}"
 ```
 
-Record the installed versions with the campaign artifacts. No installer or search is run by the public wrapper tests.
+Set `ENTREZ_EMAIL` to your NCBI contact email before the setup command. cblaster checks this configuration even for local searches. Record the installed versions with the campaign artifacts.
+
+cblaster 1.4.2 is available on PyPI and GitHub. Its multi-cluster heatmap can fail with an ndarray serialization error after writing the JSON session and summary TSV. Use 1.4.0 for the wrapper's full output. If a 1.4.2 run has already written a usable session, continue with the extraction and clinker commands below. For a native 1.4.2 run that only needs the session, summary, and clinker plot, omit the cblaster `--plot` option.
 
 ## Wrapper interface
 
@@ -66,4 +69,4 @@ The summary TSV is for inspection; it is not an extraction session. `extract_clu
 
 If no clusters are extracted, the wrapper reports that clinker was skipped. It fails before tool calls when the query, annotated input, prepared database pair, organism label, GFF companion FASTA, numeric `--gap`/`--min-hits`, or fresh output directory is invalid.
 
-Sources: [cblaster search guide](https://cblaster.readthedocs.io/en/latest/guide/search_module.html), [cblaster makedb guide](https://cblaster.readthedocs.io/en/latest/guide/makedb_module.html), [cblaster extract-clusters guide](https://cblaster.readthedocs.io/en/latest/guide/extract_clusters_module.html), [cblaster CLI source](https://github.com/gamcil/cblaster/blob/master/cblaster/parsers.py), and [clinker CLI](https://github.com/gamcil/clinker#usage).
+[cblaster search guide](https://cblaster.readthedocs.io/en/latest/guide/search_module.html) · [Database setup](https://cblaster.readthedocs.io/en/latest/guide/makedb_module.html) · [Cluster extraction](https://cblaster.readthedocs.io/en/latest/guide/extract_clusters_module.html) · [cblaster 1.4.2 on PyPI](https://pypi.org/project/cblaster/1.4.2/) · [1.4.2 plot source](https://github.com/gamcil/cblaster/blob/v1.4.2/cblaster/plot.py) · [clinker CLI](https://github.com/gamcil/clinker#usage)

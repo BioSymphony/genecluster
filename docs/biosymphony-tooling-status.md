@@ -1,74 +1,33 @@
-# Tooling status and version watch
+# Tooling Status
 
-Last reviewed: 2026-09-22. This focused update checks the release changes listed below; other entries retain the 2026-08-30 review.
+Upstream releases checked on 2026-11-13. Use the recorded baseline to reproduce
+an earlier analysis. The [calling guide](tooling/tool-chaining.md) records
+wrapper readiness and the [tooling radar](biosymphony-next-tooling-radar.md)
+lists candidates for evaluation.
 
-This page records public upstream versions, the baselines represented by this repository, and the level of public integration evidence. It is a knowledge base, not a live service-status page.
+| Tool | Upstream release | GeneCluster baseline or next check |
+|---|---|---|
+| MMseqs2 | [18-8cc5c](https://github.com/soedinglab/MMseqs2/releases/tag/18-8cc5c) | 18. Rechecked the six-column export with the native binary. |
+| DIAMOND | [2.2.8](https://github.com/bbuchfink/diamond/releases/tag/v2.2.8) | 2.2.5 in the cblaster smoke test. |
+| Foldseek | [10-941cd33](https://github.com/steineggerlab/foldseek/releases/tag/10-941cd33) | 10. Record the ProstT5 revision separately. |
+| HMMER | [3.4](https://hmmer.org/) | Record the Pfam release with each HMM search. |
+| Pfam | [39.0](https://ftp.ebi.ac.uk/pub/databases/Pfam/releases/Pfam39.0/) | Record the Pfam archive version with each search. Compare signature calls before upgrading. |
+| InterProScan 5 | [5.78-109.0](https://interproscan-docs.readthedocs.io/en/v5/ReleaseNotes.html) | Final v5 release. Use the recorded v5 bundle for replay. |
+| InterProScan 6 | [6.0.3.0](https://github.com/ebi-pf-team/interproscan6/releases/tag/6.0.3.0) | Evaluate the Nextflow runtime, parser, and separately pinned [InterPro data](https://www.ebi.ac.uk/interpro/api/entry/pfam/). |
+| antiSMASH | [8.0.4](https://github.com/antismash/antismash/releases/tag/8-0-4) | 8.0.4 cookbook. |
+| plantiSMASH | [2.0.4](https://github.com/plantismash/plantismash/releases/tag/plantismash-2.0.4) | 2.0.4 with a non-editable source install. |
+| DeepBGC | [0.1.31 on PyPI](https://pypi.org/project/deepbgc/0.1.31/) | 0.1.31. |
+| cblaster | [1.4.2](https://github.com/gamcil/cblaster/releases/tag/v1.4.2), also on [PyPI](https://pypi.org/project/cblaster/1.4.2/) and [Bioconda](https://anaconda.org/bioconda/cblaster) | Use 1.4.0. On the two-cluster fixture, 1.4.2 writes search results and fails while serializing its heatmap. |
+| clinker | [0.0.32](https://pypi.org/project/clinker/0.0.32/) | 0.0.32 in the cblaster smoke test. |
+| JCVI | [1.6.9](https://pypi.org/project/jcvi/1.6.9/) | 1.6.5. Compare anchors before updating the baseline. |
+| IQ-TREE | [3.1.4](https://github.com/iqtree/iqtree3/releases/tag/v3.1.4) | Use the recorded 2.x version to reproduce an earlier 2.x tree. |
+| MIBiG | [4.0](https://mibig.secondarymetabolites.org/download) | Record the release with cluster matches. |
+| igv-reports | [1.17.0](https://github.com/igvteam/igv-reports/releases/tag/v1.17.0) | 1.16.2. Recheck the generated HTML before upgrading. |
+| Cytoscape.js | [3.35.0](https://github.com/cytoscape/cytoscape.js/releases/tag/v3.35.0) | 3.33.3. Check interactions and export before upgrading. |
+| Quarto | [1.11.9](https://github.com/quarto-dev/quarto-cli/releases/tag/v1.11.9) | 1.9.37 for replay. 1.11.9 rendered a synthetic HTML book and manuscript. Prefer 1.11 for new installs. |
+| Plant Metabolic Network | [17](https://plantcyc.org/pmn-17-released/) | Public lookup. Complete database downloads follow [provider terms](https://plantcyc.org/downloads/). |
+| P450Rdb | [2.0](https://www.cellknowledge.com.cn/p450rdb_v2/index.html) | Keep experimentally curated entries and model predictions distinct. |
 
-## Status terms
-
-- **Available**: the tool is public and has a documented installation or access route.
-- **Checked baseline**: a public fixture and repeatable command have previously produced the expected output shape. This documentation review did not rerun those tools.
-- **Adopted**: repository contracts or runners consume that checked output shape.
-- **Planned**: the tool is relevant, but this repository does not yet make an integration claim.
-- **Gated**: access, licensing, redistribution, or resource requirements prevent a fully public integration.
-
-A newer upstream release does not automatically replace a checked baseline. Promote a version only after a public fixture and output-contract check.
-
-## Version watch
-
-| Tool | Current upstream | Public baseline in this repo | Status | Note |
-|---|---:|---:|---|---|
-| antiSMASH | 8.0.4 | 8.0.4 | Checked baseline | Bacterial and fungal BGC calling |
-| plantiSMASH | 2.0.4 | 2.0.4 | Checked baseline | Plant BGC calling; non-editable source installation |
-| DeepBGC | 0.1.31 | 0.1.31 | Checked baseline | ML-based BGC scoring |
-| cblaster | GitHub/Bioconda 1.4.2; PyPI 1.4.0 | >=1.4.0 | Available | Record the distribution channel; a PyPI install does not select the GitHub release |
-| clinker | 0.0.32 | >=0.0.32 | Available | HTML plot output uses `--plot <path>` |
-| JCVI | 1.6.7 | >=1.6.5 | Available | Released 2026-09-03; recheck the synteny fixture before promotion |
-| MMseqs2 | 18-8cc5c | 18 | Checked baseline | Large protein search |
-| Foldseek | 10-941cd33 | 10 | Checked baseline | Structure search |
-| MIBiG | 4.0 | 4.0 | Available | Curated BGC reference data |
-| igv-reports | 1.16.3 | >=1.16.2 | Available | Static genome review reports |
-| Cytoscape.js | 3.34.3 | 3.33.3 | Checked baseline | Released 2026-09-07; recheck interaction/export before promotion |
-| Quarto | 1.10.18 | 1.9.37 | Checked baseline | 1.11.5 is prerelease; recheck manuscript output before promoting |
-| InterProScan 5 | 5.78-109.0 | 5.x | Available | Final v5 release; retain the existing workflow until migration is checked |
-| InterProScan 6 | 6.0.2.2 | none | Planned | Released 2026-09-09; evaluate runtime, database, and output compatibility separately |
-| Pfam | 38.2 | 37.x | Available | Update dependent database manifests together |
-| Plant Metabolic Network | 17.0 | access by provider terms | Gated | Do not redistribute provider data |
-| HIT-EC | public repository | none | Planned | Public source exists; no public fixture is committed here |
-| ESM-C 6B | provider/model terms | none | Gated | Large-model access and compute requirements |
-
-Sources: [antiSMASH releases](https://github.com/antismash/antismash/releases), [plantiSMASH releases](https://github.com/plantismash/plantismash/releases), [cblaster releases](https://github.com/gamcil/cblaster/releases) and [PyPI](https://pypi.org/project/cblaster/), [clinker](https://github.com/gamcil/clinker), [JCVI on PyPI](https://pypi.org/project/jcvi/), [MMseqs2 releases](https://github.com/soedinglab/MMseqs2/releases), [Foldseek releases](https://github.com/steineggerlab/foldseek/releases), [igv-reports on PyPI](https://pypi.org/project/igv-reports/), [Cytoscape.js 3.34.3](https://github.com/cytoscape/cytoscape.js/releases/tag/v3.34.3), [Quarto releases](https://github.com/quarto-dev/quarto-cli/releases), [InterProScan 5 notes](https://interproscan-docs.readthedocs.io/en/v5/ReleaseNotes.html), [InterProScan 6.0.2.2](https://github.com/ebi-pf-team/interproscan6/releases/tag/6.0.2.2), and [PMN 17](https://plantcyc.org/pmn-17-released/).
-
-The [September tooling radar](biosymphony-next-tooling-radar.md) covers AI annotation, plant genome models, source adapters, and agent evaluation. Its candidates remain planned until the [evaluation contract](tooling/tool-evaluation.md) passes.
-
-## Adopted capability groups
-
-The public contracts cover these capability groups:
-
-- source and accession scouting;
-- sequence and profile search;
-- BGC calling and comparison;
-- domain and function annotation;
-- structure search and representation;
-- synteny and genome-context review;
-- report and visualization generation.
-
-An adopted group may have more tools in the inventory than packaged runners. The [per-tool guides](tooling/README.md) identify the subset with public quickstarts or wrappers.
-
-## Planned or gated integrations
-
-- **cblaster + clinker**: available upstream; the local-genome route needs GenBank inputs and a public end-to-end fixture.
-- **CLEAN + HIT-EC**: public sources are available; the combined output contract still needs a public fixture.
-- **Large structure/model lanes**: database size, model terms, and compute requirements must be recorded before adoption.
-- **PMN data**: access and redistribution remain governed by the provider’s current terms.
-
-## Maintenance rule
-
-For each version change:
-
-1. link the upstream release source;
-2. run a public or synthetic fixture;
-3. record the command, version, output shape, and hash;
-4. update the relevant quickstart and wrapper;
-5. update the packaged documentation mirror;
-6. avoid claims that depend on private infrastructure or unpublished data.
+Before changing a baseline, run a public or synthetic fixture and check the
+[output contract](tooling/tool-evaluation.md). Record tool, model, and database
+versions separately.

@@ -1,16 +1,14 @@
-# Recommended Tool Helpers
+# Tool Installers And Templates
 
-This directory contains opt-in installers and per-tool command templates. Calling wrappers are under `skills/genecluster-superpowers/scripts/`; see the [calling guide](https://github.com/BioSymphony/genecluster/blob/main/docs/tooling/tool-chaining.md) for their readiness and required inputs.
+Check the [tooling status](https://github.com/BioSymphony/genecluster/blob/main/docs/biosymphony-tooling-status.md)
+for tested versions. Set the requested checksums before downloading packages.
 
-The scripts preserve documented minimums or checked baselines. A minimum such as `>=1.6.5` is not an exact pin. Review upstream changes and verify hashes or signatures before installing downloaded artifacts.
-
-| Helper | Scope |
+| Helper | Tools |
 |---|---|
-| `install-cheap.sh` | cblaster, clinker, JCVI, MMseqs2, igv-reports, Quarto |
+| `install-cheap.sh` | cblaster 1.4.0, clinker, JCVI, MMseqs2, igv-reports, Quarto 1.11.9 |
 | `install-medium.sh` | plantiSMASH and MIBiG |
 | `install-heavy.sh` | Foldseek, ProstT5, CLEAN, and reference databases |
-| Per-tool directories | Command templates and small rendering examples |
 
-See the [tooling status](https://github.com/BioSymphony/genecluster/blob/main/docs/biosymphony-tooling-status.md) before adopting a version. Heavy data and model caches belong under ignored runtime storage or an external work directory, never in the repository.
-
-Installers are convenience references, not unattended production bootstrap scripts. Inspect them, supply immutable sources and published checksums where available, and use least-privilege credentials outside the repository.
+The per-tool directories contain command templates. See the
+[calling guide](https://github.com/BioSymphony/genecluster/blob/main/docs/tooling/tool-chaining.md)
+for wrapper inputs and outputs.
