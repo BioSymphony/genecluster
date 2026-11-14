@@ -5,13 +5,13 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Cite](https://img.shields.io/badge/cite-CITATION.cff-blue.svg)](CITATION.cff)
 
-GeneCluster gives your agent the tool knowledge to plan and run comparative
-genome and transcriptome analyses. Its guides cover which tools to use, how
-to set them up, what inputs they need, and how to connect their outputs.
+GeneCluster gives your agent tool guides and command wrappers for
+comparative genomics and transcriptome analysis. Your agent can plan an
+analysis, run the tools, and connect their outputs.
 
-## Give Your Agent GeneCluster Superpowers
+## Start With Your Agent
 
-Share [this repo](https://github.com/BioSymphony/genecluster) with your agent
+Share the [GeneCluster repository](https://github.com/BioSymphony/genecluster) with your agent
 and ask it to read [GeneCluster Superpowers](skills/genecluster-superpowers/SKILL.md).
 Give it your question, organisms, and available data.
 
@@ -28,26 +28,50 @@ Give it your question, organisms, and available data.
   </picture>
 </a>
 
-## What Your Agent Can Do
+## Tools Your Agent Can Use
 
-| Task | Tools | Output |
+| Task | Tools | What you get |
 |---|---|---|
-| Find related proteins | [MMseqs2](docs/tooling/mmseqs2.md), BLAST, DIAMOND | Protein IDs, alignments, scores |
-| Annotate families and domains | [InterProScan, HMMER, and Pfam](docs/tooling/interproscan-pfam.md) | Signature IDs and residue ranges |
-| Compare protein folds | [Foldseek + ProstT5](docs/tooling/foldseek-prostt5.md) | Structural matches |
-| Look up plant pathways and enzymes | [PlantCyc and P450Rdb](docs/tooling/plantcyc-p450rdb.md) | Reference pathway and enzyme records |
-| Predict candidate regions | [antiSMASH](docs/biosymphony-antismash-cookbook.md) for bacteria and fungi, [plantiSMASH](docs/tooling/plantismash.md) for plants | Annotated regions |
-| Search and compare neighborhoods | [cblaster + clinker](docs/tooling/cblaster-clinker.md), [JCVI MCScan](docs/tooling/jcvi-mcscan.md) | Gene maps and synteny anchors |
-| Build reports | [Quarto](docs/tooling/quarto.md), [Cytoscape.js](docs/tooling/cytoscape-js.md) | HTML reports and interactive networks |
+| Find public inputs | [NCBI Datasets, Ensembl, and nf-core/fetchngs](docs/biosymphony-next-tooling-radar.md#find-public-inputs) | Assembly accessions, annotation releases, and RNA-seq run accessions |
+| Search for protein homologs | [MMseqs2](docs/tooling/mmseqs2.md), BLAST, DIAMOND | Protein IDs, alignments, and scores |
+| Annotate protein families and domains | [InterProScan and HMMER/Pfam](docs/tooling/interproscan-pfam.md) | Signature IDs and residue ranges |
+| Compare protein folds | [Foldseek + ProstT5](docs/tooling/foldseek-prostt5.md) | Matches from structures or sequence-derived representations |
+| Look up plant pathways and enzymes | [PlantCyc and P450Rdb](docs/tooling/plantcyc-p450rdb.md), [Rhea](docs/biosymphony-next-tooling-radar.md#find-public-inputs) | Pathway, enzyme, and reaction records |
+| Predict candidate gene clusters | [antiSMASH](docs/biosymphony-antismash-cookbook.md) for bacteria and fungi, [plantiSMASH](docs/tooling/plantismash.md) for plants | Annotated genomic regions |
+| Compare genomic neighborhoods | [cblaster + clinker](docs/tooling/cblaster-clinker.md) | Conserved neighborhoods and interactive gene maps |
+| Compare gene order | [JCVI MCScan](docs/tooling/jcvi-mcscan.md) | Synteny anchors and plots |
+| Present results | [Quarto](docs/tooling/quarto.md), [Cytoscape.js](docs/tooling/cytoscape-js.md) | HTML reports and interactive networks |
+
+The [tooling radar](docs/biosymphony-next-tooling-radar.md) covers tools to
+evaluate, including OrthoFinder for orthogroups, IsoQuant and SQANTI3 for long-read
+transcriptomes, and [CLEAN and HIT-EC](docs/tooling/clean-hit-ec.md) for enzyme
+classification.
+
+## Example Requests For Your Agent
+
+- **Plan a comparison.** “Find public genome assemblies and matching annotations
+  for these three plant species. Return the assembly accessions and a plan for
+  comparing gene order, including required files and compute.”
+- **Find and annotate homologs.** “Search these plant proteomes with my reference
+  proteins. Annotate the matches and return a table with protein IDs, alignment
+  coverage, and domain accessions.”
+- **Compare genomic neighborhoods.** “Find regions around these reference genes
+  in my annotated genomes. Return a gene map and a table of homologs with their
+  assembly accessions and coordinates.”
+- **Search transcriptomes.** “Find transcripts related to this reference
+  protein in my transcriptome assemblies. Report transcript IDs and domain
+  matches for the predicted proteins.”
+- **Compare folds.** “Search this reference structure set for matches to my
+  candidate proteins. Report the structural scores alongside sequence evidence.”
 
 ## Set Up, Run, And Connect Tools
 
-The [tool knowledge base](docs/tooling/README.md) gives your agent the input
-formats, database requirements, commands, and expected outputs. The
-[installers and templates](tools/recommended/README.md) and
-[version table](docs/biosymphony-tooling-status.md) help it set up the tools
-needed for the task. The [calling guide](docs/tooling/tool-chaining.md) shows
-which wrappers to run and which commands to adapt.
+Your agent uses the [tool knowledge base](docs/tooling/README.md) to check file
+formats and database requirements. It checks tested versions in the
+[version table](docs/biosymphony-tooling-status.md), sets up tools with the
+[installers and templates](tools/recommended/README.md), and follows the
+[calling guide](docs/tooling/tool-chaining.md) for runnable wrappers and
+commands that need adapting.
 
 <a href="docs/diagrams/genecluster-tool-chain.svg">
   <picture>
@@ -56,10 +80,9 @@ which wrappers to run and which commands to adapt.
   </picture>
 </a>
 
-For neighborhood comparisons, your agent can pass cblaster's search session
-to cluster extraction and open the resulting GenBank regions in clinker.
+To compare neighborhoods, your agent can extract GenBank regions from
+cblaster’s search session and display them in clinker.
 
 For longer analyses, your agent can use the
 [campaign helpers](skills/biosymphony/SKILL.md) to track inputs and resume stages.
-See the [tooling radar](docs/biosymphony-next-tooling-radar.md) for tools to
-evaluate and [Contributing](CONTRIBUTING.md) for maintainer checks.
+See [Contributing](CONTRIBUTING.md) for maintainer checks.
